@@ -1,0 +1,7 @@
+2, 25-Aug-2024 16:48:28, Still Clocked In, Hours: 0, Late
+2, 25-Aug-2024 16:48:28, 25-Aug-2024 16:48:28, Hours: 0, Late
+2, 26-Aug-2024 21:09:41, Still Clocked In, Hours: 0, Late
+2, 26-Aug-2024 21:09:41, 26-Aug-2024 21:09:43, Hours: 0, Late
+2, 26-Aug-2024 21:12:24, Still Clocked In, Hours: 0, Late
+2, 26-Aug-2024 21:12:24, 26-Aug-2024 21:12:26, Hours: 0, Late
+
