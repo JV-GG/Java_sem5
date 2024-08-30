@@ -155,7 +155,7 @@ public class AuthApp extends JFrame {
                             if (currentUserRole.equals("System Administrator")) {
                                 cardLayout.show(mainPanel, "Admin");
                             } else if (currentUserRole.equals("Employee")) {
-                                runEmployeeClass(username);
+                                runEmployeeClass(username,password);
                             } else {
                                 cardLayout.show(mainPanel, "Dashboard");
                             }
@@ -192,9 +192,9 @@ public class AuthApp extends JFrame {
             add(loginButton, gbc);
         }
 
-        private void runEmployeeClass(String username) {
+        private void runEmployeeClass(String username, String password) {
             SwingUtilities.invokeLater(() -> {
-                Employee employee = new Employee(username);
+                Employee employee = new Employee(username, password);
                 employee.createAndShowGUI();
             });
         }
