@@ -93,7 +93,7 @@ public class Employee {
         // Status label
         statusLabel = new JLabel("", SwingConstants.CENTER);
         statusLabel.setFont(new Font("Arial", Font.PLAIN, 24));
-        statusLabel.setBounds(0, 800, 1920, 50); // Position the status label below the buttons
+        statusLabel.setBounds(0, 700, 1920, 50); // Position the status label below the buttons
         frame.add(statusLabel);
 
         // Create a logout button
@@ -230,7 +230,8 @@ public class Employee {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             String attendanceLine = String.format("%s, %s, %s, %d, %s%n", record.getUsername(),
                     record.getClockInTime().format(formatter),
-                    (record.getClockOutTime() != null) ? record.getClockOutTime().format(formatter) : "Still Clocked In",
+                    (record.getClockOutTime() != null) ? record.getClockOutTime().format(formatter)
+                            : "Still Clocked In",
                     workingHours, (record.getClockInTime().isAfter(lateThreshold)) ? "Late" : "Ontime");
 
             writer.write(attendanceLine); // Write the formatted attendance line to the file
@@ -239,12 +240,178 @@ public class Employee {
         }
     }
 
-    public void generateMonthlyReport() {
-        // Generate and display a monthly report for the current user
+    private void generateMonthlyReport() {
+        String[] months = { "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December" };
+        JComboBox<String> monthSelector = new JComboBox<>(months);
+
+        monthSelector.setPreferredSize(new Dimension(500, 70));
+
+        // Show a dialog for month selection
+        int option = JOptionPane.showConfirmDialog(null, monthSelector, "Select Month",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            int selectedMonth = monthSelector.getSelectedIndex() + 1; // Month index (1-12)
+            String directoryPath = "Employees/" + username; // Path to the user's directory
+            String filename = directoryPath + File.separator + username + "_attendance.txt";
+            List<Integer> workingHoursList = new ArrayList<>();
+            int lateCount = 0; // Track how many times the user was late
+            int penalty = 0; // Total penalty amount
+
+            // Read attendance records from the file
+            try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(", ");
+                    if (parts.length >= 4) {
+                        String hoursPart = parts[3];
+                        String[] hoursArray = hoursPart.split(": ");
+                        if (hoursArray.length == 2) {
+                            try {
+                                // Parse the hours and check if the record belongs to the selected month
+                                LocalDateTime clockInTime = LocalDateTime.parse(parts[1],
+                                        DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
+                                if (clockInTime.getMonthValue() == selectedMonth) {
+                                    int hours = Integer.parseInt(hoursArray[1]);
+                                    workingHoursList.add(hours);
+
+                                    if (parts[4].equals("Late")) {
+                                        lateCount++;
+
+                                        if (lateCount % 6 == 0) {
+                                            penalty += 100;
+                                        }
+                                    }
+                                }
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Calculate the total hours worked in the selected month
+            long totalHoursWorked = workingHoursList.stream().mapToInt(Integer::intValue).sum();
+
+            // Write the report
+            String reportFilename = directoryPath + File.separator + username + "_monthly_report_"
+                    + months[selectedMonth - 1] + ".txt";
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportFilename))) {
+                writer.write("Monthly Report for " + username + " - " + months[selectedMonth - 1] + "\n");
+                writer.write("Working Hours: \n");
+                for (int hours : workingHoursList) {
+                    if (hours != 0) {
+                        writer.write(hours + "\n");
+                    }
+                }
+                writer.write("Total Hours Worked: " + totalHoursWorked + "\n");
+                if (penalty > 0) {
+                    writer.write("Penalty: RM" + penalty + "\n"); // Write the penalty amount
+                }
+                JOptionPane.showMessageDialog(null, "Monthly report generated!", "Report Status",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Show the report
+            try {
+                Desktop.getDesktop().open(new File(reportFilename));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public void generateAnnualReport() {
-        // Generate and display an annual report for the current user
+    private void generateAnnualReport() {
+        String[] years = { "2023", "2024", "2025", "2026", "2027" };
+        JComboBox<String> yearSelector = new JComboBox<>(years);
+
+        yearSelector.setPreferredSize(new Dimension(500, 70));
+
+        // Show a dialog for year selection
+        int option = JOptionPane.showConfirmDialog(null, yearSelector, "Select Year",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            String selectedYear = (String) yearSelector.getSelectedItem();
+            String directoryPath = "Employees/" + username; // Path to the user's directory
+            String filename = directoryPath + File.separator + username + "_attendance.txt";
+            List<Integer> workingHoursList = new ArrayList<>();
+            int lateCount = 0; // Track how many times the user was late
+            int penalty = 0; // Total penalty amount
+
+            // Read attendance records from the file
+            try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(", ");
+                    if (parts.length >= 4) {
+                        String hoursPart = parts[3];
+                        String[] hoursArray = hoursPart.split(": ");
+                        if (hoursArray.length == 2) {
+                            try {
+                                // Parse the hours and check if the record belongs to the selected year
+                                LocalDateTime clockInTime = LocalDateTime.parse(parts[1],
+                                        DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
+                                if (Integer.toString(clockInTime.getYear()).equals(selectedYear)) {
+                                    int hours = Integer.parseInt(hoursArray[1]);
+                                    workingHoursList.add(hours);
+
+                                    // Check if the user was late and increment late count
+                                    if (parts[4].equals("Late")) {
+                                        lateCount++;
+
+                                        if (lateCount % 6 == 0) {
+                                            penalty += 100;
+                                        }
+                                    }
+                                }
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Calculate the total hours worked in the selected year
+            long totalHoursWorked = workingHoursList.stream().mapToInt(Integer::intValue).sum();
+
+            // Write the annual report
+            String reportFilename = directoryPath + File.separator + username + "_annual_report_" + selectedYear
+                    + ".txt";
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportFilename))) {
+                writer.write("Annual Report for " + username + " - " + selectedYear + "\n");
+                writer.write("Working Hours: \n");
+                for (int hours : workingHoursList) {
+                    if (hours != 0) {
+                        writer.write(hours + "\n");
+                    }
+                }
+                writer.write("Total Hours Worked: " + totalHoursWorked + "\n");
+                if (penalty > 0) {
+                    writer.write("Penalty: RM" + penalty + "\n"); // Write the penalty amount
+                }
+                JOptionPane.showMessageDialog(null, "Annual report generated!", "Report Status",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Show the report
+            try {
+                Desktop.getDesktop().open(new File(reportFilename));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void changePassword(String username, String password, JFrame frame) {
@@ -252,36 +419,34 @@ public class Employee {
         JLabel oldPasswordLabel = new JLabel("Old Password:");
         JLabel newPasswordLabel = new JLabel("New Password:");
         JLabel confirmPasswordLabel = new JLabel("Confirm Password:");
-    
+
         JPasswordField oldPasswordField = new JPasswordField();
         JPasswordField newPasswordField = new JPasswordField();
         JPasswordField confirmPasswordField = new JPasswordField();
-    
+
         panel.add(oldPasswordLabel);
         panel.add(oldPasswordField);
         panel.add(newPasswordLabel);
         panel.add(newPasswordField);
         panel.add(confirmPasswordLabel);
         panel.add(confirmPasswordField);
-    
+
         int option = JOptionPane.showConfirmDialog(null, panel, "Change Password", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
-    
+
         if (option == JOptionPane.OK_OPTION) {
             String oldPassword = new String(oldPasswordField.getPassword());
             String newPassword = new String(newPasswordField.getPassword());
             String confirmPassword = new String(confirmPasswordField.getPassword());
-    
-            
-    
+
             if (oldPassword.equals(password)) {
                 setPassword(username, newPassword);
-                if (!newPassword.equals(confirmPassword) || newPassword.equals(""))  {
+                if (!newPassword.equals(confirmPassword) || newPassword.equals("")) {
                     JOptionPane.showMessageDialog(null, "New password and confirmation do not match.");
                     return;
                 }
                 JOptionPane.showMessageDialog(null, "Password changed successfully.");
-                frame.dispose(); 
+                frame.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Old password is incorrect.");
             }
@@ -298,7 +463,7 @@ public class Employee {
         File tempFile = new File("user_temp.txt");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
 
             String line;
             boolean updated = false;
@@ -335,11 +500,4 @@ public class Employee {
         }
     }
 
-    
-    
-
-    
-
-    
-    
 }
