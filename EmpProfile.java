@@ -10,6 +10,7 @@ import java.util.List;
 public class EmpProfile {
     private String name;
     private String IDNo;
+    private final String Gender;
     private LocalDate DOB;
     private String address;
     private String emergencyContact;
@@ -24,6 +25,7 @@ public class EmpProfile {
     public EmpProfile(){
         this.name = "";
         this.IDNo = "";
+        this.Gender = "";
         this.DOB = LocalDate.now();
         this.address = "";
         this.emergencyContact = "";
@@ -35,9 +37,10 @@ public class EmpProfile {
         // this.monthlyGrossSalary = 0.0;
     }
 
-    public EmpProfile(String name, String IDNo, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position) {
+    public EmpProfile(String name, String IDNo, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position) {
         this.name = name;
         this.IDNo = IDNo;
+        this.Gender = Gender;
         this.DOB = DOB;
         this.address = address;
         this.emergencyContact = emergencyContact;
@@ -52,6 +55,10 @@ public class EmpProfile {
 
     public String getIDNo() {
         return IDNo;
+    }
+
+    public String getGender() {
+        return Gender;
     }
 
     public LocalDate getDOB() {

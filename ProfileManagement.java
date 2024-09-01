@@ -104,12 +104,12 @@ public class ProfileManagement {
         return employees;
     }
 
-    // Method to save employee details to a text file
     public void saveEmployeeDetails() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("employee_profiles.txt", true))) {
             for (EmpProfile emp : employees) {
                 writer.write("Name: " + emp.getName());
                 writer.write("\nID: " + emp.getIDNo());
+                writer.write("\nGender: " + emp.getGender());
                 writer.write("\nDOB: " + emp.getDOB());
                 writer.write("\nAge: " + emp.getAge());
                 writer.write("\nAddress: " + emp.getAddress());

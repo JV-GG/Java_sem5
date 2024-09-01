@@ -32,6 +32,8 @@ public class runProfileManagement {
                     String name = scanner.nextLine();
                     System.out.println("Enter Employee ID:");
                     String IDNo = scanner.nextLine();
+                    System.out.println("Enter Gender:");
+                    String Gender = scanner.nextLine();
                     System.out.println("Enter Employee DOB (yyyy-mm-dd):");
                     LocalDate DOB = LocalDate.parse(scanner.nextLine());
                     System.out.println("Enter Employee Address:");
@@ -46,7 +48,7 @@ public class runProfileManagement {
                     System.out.println("Enter Employee Department:");
                     String department = scanner.nextLine();
 
-                    EmpProfile newEmployee = new EmpProfile(name, IDNo, DOB, address, emergencyContact, experience, department, position);
+                    EmpProfile newEmployee = new EmpProfile(name, IDNo, Gender, DOB, address, emergencyContact, experience, department, position);
                     hrManager.createEmployeeProfile(newEmployee);
                 }
                 case 2 -> {
@@ -58,6 +60,7 @@ public class runProfileManagement {
                         System.out.println("\nEmployee Profile:");
                         System.out.println("Employee Name: " + emp.getName());
                         System.out.println("Employee ID: " + emp.getIDNo());
+                        System.out.println("Employee Gender: " + emp.getGender());
                         System.out.println("Employee DOB: " + emp.getDOB());
                         System.out.println("Employee age: " + emp.getAge());
                         System.out.println("Employee Address: " + emp.getAddress());
