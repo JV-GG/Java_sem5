@@ -1,15 +1,6 @@
-1, 26-Aug-2024 23:00:19, Still Clocked In, Hours: 0, Late
-1, 26-Aug-2024 23:00:19, 26-Aug-2024 23:00:19, Hours: 0, Late
-1, 26-Aug-2024 23:00:20, Still Clocked In, Hours: 0, Late
-1, 26-Aug-2024 23:00:20, 26-Aug-2024 23:00:20, Hours: 0, Late
-1, 26-Aug-2024 23:00:20, Still Clocked In, Hours: 0, Late
-1, 26-Aug-2024 23:00:20, 26-Aug-2024 23:00:20, Hours: 20, Late
-1, 26-Aug-2024 23:00:21, Still Clocked In, Hours: 0, Late
-1, 26-Aug-2024 23:00:44, Still Clocked In, Hours: 0, Late
-1, 26-Aug-2024 23:00:44, 26-Aug-2024 23:00:45, Hours: 0, Late
-1, 26-Aug-2024 23:00:45, Still Clocked In, Hours: 0, Late
-1, 26-Aug-2024 23:00:45, 26-Aug-2024 23:00:46, Hours: 10, Late
-1, 30-Aug-2024 14:59:31, Still Clocked In, 0, Late
-1, 30-Aug-2024 14:59:31, 30-Aug-2024 15:02:32, 0, Late
-1, 30-Aug-2024 15:03:20, Still Clocked In, 0, Late
-1, 30-Aug-2024 15:03:20, 30-Aug-2024 15:03:20, 0, Late
+1, 01-Sep-2024 19:54:31, Still Clocked In, Hours: 9, Late
+1, 01-Sep-2024 19:54:31, 01-Sep-2024 19:54:31, Hours: 0, Late
+1, 01-Sep-2024 19:54:31, Still Clocked In, Hours: 0, Late
+1, 01-Sep-2024 19:54:31, 01-Sep-2024 19:54:31, Hours: 9, Late
+1, 01-Sep-2024 19:54:32, Still Clocked In, Hours: 0, Ontime
+1, 01-Sep-2024 19:54:32, 01-Sep-2024 19:54:32, Hours: 0, Ontime

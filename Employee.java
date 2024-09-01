@@ -61,12 +61,12 @@ public class Employee {
             gd.setFullScreenWindow(frame);
         }
 
-        frame.setLayout(null); // Use null layout for absolute positioning
+        frame.setLayout(null);
 
         // Username display
         JLabel usernameLabel = new JLabel("Username: " + username, SwingConstants.CENTER);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 60));
-        usernameLabel.setBounds(0, 150, 1920, 50); // Set position and size
+        usernameLabel.setBounds(0, 150, 1920, 50);
         frame.add(usernameLabel);
 
         // Create buttons
@@ -75,6 +75,7 @@ public class Employee {
         JButton monthlyReportButton = new JButton("Monthly Report");
         JButton annualReportButton = new JButton("Annual Report");
         JButton changePasswordButton = new JButton("Change Password");
+        JButton supportTicketButton = new JButton("Support Ticket");
 
         // Set button positions
         clockInButton.setBounds(480, 300, 150, 50);
@@ -82,6 +83,7 @@ public class Employee {
         monthlyReportButton.setBounds(880, 300, 150, 50);
         annualReportButton.setBounds(1080, 300, 150, 50);
         changePasswordButton.setBounds(1280, 300, 200, 50);
+        supportTicketButton.setBounds(860, 950, 200, 30);
 
         // Add buttons to the frame
         frame.add(clockInButton);
@@ -89,11 +91,12 @@ public class Employee {
         frame.add(monthlyReportButton);
         frame.add(annualReportButton);
         frame.add(changePasswordButton);
+        frame.add(supportTicketButton);
 
         // Status label
         statusLabel = new JLabel("", SwingConstants.CENTER);
         statusLabel.setFont(new Font("Arial", Font.PLAIN, 24));
-        statusLabel.setBounds(0, 700, 1920, 50); // Position the status label below the buttons
+        statusLabel.setBounds(0, 700, 1920, 50);
         frame.add(statusLabel);
 
         // Create a logout button
@@ -103,7 +106,7 @@ public class Employee {
         logoutButton.addActionListener(e -> {
             frame.dispose();
         });
-        frame.add(logoutButton); // Add logout button to the frame
+        frame.add(logoutButton);
 
         // Button actions
         clockInButton.addActionListener(e -> clockIn(username));
@@ -111,6 +114,7 @@ public class Employee {
         monthlyReportButton.addActionListener(e -> generateMonthlyReport());
         annualReportButton.addActionListener(e -> generateAnnualReport());
         changePasswordButton.addActionListener(e -> changePassword(username, password, frame));
+        supportTicketButton.addActionListener(e -> supportTicket(username));
 
         frame.setVisible(true);
     }
@@ -123,30 +127,38 @@ public class Employee {
 
             // Read all lines to find the last one
             while ((currentLine = reader.readLine()) != null) {
-                lastLine = currentLine; // Store the last line read
+                lastLine = currentLine;
             }
 
             if (lastLine != null) {
-                // Parse the last line to create an AttendanceRecord
+                // Split the last line into parts
                 String[] parts = lastLine.split(", ");
-                String user = parts[0];
-                LocalDateTime clockIn = LocalDateTime.parse(parts[1],
-                        DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
-                LocalDateTime clockOut = null;
 
-                // Check if the clock out time is available
-                if (!parts[2].equals("Still Clocked In")) {
-                    clockOut = LocalDateTime.parse(parts[2], DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
-                }
+                // Ensure the parts array has at least 3 elements (username, clockIn, clockOut
+                // or "Still Clocked In")
+                if (parts.length >= 3) {
+                    String user = parts[0];
+                    LocalDateTime clockIn = LocalDateTime.parse(parts[1],
+                            DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
+                    LocalDateTime clockOut = null;
 
-                // Check if there's already a clock-in record for this user
-                boolean alreadyClockedIn = records.stream()
-                        .anyMatch(record -> record.getUsername().equals(user) && record.getClockOutTime() == null);
+                    // Check if the clock out time is available
+                    if (!parts[2].equals("Still Clocked In")) {
+                        clockOut = LocalDateTime.parse(parts[2], DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
+                    }
 
-                // Only add the record if it's not already present
-                if (!alreadyClockedIn) {
-                    AttendanceRecord record = new AttendanceRecord(user, clockIn, clockOut);
-                    records.add(record);
+                    // Check if there's already a clock-in record for this user
+                    boolean alreadyClockedIn = records.stream()
+                            .anyMatch(record -> record.getUsername().equals(user) && record.getClockOutTime() == null);
+
+                    // Only add the record if it's not already present
+                    if (!alreadyClockedIn) {
+                        AttendanceRecord record = new AttendanceRecord(user, clockIn, clockOut);
+                        records.add(record);
+                    }
+                } else {
+                    // Handle the case where the line doesn't have the expected format
+                    System.err.println("Invalid record format: " + lastLine);
                 }
             }
         } catch (IOException e) {
@@ -157,8 +169,9 @@ public class Employee {
     public void clockIn(String username) {
         LocalDateTime now = LocalDateTime.now();
         boolean alreadyClockedIn = false;
-        LocalDateTime lateThreshold = now.withHour(9).withMinute(31).withSecond(0).withNano(0);
-        long workingHours = 0;
+        LocalDateTime lateThreshold = now.withHour(9).withMinute(31).withSecond(0).withNano(0); // Define the late
+                                                                                                // threshold
+        Long workingHours = (long) 0;
 
         // Check if the user is already clocked in
         for (AttendanceRecord record : records) {
@@ -191,7 +204,7 @@ public class Employee {
 
     public void clockOut(String username) {
         LocalDateTime now = LocalDateTime.now();
-        boolean found = false; // Flag to check if the user was found
+        boolean found = false;
 
         for (AttendanceRecord record : records) {
             if (record.getUsername().equals(username) && record.getClockOutTime() == null) {
@@ -214,27 +227,32 @@ public class Employee {
 
     private void writeAttendanceToFile(AttendanceRecord record, long workingHours) {
         String username = record.getUsername();
-        String directoryPath = "Employees/" + username; // Path to the user's directory
+        String directoryPath = "Employees/" + username;
         File directory = new File(directoryPath);
 
-        // Create the directory if it doesn't exist
         if (!directory.exists()) {
-            directory.mkdirs(); // Create all necessary parent directories
+            directory.mkdirs();
         }
 
-        // Define the filename to include the directory path
         String filename = directoryPath + File.separator + username + "_attendance.txt";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
-        LocalDateTime lateThreshold = record.getClockInTime().withHour(9).withMinute(31).withSecond(0).withNano(0);
+        LocalDateTime lateThreshold = record.getClockInTime().withHour(9).withMinute(31).withSecond(0).withNano(0); // time
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            String attendanceLine = String.format("%s, %s, %s, %d, %s%n", record.getUsername(),
+            String attendanceLine = String.format("%s, %s, %s, Hours: %d",
+                    record.getUsername(),
                     record.getClockInTime().format(formatter),
-                    (record.getClockOutTime() != null) ? record.getClockOutTime().format(formatter)
-                            : "Still Clocked In",
-                    workingHours, (record.getClockInTime().isAfter(lateThreshold)) ? "Late" : "Ontime");
+                    record.getClockOutTime() != null ? record.getClockOutTime().format(formatter) : "Still Clocked In",
+                    workingHours);
 
-            writer.write(attendanceLine); // Write the formatted attendance line to the file
+            if (record.getClockInTime().isAfter(lateThreshold)) {
+                attendanceLine += ", Late";
+            } else {
+                attendanceLine += ", Ontime";
+            }
+
+            writer.write(attendanceLine);
+            writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -252,14 +270,13 @@ public class Employee {
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
-            int selectedMonth = monthSelector.getSelectedIndex() + 1; // Month index (1-12)
-            String directoryPath = "Employees/" + username; // Path to the user's directory
+            int selectedMonth = monthSelector.getSelectedIndex() + 1;
+            String directoryPath = "Employees/" + username;
             String filename = directoryPath + File.separator + username + "_attendance.txt";
             List<Integer> workingHoursList = new ArrayList<>();
-            int lateCount = 0; // Track how many times the user was late
-            int penalty = 0; // Total penalty amount
+            int lateCount = 0;
+            int penalty = 0;
 
-            // Read attendance records from the file
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -473,11 +490,11 @@ public class Employee {
                 String fileUsername = parts[0];
 
                 if (fileUsername.equals(username)) {
-                    parts[1] = password; // Update the password
-                    writer.write(String.join(",", parts)); // Write the updated line
+                    parts[1] = password;
+                    writer.write(String.join(",", parts));
                     updated = true;
                 } else {
-                    writer.write(line); // Write the original line
+                    writer.write(line);
                 }
                 writer.newLine();
             }
@@ -500,4 +517,44 @@ public class Employee {
         }
     }
 
+    private void supportTicket(String username) {
+        // Create the dropdown for selecting a reason
+        String[] reasons = { "Forget to clock in/out", "System problem", "Emergency issues", "Sick leave" };
+        JComboBox<String> reasonDropdown = new JComboBox<>(reasons);
+
+        // Create the text area for writing additional details with larger dimensions
+        JTextArea detailsTextArea = new JTextArea(10, 40); // Increased size for a bigger panel
+
+        // Display a dialog for entering support ticket details with larger components
+        int result = JOptionPane.showConfirmDialog(null,
+                new Object[] {
+                        new JLabel("Select a reason:"),
+                        reasonDropdown,
+                        new JLabel("Details (Date/Time/Reason):"),
+                        new JScrollPane(detailsTextArea)
+                },
+                "Submit Support Ticket", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String selectedReason = (String) reasonDropdown.getSelectedItem();
+            String details = detailsTextArea.getText();
+
+            if (!details.trim().isEmpty()) {
+                saveTicketToFile(username, selectedReason, details);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please enter the details.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void saveTicketToFile(String username, String option, String reason) {
+        try (FileWriter writer = new FileWriter("Employees/Employee_ticket.txt", true)) {
+            writer.write(username + ", " + option + ", " + reason + "\n");
+            JOptionPane.showMessageDialog(null, "Ticket submitted successfully.", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error writing to file.", "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
 }
