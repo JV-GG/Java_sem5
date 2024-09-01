@@ -1,0 +1,10 @@
+Name: ali
+ID: 010101-01-0101
+DOB: 2001-01-01
+Age: 23
+Address: 123
+Emergency Contact: 123
+Working Experience: 123, 456
+Position: salesman
+Department: sales
+
