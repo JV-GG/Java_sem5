@@ -96,13 +96,12 @@ public class AuthApp extends JFrame {
     }
 
     public boolean registerUser(String username, String password, String role, String nric) {
-        // Check for existing username
         try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts[0].equals(username)) {
-                    return false; // Username already exists
+                if (parts[5].equals(nric)) {
+                    return true;
                 }
             }
         } catch (IOException e) {
