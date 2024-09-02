@@ -13,6 +13,7 @@ public class AuthApp extends JFrame {
     private UserManagement userManagement;
 
     public AuthApp() {
+
         setTitle("HRMS System");
         setSize(1920, 1080);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -319,19 +320,29 @@ public class AuthApp extends JFrame {
             this.cardLayout = cardLayout;
             this.mainPanel = mainPanel;
 
-            setLayout(new GridBagLayout()); // Use GridBagLayout for precise control
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(20, 20, 20, 20); // Add padding around buttons
-            gbc.gridx = 0;
-            gbc.gridy = GridBagConstraints.RELATIVE; // Stack buttons vertically
-            gbc.anchor = GridBagConstraints.CENTER; // Center buttons horizontally
+            setLayout(new GridBagLayout());
 
-            add(createButton("Create User", this::showCreateUserPanel));
-            add(createButton("View Users", this::showUserList));
-            add(createButton("Update User", this::updateUser));
-            add(createButton("Delete User", this::deleteUser));
-            add(createButton("Unlock User", this::unlockUser));
-            add(createButton("Logout", e -> cardLayout.show(mainPanel, "Login")));
+            // Title label
+            JLabel titleLabel = new JLabel("Admin Panel");
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 80));
+            titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            titleLabel.setBounds(50, 10, 400, 70);
+            add(titleLabel);
+
+            // Layout constraints for buttons
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(20, 20, 20, 20);
+            gbc.gridx = 0;
+            gbc.gridy = GridBagConstraints.RELATIVE;
+            gbc.anchor = GridBagConstraints.CENTER;
+
+            // Create buttons
+            add(createButton("Create User", this::showCreateUserPanel), gbc);
+            add(createButton("View Users", this::showUserList), gbc);
+            add(createButton("Update User", this::updateUser), gbc);
+            add(createButton("Delete User", this::deleteUser), gbc);
+            add(createButton("Unlock User", this::unlockUser), gbc);
+            add(createButton("Logout", e -> cardLayout.show(mainPanel, "Login")), gbc);
         }
 
         private JButton createButton(String text, ActionListener actionListener) {
