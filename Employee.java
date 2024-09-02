@@ -68,6 +68,10 @@ public class Employee {
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 60));
         usernameLabel.setBounds(0, 150, 1920, 50);
         frame.add(usernameLabel);
+        JLabel usernameLabel2 = new JLabel("[Employee]", SwingConstants.LEFT);
+        usernameLabel2.setFont(new Font("Arial", Font.BOLD, 40));
+        usernameLabel2.setBounds(100, 100, 1920, 50);
+        frame.add(usernameLabel2);
 
         // Create buttons
         JButton clockInButton = new JButton("Clock In");
