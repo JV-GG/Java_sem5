@@ -18,6 +18,7 @@ public class EmpProfile {
     private List<String> workingExperience;
     private String position;
     private String department;
+    private double salary; 
     // private List<SalaryHistory> salaryHistory;
     // private LeaveEntitlement leaveEntitlement;
     // private double monthlyGrossSalary;
@@ -34,12 +35,13 @@ public class EmpProfile {
         this.workingExperience = new ArrayList<>();
         this.position = "";
         this.department = "";
+        this.salary = 0.0;
         // this.salaryHistory = new ArrayList<SalaryHistory>();
         // this.leaveEntitlement = new LeaveEntitlement();
         // this.monthlyGrossSalary = 0.0;
     }
 
-    public EmpProfile(String IDNo, String Password, String Name, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position) {
+    public EmpProfile(String IDNo, String Password, String Name, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position, double salary) {
         this.IDNo = IDNo;
         this.Password = Password;
         this.Name = Name;
@@ -50,6 +52,7 @@ public class EmpProfile {
         this.workingExperience = workingExperience;
         this.department = department;
         this.position = position;
+        this.salary = salary;
     }
 
     public String getIDNo() {
@@ -91,6 +94,10 @@ public class EmpProfile {
     public String getDepartment() {
         return department;
     }
+
+    public double getSalary() {
+        return salary;
+    }
     
     public void updateIDNo(String IDNo) {
         this.IDNo = IDNo;
@@ -130,6 +137,10 @@ public class EmpProfile {
     
     public void updateDepartment(String department) {
         this.department = department;
+    }
+
+    public void updateSalary(double salary) {
+        this.salary = salary;
     }
 
     // Method to calculate and return age

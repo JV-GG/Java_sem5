@@ -1,0 +1,52 @@
+ID: 010101010101
+Password: 123
+Name: aaa
+Gender: male
+DOB: 2001-01-01
+Age: 23
+Address: 51, lorong 2, kg baru, 85200 jementa, johor
+Emergency Contact: 0177664453
+Working Experience: promoter,  event crew
+Position: abc
+Department: abc
+Salary: 0.0
+
+ID: 020202020202
+Password: 123
+Name: abc
+Gender: female
+DOB: 2002-02-02
+Age: 22
+Address: abc
+Emergency Contact: 123
+Working Experience: abc
+Position: abc
+Department: abc
+Salary: 0.0
+
+ID: 030303010303
+Password: 123
+Name: abu
+Gender: male
+DOB: 2003-03-03
+Age: 21
+Address: 123
+Emergency Contact: 123
+Working Experience: abc, def
+Position: asd
+Department: asd
+Salary: 0.0
+
+ID: 010203040506
+Password: 123
+Name: chen jv
+Gender: male
+DOB: 2004-01-30
+Age: 20
+Address: 1, Jalan 2, Taman 3, Kajang, KL
+Emergency Contact: 60123456789
+Working Experience: crew
+Position: technical support
+Department: technical
+Salary: 1500.0
+

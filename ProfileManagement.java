@@ -20,7 +20,7 @@ public class ProfileManagement {
     }
 
     private void loadEmployeeProfiles() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("employee_profiles.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/employee_profiles.txt"))) {
             String line;
             EmpProfile employee = null;
             while ((line = reader.readLine()) != null) {
@@ -50,6 +50,8 @@ public class ProfileManagement {
                         employee.updatePosition(line.substring(10));
                     } else if (line.startsWith("Department: ")) {
                         employee.updateDepartment(line.substring(12));
+                    } else if (line.startsWith("Salary: ")) {
+                        employee.updateSalary(Double.parseDouble(line.substring(8)));
                     }
                 }
             }
@@ -69,7 +71,7 @@ public class ProfileManagement {
         }
     
         // Directly write the new employee details to the file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("employee_profiles.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProfileManagement/employee_profiles.txt", true))) {
             writer.write("ID: " + employee.getIDNo());
             writer.write("\nPassword: " + employee.getPassword());
             writer.write("\nName: " + employee.getName());
@@ -81,6 +83,7 @@ public class ProfileManagement {
             writer.write("\nWorking Experience: " + String.join(", ", employee.getWorkingExperience()));
             writer.write("\nPosition: " + employee.getPosition());
             writer.write("\nDepartment: " + employee.getDepartment());
+            writer.write("\nSalary: " + employee.getSalary());
             writer.write("\n\n");
             System.out.println("Employee profile created successfully.\n");
         } catch (IOException e) {
@@ -91,7 +94,7 @@ public class ProfileManagement {
 
     // Method to check for duplicate names in the text file
     private boolean isDuplicateID(String IDNo) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("employee_profiles.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/employee_profiles.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("ID: ") && line.substring(4).equalsIgnoreCase(IDNo)) {
@@ -106,7 +109,7 @@ public class ProfileManagement {
     }
 
     public EmpProfile retrieveEmployeeProfile(String empID) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("employee_profiles.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/employee_profiles.txt"))) {
             String line;
             EmpProfile employee = null;
 
@@ -136,6 +139,8 @@ public class ProfileManagement {
                             employee.updatePosition(line.substring(10));
                         } else if (line.startsWith("Department: ")) {
                             employee.updateDepartment(line.substring(12));
+                        } else if (line.startsWith("Salary: ")) {
+                            employee.updateSalary(Double.parseDouble(line.substring(8)));
                         }
                     }
                     return employee;
@@ -149,28 +154,61 @@ public class ProfileManagement {
     }
 
     public void updateEmployeeProfile(String employeeId, EmpProfile updatedEmployee) {
-        boolean found = false;
-        for (int i = 0; i < employees.size(); i++) {
-            if (employees.get(i).getIDNo().equals(employeeId)) {
-                employees.set(i, updatedEmployee);
-                found = true;
-                break;
+        EmpProfile existingEmployee = retrieveEmployeeProfile(employeeId);
+        
+        if (existingEmployee != null) {
+            // Check and log salary changes
+            if (existingEmployee.getSalary() != updatedEmployee.getSalary()) {
+                logSalaryChange(existingEmployee, updatedEmployee.getSalary());
             }
-        }
-        if (found) {
+        
+            // Check and log position changes
+            if (!existingEmployee.getPosition().equals(updatedEmployee.getPosition())) {
+                logPositionChange(existingEmployee, updatedEmployee.getPosition());
+            }
+        
+            // Save the updated employee list
             saveEmployeeDetails();
             System.out.println("Employee profile updated successfully.\n");
         } else {
             System.out.println("Employee not found.");
         }
     }    
+    
+    private void logSalaryChange(EmpProfile employee, double newSalary) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("SalaryIncrement.txt", true))) {
+            writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now());
+            writer.write("\nICNo: " + employee.getIDNo());
+            writer.write("\nName: " + employee.getName());
+            writer.write("\nOriginal Salary: " + employee.getSalary());
+            writer.write("\nNew Salary: " + newSalary);
+            writer.write("\n\n");
+        } catch (IOException e) {
+            System.out.println("An error occurred while logging salary changes.");
+            e.printStackTrace(System.out);
+        }
+    }
+    
+    private void logPositionChange(EmpProfile employee, String newPosition) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("PositionPromote.txt", true))) {
+            writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now());
+            writer.write("\nICNo: " + employee.getIDNo());
+            writer.write("\nName: " + employee.getName());
+            writer.write("\nOriginal Position: " + employee.getPosition());
+            writer.write("\nNew Position: " + newPosition);
+            writer.write("\n\n");
+        } catch (IOException e) {
+            System.out.println("An error occurred while logging position changes.");
+            e.printStackTrace(System.out);
+        }
+    }
 
     public List<EmpProfile> listAllEmployees() {
         return employees;
     }
 
     public void saveEmployeeDetails() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("employee_profiles.txt"))) { // Overwrite the file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProfileManagement/employee_profiles.txt"))) {
             for (EmpProfile emp : employees) {
                 writer.write("ID: " + emp.getIDNo());
                 writer.write("\nPassword: " + emp.getPassword());
@@ -183,11 +221,12 @@ public class ProfileManagement {
                 writer.write("\nWorking Experience: " + String.join(", ", emp.getWorkingExperience()));
                 writer.write("\nPosition: " + emp.getPosition());
                 writer.write("\nDepartment: " + emp.getDepartment());
+                writer.write("\nSalary: " + emp.getSalary());
                 writer.write("\n\n");
             }
         } catch (IOException e) {
             System.out.println("An error occurred while saving employee details.");
             e.printStackTrace(System.out);
         }
-    }    
+    }
 }
