@@ -1,0 +1,6 @@
+Date and Time: 2024-09-03 02:33:39.556348200
+ICNo: 040430010775
+Name: KHOO ZONG HAO
+Original Salary: 3000.0
+New Salary: 5000.0
+

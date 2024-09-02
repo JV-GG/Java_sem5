@@ -6,10 +6,12 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EmpProfile {
-    private String IDNo;
+    private String NRIC;
     private String Password;
+    private String BankAcc;
     private String Name;
     private String Gender;
     private LocalDate DOB;
@@ -25,8 +27,9 @@ public class EmpProfile {
 
     // Constructor, getters, setters, etc.
     public EmpProfile(){
-        this.IDNo = "";
+        this.NRIC = "";
         this.Password = "";
+        this.BankAcc = "";
         this.Name = "";
         this.Gender = "";
         this.DOB = LocalDate.now();
@@ -41,9 +44,10 @@ public class EmpProfile {
         // this.monthlyGrossSalary = 0.0;
     }
 
-    public EmpProfile(String IDNo, String Password, String Name, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position, double salary) {
-        this.IDNo = IDNo;
+    public EmpProfile(String NRIC, String Password, String BankAcc, String Name, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position, double salary) {
+        this.NRIC = NRIC;
         this.Password = Password;
+        this.BankAcc = BankAcc;
         this.Name = Name;
         this.Gender = Gender;
         this.DOB = DOB;
@@ -55,12 +59,16 @@ public class EmpProfile {
         this.salary = salary;
     }
 
-    public String getIDNo() {
-        return IDNo;
+    public String getNRIC() {
+        return NRIC;
     }
 
     public String getPassword() {
         return Password;
+    }
+
+    public String getBankAcc() {
+        return BankAcc;
     }
 
     public String getName() {
@@ -99,12 +107,16 @@ public class EmpProfile {
         return salary;
     }
     
-    public void updateIDNo(String IDNo) {
-        this.IDNo = IDNo;
+    public void updateNRIC(String NRIC) {
+        this.NRIC = NRIC;
     }
 
     public void updatePassword(String Password) {
         this.Password = Password;
+    }
+
+    public void updateBankAcc(String BankAcc) {
+        this.BankAcc = BankAcc;
     }
 
     public void updateName(String Name) {
@@ -151,5 +163,18 @@ public class EmpProfile {
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmpProfile that = (EmpProfile) o;
+        return NRIC.equals(that.NRIC);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(NRIC);
     }
 }

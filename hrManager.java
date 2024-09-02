@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class hrManager {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+    
     public static void main(String[] args) {
         ProfileManagement hrManager = new ProfileManagement();
         Scanner scanner = new Scanner(System.in);
@@ -39,11 +39,13 @@ public class hrManager {
 
     private static void createEmployeeProfile(Scanner scanner, ProfileManagement hrManager) {
         System.out.println("\nCreating Employee Profile");
-        System.out.println("Enter Employee ID:");
-        String IDNo = scanner.nextLine();
+        System.out.println("Enter Employee NRIC/Passport:");
+        String NRIC = scanner.nextLine();
         System.out.println("Enter Employee Password:");
         String Password = scanner.nextLine();
-        System.out.println("Enter Employee Name:");
+        System.out.println("Enter Employee Bank Account (Maybank xxxxxxxxxxxx):");
+        String BankAcc = scanner.nextLine();
+        System.out.println("Enter Employee Fullname (as per NRIC/Passport):");
         String Name = scanner.nextLine();
         System.out.println("Enter Gender:");
         String Gender = scanner.nextLine();
@@ -60,10 +62,10 @@ public class hrManager {
         String position = scanner.nextLine();
         System.out.println("Enter Employee Department:");
         String department = scanner.nextLine();
-        System.out.println("Enter Employee Salary:");
+        System.out.println("Enter Employee Salary (RM):");
         double salary = parseDouble(scanner.nextLine());
 
-        EmpProfile newEmployee = new EmpProfile(IDNo, Password, Name, Gender, DOB, address, emergencyContact, experience, department, position, salary);
+        EmpProfile newEmployee = new EmpProfile(NRIC, Password, BankAcc, Name, Gender, DOB, address, emergencyContact, experience, department, position, salary);
         hrManager.createEmployeeProfile(newEmployee);
     }
 
@@ -74,9 +76,10 @@ public class hrManager {
 
         if (emp != null) {
             System.out.println("\nEmployee Profile:");
-            System.out.println("Employee ID: " + emp.getIDNo());
+            System.out.println("Employee NRIC/Passport: " + emp.getNRIC());
             System.out.println("Employee Password: " + emp.getPassword());
-            System.out.println("Employee Name: " + emp.getName());
+            System.out.println("Employee Bank Account: " + emp.getBankAcc());
+            System.out.println("Employee Fullname (as per NRIC/Passport): " + emp.getName());
             System.out.println("Employee Gender: " + emp.getGender());
             System.out.println("Employee DOB: " + emp.getDOB());
             System.out.println("Employee age: " + emp.getAge());
@@ -85,18 +88,26 @@ public class hrManager {
             System.out.println("Employee Working Experience: " + emp.getWorkingExperience());
             System.out.println("Employee Position: " + emp.getPosition());
             System.out.println("Employee Department: " + emp.getDepartment());
+            System.out.println("Employee Salary (RM): " + emp.getSalary());
+            System.out.println("\n");
         } else {
             System.out.println("Employee not found.");
         }
     }
 
     private static void updateEmployeeProfile(Scanner scanner, ProfileManagement hrManager) {
-        System.out.println("Enter Employee ID:");
+        System.out.println("Enter Employee NRIC/Passport:");
         String empID = scanner.nextLine();
         EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
 
         if (emp != null) {
-            System.out.println("Enter new name (leave blank to keep current):");
+            System.err.println("Enter new Bank Account (leave blank to keep current):");
+            String bankAcc = scanner.nextLine();
+            if (!bankAcc.isBlank()) {
+                emp.updateBankAcc(bankAcc);
+            }
+
+            System.out.println("Enter new fullname (leave blank to keep current):");
             String name = scanner.nextLine();
             if (!name.isBlank()) {
                 emp.updateName(name);
@@ -145,7 +156,6 @@ public class hrManager {
             }
 
             hrManager.updateEmployeeProfile(empID, emp);
-            System.out.println("Employee profile updated successfully.\n");
         } else {
             System.out.println("Employee not found.");
         }
