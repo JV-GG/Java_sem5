@@ -9,7 +9,6 @@ public class AuthApp extends JFrame {
     private JPanel mainPanel;
     private File userFile = new File("users.txt");
     private String currentUserRole;
-    private String currentUsername;
     private UserManagement userManagement;
 
     public AuthApp() {
@@ -48,12 +47,12 @@ public class AuthApp extends JFrame {
         return null;
     }
 
-    public void lockAccount(String username) {
-        updateUser(username, 3, "true");
+    public void lockAccount(String nric) {
+        updateUser(nric, 3, "true");
     }
 
-    public void resetFailedAttempts(String username) {
-        updateUser(username, 4, "0");
+    public void resetFailedAttempts(String nric) {
+        updateUser(nric, 4, "0");
     }
 
     public int incrementFailedAttempts(String nric) {
@@ -63,19 +62,16 @@ public class AuthApp extends JFrame {
         return failedAttempts;
     }
 
-    public void resetPassword(String username, String newPassword) {
-        updateUser(username, 1, newPassword);
-    }
-
-    public void updateUser(String username, int indexToUpdate, String newValue) {
+    public void updateUser(String nric, int indexToUpdate, String newValue) {
         File tempFile = new File("temp.txt");
+
         try (BufferedReader br = new BufferedReader(new FileReader(userFile));
                 BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
 
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts[0].equals(username)) {
+                if (parts[5].equals(nric)) {
                     parts[indexToUpdate] = newValue;
                     line = String.join(",", parts);
                 }
