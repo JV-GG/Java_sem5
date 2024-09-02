@@ -1,8 +1,8 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import javax.swing.*;
 
 public class AuthApp extends JFrame {
     private CardLayout cardLayout;
@@ -33,12 +33,12 @@ public class AuthApp extends JFrame {
         setVisible(true);
     }
 
-    public String[] getUserDetails(String username) {
+    public String[] getUserDetails(String nric) {
         try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts[0].equals(username)) {
+                if (parts[5].equals(nric)) {
                     return parts;
                 }
             }
@@ -56,10 +56,10 @@ public class AuthApp extends JFrame {
         updateUser(username, 4, "0");
     }
 
-    public int incrementFailedAttempts(String username) {
-        String[] userDetails = getUserDetails(username);
+    public int incrementFailedAttempts(String nric) {
+        String[] userDetails = getUserDetails(nric);
         int failedAttempts = Integer.parseInt(userDetails[4]) + 1;
-        updateUser(username, 4, String.valueOf(failedAttempts));
+        updateUser(nric, 4, String.valueOf(failedAttempts));
         return failedAttempts;
     }
 
@@ -95,13 +95,14 @@ public class AuthApp extends JFrame {
         }
     }
 
-    public boolean registerUser(String username, String password, String role) {
+    public boolean registerUser(String username, String password, String role, String nric) {
+        // Check for existing username
         try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts[0].equals(username)) {
-                    return false;
+                    return false; // Username already exists
                 }
             }
         } catch (IOException e) {
@@ -109,7 +110,8 @@ public class AuthApp extends JFrame {
         }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, true))) {
-            bw.write(username + "," + password + "," + role + ",false,0");
+            // Write the username, password, role, and then nric at the end
+            bw.write(username + "," + password + "," + role + ",false,0," + nric);
             bw.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,7 +121,7 @@ public class AuthApp extends JFrame {
     }
 
     class LoginPanel extends JPanel {
-        JTextField usernameField;
+        JTextField nricField;
         JPasswordField passwordField;
 
         public LoginPanel() {
@@ -128,42 +130,45 @@ public class AuthApp extends JFrame {
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.insets = new Insets(10, 10, 10, 10);
 
-            JLabel usernameLabel = new JLabel("Username:");
-            usernameField = new JTextField();
-            usernameField.setPreferredSize(new Dimension(200, 30));
+            JLabel nricLabel = new JLabel("NRIC:");
+            nricField = new JTextField();
+            nricField.setPreferredSize(new Dimension(300, 40));
 
             JLabel passwordLabel = new JLabel("Password:");
             passwordField = new JPasswordField();
-            passwordField.setPreferredSize(new Dimension(200, 30));
+            passwordField.setPreferredSize(new Dimension(300, 40));
 
             JButton loginButton = new JButton("Login");
+            loginButton.setPreferredSize(new Dimension(200, 50));
 
             loginButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    String username = usernameField.getText();
+                    String nric = nricField.getText();
                     String password = String.valueOf(passwordField.getPassword());
 
-                    String[] userDetails = getUserDetails(username);
+                    String[] userDetails = getUserDetails(nric);
                     if (userDetails != null) {
                         if (Boolean.parseBoolean(userDetails[3])) {
                             JOptionPane.showMessageDialog(null, "Account is locked. Contact the System Administrator.");
                         } else if (userDetails[1].equals(password)) {
-                            resetFailedAttempts(username);
+                            resetFailedAttempts(nric);
                             currentUserRole = userDetails[2];
-                            currentUsername = username;
+                            currentUsername = nric;
                             JOptionPane.showMessageDialog(null, "Login successful!");
+
+                            // Navigate based on user role
                             if (currentUserRole.equals("System Administrator")) {
                                 cardLayout.show(mainPanel, "Admin");
                             } else if (currentUserRole.equals("Employee")) {
-                                runEmployeeClass(username,password);
+                                runEmployeeClass(nric, password);
                             } else {
                                 cardLayout.show(mainPanel, "Dashboard");
                             }
 
                         } else {
-                            int failedAttempts = incrementFailedAttempts(username);
+                            int failedAttempts = incrementFailedAttempts(nric);
                             if (failedAttempts >= 3) {
-                                lockAccount(username);
+                                lockAccount(nric);
                                 JOptionPane.showMessageDialog(null, "Account locked due to 3 failed login attempts.");
                             } else {
                                 JOptionPane.showMessageDialog(null,
@@ -171,16 +176,17 @@ public class AuthApp extends JFrame {
                             }
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Invalid username.");
+                        JOptionPane.showMessageDialog(null, "Invalid NRIC.");
                     }
                 }
             });
 
+            // Add components to panel
             gbc.gridx = 0;
             gbc.gridy = 0;
-            add(usernameLabel, gbc);
+            add(nricLabel, gbc);
             gbc.gridx = 1;
-            add(usernameField, gbc);
+            add(nricField, gbc);
             gbc.gridx = 0;
             gbc.gridy = 1;
             add(passwordLabel, gbc);
@@ -188,20 +194,27 @@ public class AuthApp extends JFrame {
             add(passwordField, gbc);
             gbc.gridx = 0;
             gbc.gridy = 2;
-            gbc.gridwidth = 2; // span across both columns
+            gbc.gridwidth = 2;
             add(loginButton, gbc);
         }
 
-        private void runEmployeeClass(String username, String password) {
-            SwingUtilities.invokeLater(() -> {
-                Employee employee = new Employee(username, password);
-                employee.createAndShowGUI();
-            });
+        private void runEmployeeClass(String nric, String password) {
+            String[] userDetails = getUserDetails(nric);
+            if (userDetails != null) {
+                String username = userDetails[0];
+                SwingUtilities.invokeLater(() -> {
+                    Employee employee = new Employee(username, password);
+                    employee.createAndShowGUI();
+                });
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid NRIC. Please try again.");
+            }
         }
     }
 
     class RegisterPanel extends JPanel {
         JTextField usernameField;
+        JTextField nricField;
         JPasswordField passwordField;
         JComboBox<String> roleBox;
 
@@ -212,6 +225,9 @@ public class AuthApp extends JFrame {
 
             JLabel usernameLabel = new JLabel("Username:");
             usernameField = new JTextField();
+
+            JLabel nricLabel = new JLabel("NRIC:");
+            nricField = new JTextField();
 
             JLabel passwordLabel = new JLabel("Password:");
             passwordField = new JPasswordField();
@@ -226,10 +242,11 @@ public class AuthApp extends JFrame {
 
             registerButton.addActionListener(e -> {
                 String username = usernameField.getText();
+                String nric = nricField.getText();
                 String password = String.valueOf(passwordField.getPassword());
                 String role = roleBox.getSelectedItem().toString();
 
-                if (registerUser(username, password, role)) {
+                if (registerUser(username, password, role, nric)) {
                     JOptionPane.showMessageDialog(null, "Registration successful!");
                     cardLayout.show(mainPanel, "Login");
                 } else {
@@ -246,16 +263,21 @@ public class AuthApp extends JFrame {
             add(usernameField, gbc);
             gbc.gridx = 0;
             gbc.gridy = 1;
+            add(nricLabel, gbc);
+            gbc.gridx = 1;
+            add(nricField, gbc);
+            gbc.gridx = 0;
+            gbc.gridy = 2;
             add(passwordLabel, gbc);
             gbc.gridx = 1;
             add(passwordField, gbc);
             gbc.gridx = 0;
-            gbc.gridy = 2;
+            gbc.gridy = 3;
             add(roleLabel, gbc);
             gbc.gridx = 1;
             add(roleBox, gbc);
             gbc.gridx = 0;
-            gbc.gridy = 3;
+            gbc.gridy = 4;
             add(registerButton, gbc);
             gbc.gridx = 1;
             add(goToLoginButton, gbc);
@@ -300,7 +322,13 @@ public class AuthApp extends JFrame {
             this.userManagement = userManagement;
             this.cardLayout = cardLayout;
             this.mainPanel = mainPanel;
-            setLayout(new GridLayout(6, 1));
+
+            setLayout(new GridBagLayout()); // Use GridBagLayout for precise control
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(20, 20, 20, 20); // Add padding around buttons
+            gbc.gridx = 0;
+            gbc.gridy = GridBagConstraints.RELATIVE; // Stack buttons vertically
+            gbc.anchor = GridBagConstraints.CENTER; // Center buttons horizontally
 
             add(createButton("Create User", this::showCreateUserPanel));
             add(createButton("View Users", this::showUserList));
@@ -313,6 +341,9 @@ public class AuthApp extends JFrame {
         private JButton createButton(String text, ActionListener actionListener) {
             JButton button = new JButton(text);
             button.addActionListener(actionListener);
+            button.setPreferredSize(new Dimension(300, 60));
+            button.setFont(new Font("Arial", Font.BOLD, 18));
+
             return button;
         }
 
@@ -321,17 +352,25 @@ public class AuthApp extends JFrame {
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(10, 10, 10, 10);
 
+            // Username Label and Field
             JLabel usernameLabel = new JLabel("Username:");
             JTextField usernameField = new JTextField(20);
 
+            // Password Label and Field
             JLabel passwordLabel = new JLabel("Password:");
             JPasswordField passwordField = new JPasswordField(20);
 
+            // NRIC Label and Field
+            JLabel nricLabel = new JLabel("NRIC:");
+            JTextField nricField = new JTextField(20);
+
+            // Role Label and ComboBox
             JLabel roleLabel = new JLabel("Role:");
             String[] roles = { "Employee", "System Administrator", "Human Resource Officer", "Department Manager",
                     "Payroll Officer" };
             JComboBox<String> roleBox = new JComboBox<>(roles);
 
+            // Create and Cancel Buttons
             JButton createButton = new JButton("Create");
             JButton cancelButton = new JButton("Cancel");
 
@@ -339,8 +378,9 @@ public class AuthApp extends JFrame {
                 String username = usernameField.getText();
                 String password = String.valueOf(passwordField.getPassword());
                 String role = roleBox.getSelectedItem().toString();
+                String nric = nricField.getText();
 
-                if (userManagement.registerUser(username, password, role)) {
+                if (userManagement.registerUser(username, password, role, nric)) {
                     JOptionPane.showMessageDialog(null, "User created successfully.");
                     cardLayout.show(mainPanel, "Admin");
                 } else {
@@ -350,28 +390,40 @@ public class AuthApp extends JFrame {
 
             cancelButton.addActionListener(e1 -> cardLayout.show(mainPanel, "Admin"));
 
+            // Layout the components on the panel using GridBagLayout
             gbc.gridx = 0;
             gbc.gridy = 0;
             createUserPanel.add(usernameLabel, gbc);
             gbc.gridx = 1;
             createUserPanel.add(usernameField, gbc);
+
             gbc.gridx = 0;
             gbc.gridy = 1;
             createUserPanel.add(passwordLabel, gbc);
             gbc.gridx = 1;
             createUserPanel.add(passwordField, gbc);
+
             gbc.gridx = 0;
             gbc.gridy = 2;
+            createUserPanel.add(nricLabel, gbc);
+            gbc.gridx = 1;
+            createUserPanel.add(nricField, gbc);
+
+            gbc.gridx = 0;
+            gbc.gridy = 3;
             createUserPanel.add(roleLabel, gbc);
             gbc.gridx = 1;
             createUserPanel.add(roleBox, gbc);
+
             gbc.gridx = 0;
-            gbc.gridy = 3;
+            gbc.gridy = 4;
             gbc.gridwidth = 2;
             createUserPanel.add(createButton, gbc);
-            gbc.gridy = 4;
+
+            gbc.gridy = 5;
             createUserPanel.add(cancelButton, gbc);
 
+            // Add the panel to the main panel and show it
             mainPanel.add(createUserPanel, "CreateUser");
             cardLayout.show(mainPanel, "CreateUser");
         }
@@ -389,8 +441,8 @@ public class AuthApp extends JFrame {
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(10, 10, 10, 10);
 
-            JLabel usernameLabel = new JLabel("Username:");
-            JTextField usernameField = new JTextField(20);
+            JLabel nricLabel = new JLabel("NRIC:");
+            JTextField nricField = new JTextField(20);
 
             JLabel newPasswordLabel = new JLabel("New Password:");
             JPasswordField newPasswordField = new JPasswordField(20);
@@ -399,12 +451,10 @@ public class AuthApp extends JFrame {
             JButton cancelButton = new JButton("Cancel");
 
             updateButton.addActionListener(e1 -> {
-                String username = usernameField.getText();
+                String nric = nricField.getText();
                 String newPassword = String.valueOf(newPasswordField.getPassword());
 
-                // Call the updateUser method to update the password (index 1 is for password)
-                userManagement.updateUser(username, 1, newPassword);
-                JOptionPane.showMessageDialog(null, "Password updated successfully.");
+                userManagement.updateUser(nric, 1, newPassword);
                 cardLayout.show(mainPanel, "Admin");
             });
 
@@ -412,9 +462,9 @@ public class AuthApp extends JFrame {
 
             gbc.gridx = 0;
             gbc.gridy = 0;
-            updateUserPanel.add(usernameLabel, gbc);
+            updateUserPanel.add(nricLabel, gbc);
             gbc.gridx = 1;
-            updateUserPanel.add(usernameField, gbc);
+            updateUserPanel.add(nricField, gbc);
             gbc.gridx = 0;
             gbc.gridy = 1;
             updateUserPanel.add(newPasswordLabel, gbc);
@@ -436,16 +486,15 @@ public class AuthApp extends JFrame {
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(10, 10, 10, 10);
 
-            JLabel usernameLabel = new JLabel("Username:");
-            JTextField usernameField = new JTextField(20);
+            JLabel nricLabel = new JLabel("NRIC:");
+            JTextField nricField = new JTextField(20);
 
             JButton deleteButton = new JButton("Delete");
             JButton cancelButton = new JButton("Cancel");
 
             deleteButton.addActionListener(e1 -> {
-                String username = usernameField.getText();
-                userManagement.deleteUser(username);
-                JOptionPane.showMessageDialog(null, "User deleted successfully.");
+                String nric = nricField.getText();
+                userManagement.deleteUser(nric);
                 cardLayout.show(mainPanel, "Admin");
             });
 
@@ -453,9 +502,9 @@ public class AuthApp extends JFrame {
 
             gbc.gridx = 0;
             gbc.gridy = 0;
-            deleteUserPanel.add(usernameLabel, gbc);
+            deleteUserPanel.add(nricLabel, gbc);
             gbc.gridx = 1;
-            deleteUserPanel.add(usernameField, gbc);
+            deleteUserPanel.add(nricField, gbc);
             gbc.gridx = 0;
             gbc.gridy = 1;
             gbc.gridwidth = 2;
@@ -472,17 +521,17 @@ public class AuthApp extends JFrame {
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(10, 10, 10, 10);
 
-            JLabel usernameLabel = new JLabel("Username:");
-            JTextField usernameField = new JTextField(20);
+            JLabel nricLabel = new JLabel("NRIC:");
+            JTextField nricField = new JTextField(20);
 
             JButton unlockButton = new JButton("Unlock");
             JButton cancelButton = new JButton("Cancel");
 
             unlockButton.addActionListener(e1 -> {
-                String username = usernameField.getText();
-                userManagement.updateUser(username, 3, "false"); // Unlock account
-                userManagement.updateUser(username, 4, "0"); // Reset failed attempts
-                JOptionPane.showMessageDialog(null, "User unlocked successfully.");
+                String nric = nricField.getText();
+                int[] indicesToUpdate = { 3, 4 };
+                String[] newValues = { "false", "0" };
+                userManagement.updateUser2(nric, indicesToUpdate, newValues);
                 cardLayout.show(mainPanel, "Admin");
             });
 
@@ -490,9 +539,9 @@ public class AuthApp extends JFrame {
 
             gbc.gridx = 0;
             gbc.gridy = 0;
-            unlockUserPanel.add(usernameLabel, gbc);
+            unlockUserPanel.add(nricLabel, gbc);
             gbc.gridx = 1;
-            unlockUserPanel.add(usernameField, gbc);
+            unlockUserPanel.add(nricField, gbc);
             gbc.gridx = 0;
             gbc.gridy = 1;
             gbc.gridwidth = 2;
@@ -517,7 +566,7 @@ class UserManagement {
         this.userFile = new File(filePath);
     }
 
-    public boolean registerUser(String username, String password, String role) {
+    public boolean registerUser(String username, String password, String role, String nric) {
         try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -531,7 +580,7 @@ class UserManagement {
         }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, true))) {
-            bw.write(username + "," + password + "," + role + ",false,0");
+            bw.write(username + "," + password + "," + role + ",false,0," + nric);
             bw.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -540,12 +589,12 @@ class UserManagement {
         return true;
     }
 
-    public String[] getUserDetails(String username) {
+    public String[] getUserDetails(String nric) {
         try (BufferedReader br = new BufferedReader(new FileReader(userFile))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts[0].equals(username)) {
+                if (parts[5].equals(nric)) {
                     return parts;
                 }
             }
@@ -555,23 +604,78 @@ class UserManagement {
         return null;
     }
 
-    public void updateUser(String username, int indexToUpdate, String newValue) {
+    public void updateUser2(String nric, int[] indicesToUpdate, String[] newValues) {
         File tempFile = new File("temp.txt");
+        boolean nricFound = false;
+
+        // Check that indices and values have the same length
+        if (indicesToUpdate.length != newValues.length) {
+            throw new IllegalArgumentException("Indices and values arrays must be of the same length.");
+        }
+
         try (BufferedReader br = new BufferedReader(new FileReader(userFile));
                 BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
 
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts[0].equals(username)) {
-                    parts[indexToUpdate] = newValue;
+                if (parts[5].equals(nric)) {
+                    // Update the specified indices with new values
+                    for (int i = 0; i < indicesToUpdate.length; i++) {
+                        parts[indicesToUpdate[i]] = newValues[i];
+                    }
                     line = String.join(",", parts);
+                    nricFound = true;
                 }
                 bw.write(line);
                 bw.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if (!nricFound) {
+            JOptionPane.showMessageDialog(null, "No NRIC found: " + nric);
+        } else {
+            JOptionPane.showMessageDialog(null, "User with NRIC " + nric + " has unlocked.");
+        }
+
+        // Rename the temp file to the original user file
+        if (userFile.delete()) {
+            if (!tempFile.renameTo(userFile)) {
+                System.out.println("Failed to rename temp file to user file");
+            }
+        } else {
+            System.out.println("Failed to delete the original user file");
+        }
+    }
+
+    public void updateUser(String nric, int indexToUpdate, String newValue) {
+        File tempFile = new File("temp.txt");
+        boolean nricFound = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(userFile));
+                BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts[5].equals(nric)) {
+                    parts[indexToUpdate] = newValue;
+                    line = String.join(",", parts);
+                    nricFound = true;
+                }
+                bw.write(line);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (!nricFound) {
+            JOptionPane.showMessageDialog(null, "No NRIC found: " + nric);
+        } else {
+            JOptionPane.showMessageDialog(null, "User with NRIC " + nric + " password updated");
         }
 
         if (userFile.delete()) {
@@ -583,21 +687,31 @@ class UserManagement {
         }
     }
 
-    public void deleteUser(String username) {
+    public void deleteUser(String nric) {
         File tempFile = new File("temp.txt");
+        boolean nricFound = false;
+
         try (BufferedReader br = new BufferedReader(new FileReader(userFile));
                 BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile))) {
 
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (!parts[0].equals(username)) {
-                    bw.write(line);
-                    bw.newLine();
+                if (parts[5].equals(nric) && !parts[5].equals("000000000000")) { // admin's nric couldnt be deleted
+                    nricFound = true;
+                    continue;
                 }
+                bw.write(line);
+                bw.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if (!nricFound) {
+            JOptionPane.showMessageDialog(null, "No NRIC found: " + nric);
+        } else {
+            JOptionPane.showMessageDialog(null, "User with NRIC " + nric + " deleted successfully.");
         }
 
         if (userFile.delete()) {
@@ -618,7 +732,7 @@ class UserManagement {
                 userCount++;
             }
 
-            String[][] userList = new String[userCount][4];
+            String[][] userList = new String[userCount][5];
             br.close();
 
             BufferedReader br2 = new BufferedReader(new FileReader(userFile));
@@ -630,6 +744,7 @@ class UserManagement {
                 userList[index][1] = parts[2];
                 userList[index][2] = parts[3];
                 userList[index][3] = parts[4];
+                userList[index][4] = parts[5];
                 index++;
             }
             br2.close();
