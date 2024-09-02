@@ -9,6 +9,7 @@ public class AuthApp extends JFrame {
     private JPanel mainPanel;
     private File userFile = new File("users.txt");
     private String currentUserRole;
+    private String currentUsername;
     private UserManagement userManagement;
 
     public AuthApp() {
