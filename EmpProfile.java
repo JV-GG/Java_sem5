@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmpProfile {
-    private String name;
     private String IDNo;
-    private final String Gender;
+    private String Password;
+    private String Name;
+    private String Gender;
     private LocalDate DOB;
     private String address;
     private String emergencyContact;
@@ -23,8 +24,9 @@ public class EmpProfile {
 
     // Constructor, getters, setters, etc.
     public EmpProfile(){
-        this.name = "";
         this.IDNo = "";
+        this.Password = "";
+        this.Name = "";
         this.Gender = "";
         this.DOB = LocalDate.now();
         this.address = "";
@@ -37,9 +39,10 @@ public class EmpProfile {
         // this.monthlyGrossSalary = 0.0;
     }
 
-    public EmpProfile(String name, String IDNo, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position) {
-        this.name = name;
+    public EmpProfile(String IDNo, String Password, String Name, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position) {
         this.IDNo = IDNo;
+        this.Password = Password;
+        this.Name = Name;
         this.Gender = Gender;
         this.DOB = DOB;
         this.address = address;
@@ -49,12 +52,16 @@ public class EmpProfile {
         this.position = position;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getIDNo() {
         return IDNo;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public String getName() {
+        return Name;
     }
 
     public String getGender() {
@@ -84,13 +91,21 @@ public class EmpProfile {
     public String getDepartment() {
         return department;
     }
-
-    public void updateName(String name) {
-        this.name = name;
-    }
     
     public void updateIDNo(String IDNo) {
         this.IDNo = IDNo;
+    }
+
+    public void updatePassword(String Password) {
+        this.Password = Password;
+    }
+
+    public void updateName(String Name) {
+        this.Name = Name;
+    }
+
+    public void updateGender(String Gender){
+        this.Gender = Gender;
     }
     
     public void updateDOB(LocalDate DOB) {

@@ -1,11 +1,24 @@
-Name: ali
-ID: 010101-01-0101
+ID: 010101010101
+Password: 123
+Name: aaa
 Gender: male
 DOB: 2001-01-01
 Age: 23
-Address: 123
+Address: 51, lorong 2, kg baru, 85200 jementa, johor
+Emergency Contact: 0177664453
+Working Experience: promoter,  event crew
+Position: abc
+Department: abc
+
+ID: 020202020202
+Password: 123
+Name: abc
+Gender: female
+DOB: 2002-02-02
+Age: 22
+Address: abc
 Emergency Contact: 123
-Working Experience: 123, 456
-Position: salesman
-Department: sales
+Working Experience: abc
+Position: abc
+Department: abc
 

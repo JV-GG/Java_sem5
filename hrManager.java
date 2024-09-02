@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class runProfileManagement {
+public class hrManager {
     public static void main(String[] args) {
         ProfileManagement hrManager = new ProfileManagement();
         Scanner scanner = new Scanner(System.in);
@@ -28,10 +28,12 @@ public class runProfileManagement {
             switch (choice) {
                 case 1 -> {
                     System.out.println("\nCreating Employee Profile");
-                    System.out.println("Enter Employee Name:");
-                    String name = scanner.nextLine();
                     System.out.println("Enter Employee ID:");
                     String IDNo = scanner.nextLine();
+                    System.out.println("Enter Employee Password:");
+                    String Password = scanner.nextLine();
+                    System.out.println("Enter Employee Name:");
+                    String Name = scanner.nextLine();
                     System.out.println("Enter Gender:");
                     String Gender = scanner.nextLine();
                     System.out.println("Enter Employee DOB (yyyy-mm-dd):");
@@ -48,7 +50,7 @@ public class runProfileManagement {
                     System.out.println("Enter Employee Department:");
                     String department = scanner.nextLine();
 
-                    EmpProfile newEmployee = new EmpProfile(name, IDNo, Gender, DOB, address, emergencyContact, experience, department, position);
+                    EmpProfile newEmployee = new EmpProfile(IDNo, Password, Name, Gender, DOB, address, emergencyContact, experience, department, position);
                     hrManager.createEmployeeProfile(newEmployee);
                 }
                 case 2 -> {
@@ -58,8 +60,9 @@ public class runProfileManagement {
 
                     if (emp != null) {
                         System.out.println("\nEmployee Profile:");
-                        System.out.println("Employee Name: " + emp.getName());
                         System.out.println("Employee ID: " + emp.getIDNo());
+                        System.out.println("Employee Password: " + emp.getPassword());
+                        System.out.println("Employee Name: " + emp.getName());
                         System.out.println("Employee Gender: " + emp.getGender());
                         System.out.println("Employee DOB: " + emp.getDOB());
                         System.out.println("Employee age: " + emp.getAge());

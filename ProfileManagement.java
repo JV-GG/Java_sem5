@@ -16,32 +16,90 @@ public class ProfileManagement {
 
     public ProfileManagement() {
         this.employees = new ArrayList<>();
+        loadEmployeeProfiles();
+    }
+
+    private void loadEmployeeProfiles() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("employee_profiles.txt"))) {
+            String line;
+            EmpProfile employee = null;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("ID: ")) {
+                    if (employee != null) {
+                        employees.add(employee);
+                    }
+                    employee = new EmpProfile();
+                    employee.updateIDNo(line.substring(4));
+                } else if (employee != null) {
+                    if (line.startsWith("Password: ")) {
+                        employee.updatePassword(line.substring(10));
+                    } else if (line.startsWith("Name: ")) {
+                        employee.updateName(line.substring(6));
+                    } else if (line.startsWith("Gender: ")) {
+                        employee.updateGender(line.substring(8));
+                    } else if (line.startsWith("DOB: ")) {
+                        employee.updateDOB(LocalDate.parse(line.substring(5)));
+                    } else if (line.startsWith("Address: ")) {
+                        employee.updateAddress(line.substring(9));
+                    } else if (line.startsWith("Emergency Contact: ")) {
+                        employee.updateEmergencyContact(line.substring(19));
+                    } else if (line.startsWith("Working Experience: ")) {
+                        List<String> experience = List.of(line.substring(20).split(", "));
+                        employee.updateWorkingExperience(experience);
+                    } else if (line.startsWith("Position: ")) {
+                        employee.updatePosition(line.substring(10));
+                    } else if (line.startsWith("Department: ")) {
+                        employee.updateDepartment(line.substring(12));
+                    }
+                }
+            }
+            if (employee != null) {
+                employees.add(employee);
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while loading employee profiles.");
+            e.printStackTrace(System.out);
+        }
     }
 
     public void createEmployeeProfile(EmpProfile employee) {
-        // Check if the name already exists in the text file
-        if (isDuplicateName(employee.getName())) {
-            System.out.println("An employee with this name already exists in the file. Cannot create duplicate profiles.\n");
+        if (isDuplicateID(employee.getIDNo())) {
+            System.out.println("An employee with this ID already exists in the file. Cannot create duplicate profiles.\n");
             return;
         }
-
-        // If no duplicate, add the employee to the list and save to the file
-        employees.add(employee);
-        saveEmployeeDetails();
-        System.out.println("Employee profile created successfully.\n");
+    
+        // Directly write the new employee details to the file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("employee_profiles.txt", true))) {
+            writer.write("ID: " + employee.getIDNo());
+            writer.write("\nPassword: " + employee.getPassword());
+            writer.write("\nName: " + employee.getName());
+            writer.write("\nGender: " + employee.getGender());
+            writer.write("\nDOB: " + employee.getDOB());
+            writer.write("\nAge: " + employee.getAge());
+            writer.write("\nAddress: " + employee.getAddress());
+            writer.write("\nEmergency Contact: " + employee.getEmergencyContact());
+            writer.write("\nWorking Experience: " + String.join(", ", employee.getWorkingExperience()));
+            writer.write("\nPosition: " + employee.getPosition());
+            writer.write("\nDepartment: " + employee.getDepartment());
+            writer.write("\n\n");
+            System.out.println("Employee profile created successfully.\n");
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving employee details.");
+            e.printStackTrace(System.out);
+        }
     }
 
     // Method to check for duplicate names in the text file
-    private boolean isDuplicateName(String name) {
+    private boolean isDuplicateID(String IDNo) {
         try (BufferedReader reader = new BufferedReader(new FileReader("employee_profiles.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Name: ") && line.substring(6).equalsIgnoreCase(name)) {
+                if (line.startsWith("ID: ") && line.substring(4).equalsIgnoreCase(IDNo)) {
                     return true;
                 }
             }
         } catch (IOException e) {
-            System.out.println("An error occurred while checking for duplicate names.");
+            System.out.println("An error occurred while checking for duplicate ID.");
             e.printStackTrace(System.out);
         }
         return false;
@@ -57,21 +115,22 @@ public class ProfileManagement {
                     employee = new EmpProfile();
                     employee.updateIDNo(empID);
 
-                    // The name line comes before the ID line
-                    if (line.startsWith("Name: ")) {
-                        employee.updateName(line.substring(6));
-                    }
-
                     // Read the rest of the employee details
                     while ((line = reader.readLine()) != null && !line.trim().isEmpty()) {
-                        if (line.startsWith("DOB: ")) {
+                        if (line.startsWith("Password: ")) {
+                            employee.updatePassword(line.substring(10));
+                        }else if (line.startsWith("Name: ")) {
+                            employee.updateName(line.substring(6));
+                        }else if (line.startsWith("Gender: ")) {
+                            employee.updateGender(line.substring(8));
+                        }else if (line.startsWith("DOB: ")) {
                             employee.updateDOB(LocalDate.parse(line.substring(5)));
                         } else if (line.startsWith("Address: ")) {
                             employee.updateAddress(line.substring(9));
                         } else if (line.startsWith("Emergency Contact: ")) {
                             employee.updateEmergencyContact(line.substring(19));
                         } else if (line.startsWith("Working Experience: ")) {
-                            List<String> experience = List.of(line.substring(19).split(", "));
+                            List<String> experience = List.of(line.substring(20).split(", "));
                             employee.updateWorkingExperience(experience);
                         } else if (line.startsWith("Position: ")) {
                             employee.updatePosition(line.substring(10));
@@ -90,25 +149,32 @@ public class ProfileManagement {
     }
 
     public void updateEmployeeProfile(String employeeId, EmpProfile updatedEmployee) {
+        boolean found = false;
         for (int i = 0; i < employees.size(); i++) {
             if (employees.get(i).getIDNo().equals(employeeId)) {
                 employees.set(i, updatedEmployee);
-                saveEmployeeDetails();
-                return;
+                found = true;
+                break;
             }
         }
-    }
-    
+        if (found) {
+            saveEmployeeDetails();
+            System.out.println("Employee profile updated successfully.\n");
+        } else {
+            System.out.println("Employee not found.");
+        }
+    }    
 
     public List<EmpProfile> listAllEmployees() {
         return employees;
     }
 
     public void saveEmployeeDetails() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("employee_profiles.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("employee_profiles.txt"))) { // Overwrite the file
             for (EmpProfile emp : employees) {
-                writer.write("Name: " + emp.getName());
-                writer.write("\nID: " + emp.getIDNo());
+                writer.write("ID: " + emp.getIDNo());
+                writer.write("\nPassword: " + emp.getPassword());
+                writer.write("\nName: " + emp.getName());
                 writer.write("\nGender: " + emp.getGender());
                 writer.write("\nDOB: " + emp.getDOB());
                 writer.write("\nAge: " + emp.getAge());
@@ -123,5 +189,5 @@ public class ProfileManagement {
             System.out.println("An error occurred while saving employee details.");
             e.printStackTrace(System.out);
         }
-    }
+    }    
 }
