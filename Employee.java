@@ -49,6 +49,7 @@ public class Employee {
     }
 
     public void createAndShowGUI() {
+        System.setProperty("sun.java2d.uiScale", "1.0");
         loadAttendanceRecords(username);
         JFrame frame = new JFrame("Employee Attendance System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
