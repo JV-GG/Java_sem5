@@ -21,6 +21,11 @@ public class hrManager {
     private String nric;
     private ProfileManagement hrManager = new ProfileManagement();
 
+    public hrManager(String password, String nric) {
+        this.password = password;
+        this.nric = nric;
+    }
+
     public void runhrManager() {
         // Create the frame
         frame = new JFrame("HR Manager");
@@ -310,7 +315,7 @@ public class hrManager {
         }
     }
 
-    public void changePassword(String username, String currentPassword, JFrame frame) {
+    public void changePassword(String username, String password, JFrame frame) {
         JPanel panel = new JPanel(new GridLayout(3, 2));
         JLabel oldPasswordLabel = new JLabel("Old Password:");
         JLabel newPasswordLabel = new JLabel("New Password:");
@@ -331,26 +336,21 @@ public class hrManager {
                 JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
-            String oldPassword = new String(oldPasswordField.getPassword()).trim();
-            String newPassword = new String(newPasswordField.getPassword()).trim();
-            String confirmPassword = new String(confirmPasswordField.getPassword()).trim();
+            String oldPassword = new String(oldPasswordField.getPassword());
+            String newPassword = new String(newPasswordField.getPassword());
+            String confirmPassword = new String(confirmPasswordField.getPassword());
 
-            // Check if old password is correct
-            if (!oldPassword.equals(currentPassword)) {
+            if (oldPassword.equals(password)) {
+                setPassword(nric, newPassword);
+                if (!newPassword.equals(confirmPassword) || newPassword.equals("")) {
+                    JOptionPane.showMessageDialog(null, "New password and confirmation do not match.");
+                    return;
+                }
+                JOptionPane.showMessageDialog(null, "Password changed successfully.");
+                frame.dispose();
+            } else {
                 JOptionPane.showMessageDialog(null, "Old password is incorrect.");
-                return;
             }
-
-            // Check if new password and confirmation match
-            if (!newPassword.equals(confirmPassword) || newPassword.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "New password and confirmation do not match.");
-                return;
-            }
-
-            // Update the password
-            setPassword(username, newPassword);
-            JOptionPane.showMessageDialog(null, "Password changed successfully.");
-            frame.dispose();
         }
     }
 
@@ -406,6 +406,8 @@ public class hrManager {
     }
 
     public static void main(String[] args) {
-        new hrManager().runhrManager();
+        String password = "";
+        String nric = "";
+        new hrManager(password, nric).runhrManager();
     }
 }

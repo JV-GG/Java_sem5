@@ -161,9 +161,10 @@ public class AuthApp extends JFrame {
                                 cardLayout.show(mainPanel, "Admin");
                             } else if (currentUserRole.equals("Human Resource Officer")) {
                                 JOptionPane.showMessageDialog(null, "Welcome Human Resource Officer!");
-                                hrManager manager = new hrManager();
+                                nricField.setText("");
+                                passwordField.setText("");
+                                hrManager manager = new hrManager(password, nric);
                                 manager.runhrManager();
-                                SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                             } else if (currentUserRole.equals("Department Manager")) {
                                 JOptionPane.showMessageDialog(null, "Welcome Department Manager!");
                             } else if (currentUserRole.equals("Payroll Officer")) {
@@ -173,7 +174,6 @@ public class AuthApp extends JFrame {
                                 nricField.setText("");
                                 passwordField.setText("");
                                 runEmployeeClass(nric, password);
-                                SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                             } else {
                                 cardLayout.show(mainPanel, "Dashboard");
                             }
@@ -388,7 +388,7 @@ public class AuthApp extends JFrame {
             if (selectedRole == null) {
                 return;
             } else if (selectedRole.equals("Employee")) {
-                hrManager hrManager = new hrManager();
+                hrManager hrManager = new hrManager("", "");
                 hrManager.createEmployeeProfile();
             } else if (!selectedRole.equals("Employee")) {
                 // Step 2: Proceed to show the Create User Panel
