@@ -26,3 +26,33 @@ Allowance: RM300.00
 Net Salary: RM2444.20
 --------------------------------------------------
 
+--------------------------------------------------
+Payslip for -
+Salary: RM5000.00
+OT Pay: RMRM0.00
+Unpaid Leave Deduction: RMRM0.00
+Late Penalty Deduction: RMRM200.00
+EPF: RM550.00
+SOCSO: RM25.00
+EIS: RM10.00
+PCB: RM20.80
+Total Payable: RM605.80
+Allowance: RM300.00
+Net Salary: RM4494.20
+--------------------------------------------------
+
+--------------------------------------------------
+Payslip for -
+Salary: RM5000.00
+OT Pay: RMRM0.00
+Unpaid Leave Deduction: RMRM0.00
+Late Penalty Deduction: RMRM200.00
+EPF: RM550.00
+SOCSO: RM25.00
+EIS: RM10.00
+PCB: RM20.80
+Total Payable: RM605.80
+Allowance: RM300.00
+Net Salary: RM4494.20
+--------------------------------------------------
+
