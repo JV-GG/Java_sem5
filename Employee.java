@@ -232,15 +232,15 @@ public class Employee {
     }
 
     private void writeAttendanceToFile(AttendanceRecord record, long workingHours) {
-        String username = record.getUsername();
-        String directoryPath = "Employees/" + username;
+
+        String directoryPath = "Employees/" + nric;
         File directory = new File(directoryPath);
 
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
-        String filename = directoryPath + File.separator + username + "_attendance.txt";
+        String filename = directoryPath + File.separator + nric + "_attendance.txt";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
         LocalDateTime lateThreshold = record.getClockInTime().withHour(9).withMinute(31).withSecond(0).withNano(0); // time
 
@@ -277,8 +277,8 @@ public class Employee {
 
         if (option == JOptionPane.OK_OPTION) {
             int selectedMonth = monthSelector.getSelectedIndex() + 1;
-            String directoryPath = "Employees/" + username;
-            String filename = directoryPath + File.separator + username + "_attendance.txt";
+            String directoryPath = "Employees/" + nric;
+            String filename = directoryPath + File.separator + nric + "_attendance.txt";
             List<Integer> workingHoursList = new ArrayList<>();
             int lateCount = 0;
             int penalty = 0;
@@ -321,7 +321,7 @@ public class Employee {
             long totalHoursWorked = workingHoursList.stream().mapToInt(Integer::intValue).sum();
 
             // Write the report
-            String reportFilename = directoryPath + File.separator + username + "_monthly_report_"
+            String reportFilename = directoryPath + File.separator + nric + "_monthly_report_"
                     + months[selectedMonth - 1] + ".txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportFilename))) {
                 writer.write("Monthly Report for " + username + " - " + months[selectedMonth - 1] + "\n");
@@ -362,8 +362,8 @@ public class Employee {
 
         if (option == JOptionPane.OK_OPTION) {
             String selectedYear = (String) yearSelector.getSelectedItem();
-            String directoryPath = "Employees/" + username; // Path to the user's directory
-            String filename = directoryPath + File.separator + username + "_attendance.txt";
+            String directoryPath = "Employees/" + nric; // Path to the user's directory
+            String filename = directoryPath + File.separator + nric + "_attendance.txt";
             List<Integer> workingHoursList = new ArrayList<>();
             int lateCount = 0; // Track how many times the user was late
             int penalty = 0; // Total penalty amount
@@ -408,7 +408,7 @@ public class Employee {
             long totalHoursWorked = workingHoursList.stream().mapToInt(Integer::intValue).sum();
 
             // Write the annual report
-            String reportFilename = directoryPath + File.separator + username + "_annual_report_" + selectedYear
+            String reportFilename = directoryPath + File.separator + nric + "_annual_report_" + selectedYear
                     + ".txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportFilename))) {
                 writer.write("Annual Report for " + username + " - " + selectedYear + "\n");
@@ -463,7 +463,7 @@ public class Employee {
             String confirmPassword = new String(confirmPasswordField.getPassword());
 
             if (oldPassword.equals(password)) {
-                setPassword(username, newPassword);
+                setPassword(nric, newPassword);
                 if (!newPassword.equals(confirmPassword) || newPassword.equals("")) {
                     JOptionPane.showMessageDialog(null, "New password and confirmation do not match.");
                     return;
@@ -476,12 +476,12 @@ public class Employee {
         }
     }
 
-    private void setPassword(String username, String password) {
-        userPasswords.put(username, password);
-        updatePasswordInFile(username, password);
+    private void setPassword(String nric, String password) {
+        userPasswords.put(nric, password);
+        updatePasswordInFile(nric, password);
     }
 
-    private void updatePasswordInFile(String username, String password) {
+    private void updatePasswordInFile(String nric, String password) {
         File file = new File("users.txt");
         File tempFile = new File("user_temp.txt");
 
@@ -493,10 +493,10 @@ public class Employee {
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                String fileUsername = parts[0];
+                String filenric = parts[5]; // Assuming the NRIC is in the 6th position
 
-                if (fileUsername.equals(username)) {
-                    parts[1] = password;
+                if (filenric.equals(nric)) {
+                    parts[1] = password; // Update the password
                     writer.write(String.join(",", parts));
                     updated = true;
                 } else {
@@ -505,9 +505,14 @@ public class Employee {
                 writer.newLine();
             }
 
-            // If the username was not found, add it to the file
             if (!updated) {
-                writer.write(username + "," + password);
+                String username = "defaultUsername";
+                String additionalInfo1 = "defaultInfo1";
+                String additionalInfo2 = "defaultInfo2";
+                String additionalInfo3 = "defaultInfo3";
+                String additionalInfo4 = "defaultInfo4";
+                writer.write(username + "," + password + "," + additionalInfo1 + "," + additionalInfo2 + ","
+                        + additionalInfo3 + "," + additionalInfo4 + "," + nric);
                 writer.newLine();
             }
 
@@ -515,7 +520,6 @@ public class Employee {
             e.printStackTrace();
         }
 
-        // Replace the original file with the updated one
         if (file.delete()) {
             tempFile.renameTo(file);
         } else {
@@ -524,14 +528,9 @@ public class Employee {
     }
 
     private void supportTicket(String username) {
-        // Create the dropdown for selecting a reason
         String[] reasons = { "Forget to clock in/out", "System problem", "Others" };
         JComboBox<String> reasonDropdown = new JComboBox<>(reasons);
-
-        // Create the text area for writing additional details with larger dimensions
-        JTextArea detailsTextArea = new JTextArea(10, 40); // Increased size for a bigger panel
-
-        // Display a dialog for entering support ticket details with larger components
+        JTextArea detailsTextArea = new JTextArea(10, 40);
         int result = JOptionPane.showConfirmDialog(null,
                 new Object[] {
                         new JLabel("Select a reason:"),
