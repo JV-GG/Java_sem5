@@ -10,7 +10,7 @@ Emergency Contact: -
 Working Experience: -
 Position: technical support
 Department: -
-Salary: 3000.0
+Gross Salary: 0.0
 
 ID: 040720040016
 Password: -
@@ -24,7 +24,7 @@ Emergency Contact: -
 Working Experience: -
 Position: technical support
 Department: -
-Salary: 5000.0
+Gross Salary: 0.0
 
 ID: 020202020202
 Password: -
@@ -38,5 +38,19 @@ Emergency Contact: -
 Working Experience: -
 Position: technical support
 Department: -
-Salary: 2000.0
+Gross Salary: 0.0
+
+ID: 010203040506
+Password: 123
+BankAcc: 123
+Name: Ali
+Gender: Male
+DOB: 2001-02-03
+Age: 23
+Address: 123
+Emergency Contact: 60123456789
+Working Experience: NA
+Position: Toilet Manager
+Department: Toilet
+Gross Salary: 1500.0
 

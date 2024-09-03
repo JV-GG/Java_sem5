@@ -4,3 +4,9 @@ Name: -
 Original Salary: 3000.0
 New Salary: 5000.0
 
+Date and Time: 2024-09-03 22:03:10.362465
+ICNo: 010203040506
+Name: Ali
+Original Gross Salary: 1200.0
+New Gross Salary: 1500.0
+

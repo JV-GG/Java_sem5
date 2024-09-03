@@ -106,8 +106,8 @@ public class hrManager {
             String address = ((JTextField) components[13]).getText();
             String emergencyContact = ((JTextField) components[15]).getText();
             List<String> experience = Arrays.asList(((JTextField) components[17]).getText().split(","));
-            String department = ((JTextField) components[19]).getText();
-            String position = ((JTextField) components[21]).getText();
+            String position = ((JTextField) components[19]).getText();
+            String department = ((JTextField) components[21]).getText();
             double salary = Double.parseDouble(((JTextField) components[23]).getText());
     
             // Create and register the new employee profile
