@@ -190,8 +190,8 @@ public class Employee {
         }
     }
 
-    public void loadAttendanceRecords(String username) {
-        String filename = "Employees/" + username + "/" + username + "_attendance.txt";
+    public void loadAttendanceRecords(String nric) {
+        String filename = "Employees/" + nric + "/" + nric + "_attendance.txt";
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String lastLine = null;
             String currentLine;
