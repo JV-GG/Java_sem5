@@ -313,7 +313,6 @@ public class hrManager {
     }
 
     public static void main(String[] args) {
-        // main method code
         new hrManager().runhrManager();
     }
 }
