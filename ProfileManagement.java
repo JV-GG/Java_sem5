@@ -83,6 +83,7 @@ public class ProfileManagement {
         employees.add(employee);
         saveEmployeeDetails();
         saveEmployeeDetails2(employee);
+        JOptionPane.showMessageDialog(null, "Employee profile created successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
     
     private boolean isDuplicateID(String NRIC) {
@@ -161,7 +162,7 @@ public class ProfileManagement {
             int index = employees.indexOf(existingEmployee);
             if (index != -1) {
                 employees.set(index, updatedEmployee);
-                JOptionPane.showMessageDialog(null, "Employee profile updated.", "New Employee Create!", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println("Employee profile updated successfully.");
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to find the employee.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -228,7 +229,7 @@ public class ProfileManagement {
                 writer.write("\nSalary: " + emp.getSalary());
                 writer.write("\n\n");
             }
-            JOptionPane.showMessageDialog(null, "Employee details saved successfully.", "New Employee Create!", JOptionPane.INFORMATION_MESSAGE);
+            System.out.println("Employee details saved successfully.");
         } catch (IOException e) {
             System.out.println("An error occurred while saving employee details.\n");
             e.printStackTrace(System.out);

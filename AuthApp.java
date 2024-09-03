@@ -160,6 +160,7 @@ public class AuthApp extends JFrame {
                                 JOptionPane.showMessageDialog(null, "Welcome Human Resource Officer!");
                                 hrManager manager = new hrManager();
                                 manager.runhrManager();
+                                SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                             } else if (currentUserRole.equals("Department Manager")) {
                                 JOptionPane.showMessageDialog(null, "Welcome Department Manager!");
                             } else if (currentUserRole.equals("Payroll Officer")) {
@@ -363,84 +364,91 @@ public class AuthApp extends JFrame {
         }
 
         private void showCreateUserPanel(ActionEvent e) {
-            JPanel createUserPanel = new JPanel(new GridBagLayout());
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(10, 10, 10, 10);
-
-            // Username Label and Field
-            JLabel usernameLabel = new JLabel("Username:");
-            JTextField usernameField = new JTextField(20);
-
-            // Password Label and Field
-            JLabel passwordLabel = new JLabel("Password:");
-            JPasswordField passwordField = new JPasswordField(20);
-
-            // NRIC Label and Field
-            JLabel nricLabel = new JLabel("NRIC:");
-            JTextField nricField = new JTextField(20);
-
-            // Role Label and ComboBox
-            JLabel roleLabel = new JLabel("Role:");
-            String[] roles = { "Employee", "System Administrator", "Human Resource Officer", "Department Manager",
-                    "Payroll Officer" };
-            JComboBox<String> roleBox = new JComboBox<>(roles);
-
-            // Create and Cancel Buttons
-            JButton createButton = new JButton("Create");
-            JButton cancelButton = new JButton("Cancel");
-
-            createButton.addActionListener(e1 -> {
-                String username = usernameField.getText();
-                String password = String.valueOf(passwordField.getPassword());
-                String role = roleBox.getSelectedItem().toString();
-                String nric = nricField.getText();
-
-                if (userManagement.registerUser(username, password, role, nric)) {
-                    JOptionPane.showMessageDialog(null, "User created successfully.");
-                    cardLayout.show(mainPanel, "Admin");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Username already exists.");
-                }
-            });
-
-            cancelButton.addActionListener(e1 -> cardLayout.show(mainPanel, "Admin"));
-
-            // Layout the components on the panel using GridBagLayout
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            createUserPanel.add(usernameLabel, gbc);
-            gbc.gridx = 1;
-            createUserPanel.add(usernameField, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            createUserPanel.add(passwordLabel, gbc);
-            gbc.gridx = 1;
-            createUserPanel.add(passwordField, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 2;
-            createUserPanel.add(nricLabel, gbc);
-            gbc.gridx = 1;
-            createUserPanel.add(nricField, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 3;
-            createUserPanel.add(roleLabel, gbc);
-            gbc.gridx = 1;
-            createUserPanel.add(roleBox, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 4;
-            gbc.gridwidth = 2;
-            createUserPanel.add(createButton, gbc);
-
-            gbc.gridy = 5;
-            createUserPanel.add(cancelButton, gbc);
-
-            // Add the panel to the main panel and show it
-            mainPanel.add(createUserPanel, "CreateUser");
-            cardLayout.show(mainPanel, "CreateUser");
+            // Step 1: Show Role Selection Dialog
+            String[] roles = { "Employee", "System Administrator", "Human Resource Officer", "Department Manager", "Payroll Officer" };
+            String selectedRole = (String) JOptionPane.showInputDialog(
+                    null,
+                    "Select a role for the new user:",
+                    "Role Selection",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    roles,
+                    roles[0]);
+        
+            // If no role is selected (user presses cancel), exit the function
+            if (selectedRole == null) {
+                return;
+            } else if (selectedRole.equals("Employee")){
+                hrManager hrManager = new hrManager();
+                hrManager.createEmployeeProfile();
+            } else if (!selectedRole.equals("Employee")){        
+                // Step 2: Proceed to show the Create User Panel
+                JPanel createUserPanel = new JPanel(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.insets = new Insets(10, 10, 10, 10);
+            
+                // Username Label and Field
+                JLabel usernameLabel = new JLabel("Username:");
+                JTextField usernameField = new JTextField(20);
+            
+                // Password Label and Field
+                JLabel passwordLabel = new JLabel("Password:");
+                JPasswordField passwordField = new JPasswordField(20);
+            
+                // NRIC Label and Field
+                JLabel nricLabel = new JLabel("NRIC:");
+                JTextField nricField = new JTextField(20);
+            
+                // Create and Cancel Buttons
+                JButton createButton = new JButton("Create");
+                JButton cancelButton = new JButton("Cancel");
+            
+                createButton.addActionListener(e1 -> {
+                    String username = usernameField.getText();
+                    String password = String.valueOf(passwordField.getPassword());
+                    String nric = nricField.getText();
+            
+                    if (userManagement.registerUser(username, password, selectedRole, nric)) {
+                        JOptionPane.showMessageDialog(null, "User created successfully.");
+                        cardLayout.show(mainPanel, "Admin");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Username already exists.");
+                    }
+                });
+            
+                cancelButton.addActionListener(e1 -> cardLayout.show(mainPanel, "Admin"));
+            
+                // Layout the components on the panel using GridBagLayout
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                createUserPanel.add(usernameLabel, gbc);
+                gbc.gridx = 1;
+                createUserPanel.add(usernameField, gbc);
+            
+                gbc.gridx = 0;
+                gbc.gridy = 1;
+                createUserPanel.add(passwordLabel, gbc);
+                gbc.gridx = 1;
+                createUserPanel.add(passwordField, gbc);
+            
+                gbc.gridx = 0;
+                gbc.gridy = 2;
+                createUserPanel.add(nricLabel, gbc);
+                gbc.gridx = 1;
+                createUserPanel.add(nricField, gbc);
+            
+                gbc.gridx = 0;
+                gbc.gridy = 4;
+                gbc.gridwidth = 2;
+                createUserPanel.add(createButton, gbc);
+            
+                gbc.gridy = 5;
+                createUserPanel.add(cancelButton, gbc);
+            
+                // Add the panel to the main panel and show it
+                mainPanel.add(createUserPanel, "CreateUser");
+                cardLayout.show(mainPanel, "CreateUser");
+            }
         }
 
         private void showUserList(ActionEvent e) {

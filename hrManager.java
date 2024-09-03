@@ -14,6 +14,7 @@ public class hrManager {
         // Create the frame
         frame = new JFrame("HR Manager");
         frame.setSize(800, 600);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create the panel
@@ -79,7 +80,7 @@ public class hrManager {
     }
 
 
-    private void createEmployeeProfile() {
+    public void createEmployeeProfile() {
         JPanel formPanel = new JPanel(new GridLayout(20,20,0,20));
 
         formPanel.add(new JLabel("Employee NRIC/Passport:"));
