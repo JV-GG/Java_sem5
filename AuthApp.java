@@ -153,6 +153,8 @@ public class AuthApp extends JFrame {
                             currentUserRole = userDetails[2];
                             currentUsername = nric;
                             JOptionPane.showMessageDialog(null, "Login successful!");
+                            nricField.setText("");
+                            passwordField.setText("");
 
                             // Navigate based on user role
                             if (currentUserRole.equals("System Administrator")) {
@@ -168,6 +170,8 @@ public class AuthApp extends JFrame {
                                 JOptionPane.showMessageDialog(null, "Welcome Payroll Officer!");
                             } else if (currentUserRole.equals("Employee")) {
                                 JOptionPane.showMessageDialog(null, "Welcome Employee!");
+                                nricField.setText("");
+                                passwordField.setText("");
                                 runEmployeeClass(nric, password);
                                 SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                             } else {
