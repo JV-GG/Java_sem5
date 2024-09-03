@@ -45,7 +45,7 @@ public class AuthApp extends JFrame {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return null;
     }
@@ -82,7 +82,7 @@ public class AuthApp extends JFrame {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         if (userFile.delete()) {
@@ -104,7 +104,7 @@ public class AuthApp extends JFrame {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, true))) {
@@ -112,7 +112,7 @@ public class AuthApp extends JFrame {
             bw.write(username + "," + password + "," + role + ",false,0," + nric);
             bw.newLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         return true;
@@ -621,14 +621,14 @@ class UserManagement {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, true))) {
             bw.write(username + "," + password + "," + role + ",false,0," + nric);
             bw.newLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         return true;
@@ -644,7 +644,7 @@ class UserManagement {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return null;
     }
@@ -676,7 +676,7 @@ class UserManagement {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         if (!nricFound) {
@@ -714,7 +714,7 @@ class UserManagement {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         if (!nricFound) {
@@ -750,7 +750,7 @@ class UserManagement {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         if (!nricFound) {
@@ -796,7 +796,7 @@ class UserManagement {
             return userList;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return new String[0][0];
     }
@@ -809,7 +809,7 @@ class UserManagement {
                 userList.append(line).append("\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return userList.toString();
     }
@@ -822,7 +822,7 @@ class UserManagement {
                 supportList.append(line).append("\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return supportList.toString();
     }

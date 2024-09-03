@@ -209,8 +209,7 @@ public class Employee {
                 // or "Still Clocked In")
                 if (parts.length >= 3) {
                     String user = parts[0];
-                    LocalDateTime clockIn = LocalDateTime.parse(parts[1],
-                            DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
+                    LocalDateTime clockIn = LocalDateTime.parse(parts[1], DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
                     LocalDateTime clockOut = null;
 
                     // Check if the clock out time is available
