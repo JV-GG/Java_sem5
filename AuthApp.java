@@ -16,6 +16,7 @@ public class AuthApp extends JFrame {
 
         setTitle("HRMS System");
         setSize(1920, 1080);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -166,7 +167,9 @@ public class AuthApp extends JFrame {
                             } else if (currentUserRole.equals("Payroll Officer")) {
                                 JOptionPane.showMessageDialog(null, "Welcome Payroll Officer!");
                             } else if (currentUserRole.equals("Employee")) {
+                                JOptionPane.showMessageDialog(null, "Welcome Employee!");
                                 runEmployeeClass(nric, password);
+                                SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                             } else {
                                 cardLayout.show(mainPanel, "Dashboard");
                             }

@@ -1,1 +1,2 @@
 Username: 1, NRIC: 040329040267, Forget to clock in/out, Reason: testing123
+Username: 1, NRIC: 040329040267, Forget to clock in/out, Reason: haha sorry boss

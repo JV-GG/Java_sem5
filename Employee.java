@@ -7,6 +7,8 @@ import java.util.List;
 import javax.swing.*;
 
 public class Employee {
+    private JFrame frame1;
+
     private static class AttendanceRecord {
         private String username;
         private LocalDateTime clockInTime;
@@ -49,9 +51,14 @@ public class Employee {
     }
 
     public void createAndShowGUI() {
+<<<<<<< Updated upstream
         System.setProperty("sun.java2d.uiScale", "1.0");
+=======
+        System.setProperty("sun.java2d.uiScale", "1.25");
+>>>>>>> Stashed changes
         loadAttendanceRecords(username);
         JFrame frame = new JFrame("Employee Attendance System");
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Set up full-screen mode
@@ -77,6 +84,7 @@ public class Employee {
         frame.add(usernameLabel2);
 
         // Create buttons
+        JButton retrieveButton = new JButton("View Profile");
         JButton clockInButton = new JButton("Clock In");
         JButton clockOutButton = new JButton("Clock Out");
         JButton monthlyReportButton = new JButton("Monthly Report");
@@ -85,14 +93,16 @@ public class Employee {
         JButton supportTicketButton = new JButton("Support Ticket");
 
         // Set button positions
+        retrieveButton.setBounds(760, 950, 150, 40);
         clockInButton.setBounds(480, 300, 150, 50);
         clockOutButton.setBounds(680, 300, 150, 50);
         monthlyReportButton.setBounds(880, 300, 150, 50);
         annualReportButton.setBounds(1080, 300, 150, 50);
         changePasswordButton.setBounds(1280, 300, 200, 50);
-        supportTicketButton.setBounds(860, 950, 200, 30);
+        supportTicketButton.setBounds(1010, 950, 150, 40);
 
         // Add buttons to the frame
+        frame.add(retrieveButton);
         frame.add(clockInButton);
         frame.add(clockOutButton);
         frame.add(monthlyReportButton);
@@ -112,10 +122,12 @@ public class Employee {
         logoutButton.setBounds(760, 800, 400, 100);
         logoutButton.addActionListener(e -> {
             frame.dispose();
+            new AuthApp();
         });
         frame.add(logoutButton);
 
         // Button actions
+        retrieveButton.addActionListener(e -> viewProfile(nric));
         clockInButton.addActionListener(e -> clockIn(username));
         clockOutButton.addActionListener(e -> clockOut(username));
         monthlyReportButton.addActionListener(e -> generateMonthlyReport());
@@ -124,6 +136,62 @@ public class Employee {
         supportTicketButton.addActionListener(e -> supportTicket(username));
 
         frame.setVisible(true);
+    }
+
+    private void viewProfile(String nric) {
+        ProfileManagement hrManager = new ProfileManagement();
+        EmpProfile emp = hrManager.retrieveEmployeeProfile(nric);
+
+        if (emp != null) {
+            // Create a panel to display the employee profile
+            JPanel profilePanel = new JPanel(new GridLayout(0, 2, 10, 10));
+            profilePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+            // Add profile details to the panel
+            profilePanel.add(new JLabel("Employee NRIC/Passport:"));
+            profilePanel.add(new JLabel(emp.getNRIC()));
+
+            profilePanel.add(new JLabel("Employee Password:"));
+            profilePanel.add(new JLabel(emp.getPassword()));
+
+            profilePanel.add(new JLabel("Employee Bank Account:"));
+            profilePanel.add(new JLabel(emp.getBankAcc()));
+
+            profilePanel.add(new JLabel("Employee Fullname (as per NRIC/Passport):"));
+            profilePanel.add(new JLabel(emp.getName()));
+
+            profilePanel.add(new JLabel("Employee Gender:"));
+            profilePanel.add(new JLabel(emp.getGender()));
+
+            profilePanel.add(new JLabel("Employee DOB:"));
+            profilePanel.add(new JLabel(emp.getDOB().toString()));
+
+            profilePanel.add(new JLabel("Employee Age:"));
+            profilePanel.add(new JLabel(String.valueOf(emp.getAge())));
+
+            profilePanel.add(new JLabel("Employee Address:"));
+            profilePanel.add(new JLabel(emp.getAddress()));
+
+            profilePanel.add(new JLabel("Employee Emergency Contact:"));
+            profilePanel.add(new JLabel(emp.getEmergencyContact()));
+
+            profilePanel.add(new JLabel("Employee Working Experience:"));
+            profilePanel.add(new JLabel(String.join(", ", emp.getWorkingExperience())));
+
+            profilePanel.add(new JLabel("Employee Position:"));
+            profilePanel.add(new JLabel(emp.getPosition()));
+
+            profilePanel.add(new JLabel("Employee Department:"));
+            profilePanel.add(new JLabel(emp.getDepartment()));
+
+            profilePanel.add(new JLabel("Employee Salary (RM):"));
+            profilePanel.add(new JLabel(String.format("%.2f", emp.getSalary())));
+
+            // Display the profile information in a dialog
+            JOptionPane.showMessageDialog(frame1, profilePanel, "Employee Profile", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(frame1, "Employee not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void loadAttendanceRecords(String username) {
