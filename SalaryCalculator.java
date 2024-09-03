@@ -7,15 +7,15 @@ import javax.swing.*;
 
 public class SalaryCalculator extends JFrame {
     private JComboBox<String> employeeSelector;
-    private JTextField hoursWorkedField, unpaidLeaveDaysField;
-    private JLabel otPayLabel, unpaidLeaveDeductionLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel, salaryLabel;
+    private JTextField hoursWorkedField, unpaidLeaveDaysField, lateDaysField;
+    private JLabel nricLabel, otPayLabel, unpaidLeaveDeductionLabel, latePenaltyLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel, salaryLabel;
     private JButton calculateButton, printPayslipButton;
     private HashMap<String, EmpProfile> employees;
     private EmpProfile selectedEmployee;
 
     public SalaryCalculator() {
         setTitle("Salary Calculator");
-        setSize(500, 650);
+        setSize(500, 750);  // Adjusted height for late penalty display
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
@@ -47,9 +47,17 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         panel.add(salaryLabel, gbc);
 
-        // Hours Worked
+        // NRIC Label
         gbc.gridx = 0;
         gbc.gridy = 2;
+        panel.add(new JLabel("Employee NRIC:"), gbc);
+        nricLabel = new JLabel("-");
+        gbc.gridx = 1;
+        panel.add(nricLabel, gbc);
+
+        // Hours Worked
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         panel.add(new JLabel("Enter Hours Worked:"), gbc);
         hoursWorkedField = new JTextField(15);
         gbc.gridx = 1;
@@ -57,16 +65,24 @@ public class SalaryCalculator extends JFrame {
 
         // Unpaid Leave Days
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         panel.add(new JLabel("Enter Unpaid Leave Days:"), gbc);
         unpaidLeaveDaysField = new JTextField(15);
         gbc.gridx = 1;
         panel.add(unpaidLeaveDaysField, gbc);
 
+        // Late Days
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        panel.add(new JLabel("Enter Late Days:"), gbc);
+        lateDaysField = new JTextField(15);
+        gbc.gridx = 1;
+        panel.add(lateDaysField, gbc);
+
         // Calculate Button
         calculateButton = new JButton("Calculate Salary");
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         calculateButton.setFont(new Font("Arial", Font.BOLD, 14));
@@ -74,67 +90,74 @@ public class SalaryCalculator extends JFrame {
         calculateButton.setForeground(Color.WHITE);
         panel.add(calculateButton, gbc);
 
-        // Output labels (same as before)
+        // Output labels (with NRIC before OT Pay)
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 7;
         panel.add(new JLabel("OT Pay (RM):"), gbc);
         otPayLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(otPayLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 8;
         panel.add(new JLabel("Unpaid Leave Deduction (RM):"), gbc);
         unpaidLeaveDeductionLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(unpaidLeaveDeductionLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 9;
+        panel.add(new JLabel("Late Penalty (RM):"), gbc);
+        latePenaltyLabel = new JLabel();
+        gbc.gridx = 1;
+        panel.add(latePenaltyLabel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 10;
         panel.add(new JLabel("Payable EPF (RM):"), gbc);
         epfLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(epfLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 11;
         panel.add(new JLabel("Payable SOCSO (RM):"), gbc);
         socsoLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(socsoLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 12;
         panel.add(new JLabel("Payable EIS (RM):"), gbc);
         eisLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(eisLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 13;
         panel.add(new JLabel("Payable PCB (RM):"), gbc);
         pcbLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(pcbLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 14;
         panel.add(new JLabel("Total Payable (RM):"), gbc);
         totalPayableLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(totalPayableLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 12;
+        gbc.gridy = 15;
         panel.add(new JLabel("Gross Allowance (RM):"), gbc);
         allowanceLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(allowanceLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 13;
+        gbc.gridy = 16;
         panel.add(new JLabel("Net Salary (RM):"), gbc);
         netSalaryLabel = new JLabel();
         gbc.gridx = 1;
@@ -143,7 +166,7 @@ public class SalaryCalculator extends JFrame {
         // Print Payslip Button
         printPayslipButton = new JButton("Print Payslip");
         gbc.gridx = 1;
-        gbc.gridy = 14;
+        gbc.gridy = 17;
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(printPayslipButton, gbc);
 
@@ -163,6 +186,7 @@ public class SalaryCalculator extends JFrame {
 
         if (selectedEmployee != null) {
             salaryLabel.setText(String.format("RM%.2f", selectedEmployee.getSalary()));
+            nricLabel.setText(selectedEmployee.getNRIC());  // Set NRIC label
         }
     }
 
@@ -171,6 +195,7 @@ public class SalaryCalculator extends JFrame {
             double salary = selectedEmployee.getSalary();
             int hoursWorked = Integer.parseInt(hoursWorkedField.getText());
             int unpaidLeaveDays = Integer.parseInt(unpaidLeaveDaysField.getText());
+            int lateDays = Integer.parseInt(lateDaysField.getText());
 
             double otRate = 8.0;
             double otPay = 0.0;
@@ -186,6 +211,10 @@ public class SalaryCalculator extends JFrame {
                 unpaidLeaveDeduction = (salary / 20) * outstandingLeave;
             }
             unpaidLeaveDeductionLabel.setText(String.format("RM%.2f", unpaidLeaveDeduction));
+
+            double latePenaltyRate = 10.0;  // Assume a fixed rate of RM10 per late day
+            double latePenalty = lateDays * latePenaltyRate;
+            latePenaltyLabel.setText(String.format("RM%.2f", latePenalty));
 
             double epfContribution = salary * 0.11;
             epfLabel.setText(String.format("RM%.2f", epfContribution));
@@ -205,7 +234,7 @@ public class SalaryCalculator extends JFrame {
             double allowance = 300;
             allowanceLabel.setText(String.format("RM%.2f", allowance));
 
-            double netSalary = salary - totalPayable + allowance + otPay - unpaidLeaveDeduction;
+            double netSalary = salary - totalPayable + allowance + otPay - unpaidLeaveDeduction - latePenalty;
             netSalaryLabel.setText(String.format("RM%.2f", netSalary));
 
         } catch (NumberFormatException ex) {
@@ -217,26 +246,27 @@ public class SalaryCalculator extends JFrame {
         String fileName = "Payslips.txt";
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) { // 'true' to append to file
-        writer.println("--------------------------------------------------");
-        writer.println("Payslip for " + selectedEmployee.getName());
-        writer.println("NRIC: " + selectedEmployee.getNRIC());
-        writer.println("Salary: RM" + String.format("%.2f", selectedEmployee.getSalary()));
-        writer.println("OT Pay: RM" + otPayLabel.getText());
-        writer.println("Unpaid Leave Deduction: RM" + unpaidLeaveDeductionLabel.getText());
-        writer.println("EPF: " + epfLabel.getText());
-        writer.println("SOCSO: " + socsoLabel.getText());
-        writer.println("EIS: " + eisLabel.getText());
-        writer.println("PCB: " + pcbLabel.getText());
-        writer.println("Total Payable: " + totalPayableLabel.getText());
-        writer.println("Allowance: " + allowanceLabel.getText());
-        writer.println("Net Salary: " + netSalaryLabel.getText());
-        writer.println("--------------------------------------------------");
-        writer.println(); // Add a blank line for separation between payslips
+            writer.println("--------------------------------------------------");
+            writer.println("Payslip for " + selectedEmployee.getName());
+            writer.println("NRIC: " + selectedEmployee.getNRIC());
+            writer.println("Salary: RM" + String.format("%.2f", selectedEmployee.getSalary()));
+            writer.println("OT Pay: RM" + otPayLabel.getText());
+            writer.println("Unpaid Leave Deduction: RM" + unpaidLeaveDeductionLabel.getText());
+            writer.println("Late Penalty: RM" + latePenaltyLabel.getText());
+            writer.println("EPF: " + epfLabel.getText());
+            writer.println("SOCSO: " + socsoLabel.getText());
+            writer.println("EIS: " + eisLabel.getText());
+            writer.println("PCB: " + pcbLabel.getText());
+            writer.println("Total Payable: " + totalPayableLabel.getText());
+            writer.println("Allowance: " + allowanceLabel.getText());
+            writer.println("Net Salary: " + netSalaryLabel.getText());
+            writer.println("--------------------------------------------------");
+            writer.println(); // Add a blank line for separation between payslips
 
-        JOptionPane.showMessageDialog(this, "Payslip has been appended to the file.");
-    } catch (IOException ex) {
-        JOptionPane.showMessageDialog(this, "An error occurred while printing the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
-    }
+            JOptionPane.showMessageDialog(this, "Payslip has been appended to the file.");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "An error occurred while printing the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private HashMap<String, EmpProfile> readEmployeeData() {
