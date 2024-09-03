@@ -26,3 +26,46 @@ Allowance: RM300.00
 Net Salary: RM2444.20
 --------------------------------------------------
 
+--------------------------------------------------
+Payslip for -
+Salary: RM3000.00
+OT Pay: RMRM80.00
+Unpaid Leave Deduction: RMRM0.00
+EPF: RM330.00
+SOCSO: RM15.00
+EIS: RM6.00
+PCB: RM12.48
+Total Payable: RM363.48
+Allowance: RM300.00
+Net Salary: RM3016.52
+--------------------------------------------------
+
+--------------------------------------------------
+Payslip for Khoo Zong Hao
+Salary: RM3000.00
+OT Pay: RMRM160.00
+Unpaid Leave Deduction: RMRM0.00
+EPF: RM330.00
+SOCSO: RM15.00
+EIS: RM6.00
+PCB: RM12.48
+Total Payable: RM363.48
+Allowance: RM300.00
+Net Salary: RM3096.52
+--------------------------------------------------
+
+--------------------------------------------------
+Payslip for Khoo Zong Hao
+NRIC: 040430010775
+Salary: RM3000.00
+OT Pay: RMRM0.00
+Unpaid Leave Deduction: RMRM0.00
+EPF: RM330.00
+SOCSO: RM15.00
+EIS: RM6.00
+PCB: RM12.48
+Total Payable: RM363.48
+Allowance: RM300.00
+Net Salary: RM2936.52
+--------------------------------------------------
+

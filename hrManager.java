@@ -83,7 +83,7 @@ public class hrManager {
         addLabeledField(formPanel, gbc, "Employee Working Experience (comma-separated):", new JTextField());
         addLabeledField(formPanel, gbc, "Position:", new JTextField());
         addLabeledField(formPanel, gbc, "Department:", new JTextField());
-        addLabeledField(formPanel, gbc, "Salary (RM):", new JTextField());
+        addLabeledField(formPanel, gbc, "Gross Salary (RM):", new JTextField());
         
         // Adjust field sizes
         Component[] components = formPanel.getComponents();
@@ -174,7 +174,7 @@ public class hrManager {
                 profilePanel.add(new JLabel("Employee Department:"));
                 profilePanel.add(new JLabel(emp.getDepartment()));
     
-                profilePanel.add(new JLabel("Employee Salary (RM):"));
+                profilePanel.add(new JLabel("Employee Gross Salary (RM):"));
                 profilePanel.add(new JLabel(String.format("%.2f", emp.getSalary())));
     
                 // Display the profile information in a dialog
@@ -230,7 +230,7 @@ public class hrManager {
                 JTextField txtDepartment = new JTextField(emp.getDepartment());
                 formPanel.add(txtDepartment);
     
-                formPanel.add(new JLabel("New Salary (leave blank to keep current):"));
+                formPanel.add(new JLabel("New Gross Salary (leave blank to keep current):"));
                 JTextField txtSalary = new JTextField(String.valueOf(emp.getSalary()));
                 formPanel.add(txtSalary);
     

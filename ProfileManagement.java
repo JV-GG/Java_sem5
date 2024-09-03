@@ -53,8 +53,8 @@ public class ProfileManagement {
                         employee.updatePosition(line.substring(10));
                     } else if (line.startsWith("Department: ")) {
                         employee.updateDepartment(line.substring(12));
-                    } else if (line.startsWith("Salary: ")) {
-                        employee.updateSalary(Double.parseDouble(line.substring(8)));
+                    } else if (line.startsWith("Gross Salary: ")) {
+                        employee.updateSalary(Double.parseDouble(line.substring(14)));
                     }
                 }
             }
@@ -123,8 +123,8 @@ public class ProfileManagement {
                         employee.updatePosition(line.substring(10));
                     } else if (line.startsWith("Department: ")) {
                         employee.updateDepartment(line.substring(12));
-                    } else if (line.startsWith("Salary: ")) {
-                        employee.updateSalary(Double.parseDouble(line.substring(8)));
+                    } else if (line.startsWith("Gross Salary: ")) {
+                        employee.updateSalary(Double.parseDouble(line.substring(14)));
                     }
                 }
             }
@@ -181,8 +181,8 @@ public class ProfileManagement {
             writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now());
             writer.write("\nICNo: " + employee.getNRIC());
             writer.write("\nName: " + employee.getName());
-            writer.write("\nOriginal Salary: " + employee.getSalary());
-            writer.write("\nNew Salary: " + newSalary);
+            writer.write("\nOriginal Gross Salary: " + employee.getSalary());
+            writer.write("\nNew Gross Salary: " + newSalary);
             writer.write("\n\n");
             System.out.println("Salary change logged successfully.");
         } catch (IOException e) {
@@ -226,7 +226,7 @@ public class ProfileManagement {
                 writer.write("\nWorking Experience: " + String.join(", ", emp.getWorkingExperience()));
                 writer.write("\nPosition: " + emp.getPosition());
                 writer.write("\nDepartment: " + emp.getDepartment());
-                writer.write("\nSalary: " + emp.getSalary());
+                writer.write("\nGross Salary: " + emp.getSalary());
                 writer.write("\n\n");
             }
             System.out.println("Employee details saved successfully.");

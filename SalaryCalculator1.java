@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
 
-public class SalaryCalculator extends JFrame {
+public class SalaryCalculator1 extends JFrame {
     private JComboBox<String> employeeSelector;
     private JTextField hoursWorkedField, unpaidLeaveDaysField;
     private JLabel otPayLabel, unpaidLeaveDeductionLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel, salaryLabel;
@@ -13,7 +13,7 @@ public class SalaryCalculator extends JFrame {
     private HashMap<String, EmpProfile> employees;
     private EmpProfile selectedEmployee;
 
-    public SalaryCalculator() {
+    public SalaryCalculator1() {
         setTitle("Salary Calculator");
         setSize(500, 650);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -42,7 +42,7 @@ public class SalaryCalculator extends JFrame {
         // Salary
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Gross Salary (RM):"), gbc);
+        panel.add(new JLabel("Salary (RM):"), gbc);
         salaryLabel = new JLabel("RM0.00");
         gbc.gridx = 1;
         panel.add(salaryLabel, gbc);
@@ -218,9 +218,8 @@ public class SalaryCalculator extends JFrame {
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) { // 'true' to append to file
         writer.println("--------------------------------------------------");
-        writer.println("Payslip for " + selectedEmployee.getName());
-        writer.println("NRIC: " + selectedEmployee.getNRIC());
-        writer.println("Salary: RM" + String.format("%.2f", selectedEmployee.getSalary()));
+        writer.println("Payslip for " + employee.getName());
+        writer.println("Salary: RM" + String.format("%.2f", employee.getSalary()));
         writer.println("OT Pay: RM" + otPayLabel.getText());
         writer.println("Unpaid Leave Deduction: RM" + unpaidLeaveDeductionLabel.getText());
         writer.println("EPF: " + epfLabel.getText());
@@ -257,8 +256,8 @@ public class SalaryCalculator extends JFrame {
                     name = line.substring(6).trim();
                 } else if (line.startsWith("Position: ")) {
                     position = line.substring(10).trim();
-                } else if (line.startsWith("Gross Salary: ")) {
-                    salary = Double.parseDouble(line.substring(14).trim());
+                } else if (line.startsWith("Salary: ")) {
+                    salary = Double.parseDouble(line.substring(8).trim());
                 }
 
                 if (id != null && name != null && position != null && salary != 0.0) {
