@@ -6,14 +6,15 @@ import java.io.PrintWriter;
 
 public class SalaryCalculator extends JFrame {
     private JTextField hoursWorkedField, unpaidLeaveDaysField;
-    private JLabel otPayLabel, unpaidLeaveDeductionLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel;
+    private JLabel otPayLabel, unpaidLeaveDeductionLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel, latePenaltyAmountLabel;
     private JButton calculateButton, printPayslipButton;
     private EmpProfile employee;
+    private JComboBox<Integer> latePenaltyComboBox;
 
     public SalaryCalculator(EmpProfile employee) {
         this.employee = employee;
         setTitle("Salary Calculator");
-        setSize(500, 650);  // Adjust size to fit the new button
+        setSize(500, 700);  // Adjust size to fit the new component
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);  // Center the window on the screen
         setLayout(new GridBagLayout());
@@ -50,10 +51,22 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         panel.add(unpaidLeaveDaysField, gbc);
 
+        // Late Penalty Days (Dropdown)
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panel.add(new JLabel("Select Late Penalty Days:"), gbc);
+        Integer[] latePenaltyDays = new Integer[30]; // Options for 1-30 days
+        for (int i = 0; i < 30; i++) {
+            latePenaltyDays[i] = i + 1;
+        }
+        latePenaltyComboBox = new JComboBox<>(latePenaltyDays);
+        gbc.gridx = 1;
+        panel.add(latePenaltyComboBox, gbc);
+
         // Calculate Button
         calculateButton = new JButton("Calculate Salary");
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         calculateButton.setFont(new Font("Arial", Font.BOLD, 14));
@@ -65,63 +78,70 @@ public class SalaryCalculator extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         panel.add(new JLabel("OT Pay (RM):"), gbc);
         otPayLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(otPayLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         panel.add(new JLabel("Unpaid Leave Deduction (RM):"), gbc);
         unpaidLeaveDeductionLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(unpaidLeaveDeductionLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
+        panel.add(new JLabel("Late Penalty Deduction (RM):"), gbc);
+        latePenaltyAmountLabel = new JLabel();
+        gbc.gridx = 1;
+        panel.add(latePenaltyAmountLabel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 8;
         panel.add(new JLabel("Payable EPF (RM):"), gbc);
         epfLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(epfLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 9;
         panel.add(new JLabel("Payable SOCSO (RM):"), gbc);
         socsoLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(socsoLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 10;
         panel.add(new JLabel("Payable EIS (RM):"), gbc);
         eisLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(eisLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 11;
         panel.add(new JLabel("Payable PCB (RM):"), gbc);
         pcbLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(pcbLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 12;
         panel.add(new JLabel("Total Payable (RM):"), gbc);
         totalPayableLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(totalPayableLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 13;
         panel.add(new JLabel("Gross Allowance (RM):"), gbc);
         allowanceLabel = new JLabel();
         gbc.gridx = 1;
         panel.add(allowanceLabel, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 12;
+        gbc.gridy = 14;
         panel.add(new JLabel("Net Salary (RM):"), gbc);
         netSalaryLabel = new JLabel();
         gbc.gridx = 1;
@@ -130,7 +150,7 @@ public class SalaryCalculator extends JFrame {
         // Print Payslip Button
         printPayslipButton = new JButton("Print Payslip");
         gbc.gridx = 1;
-        gbc.gridy = 13;
+        gbc.gridy = 15;
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(printPayslipButton, gbc);
 
@@ -147,6 +167,7 @@ public class SalaryCalculator extends JFrame {
             double salary = employee.getSalary();
             int hoursWorked = Integer.parseInt(hoursWorkedField.getText());
             int unpaidLeaveDays = Integer.parseInt(unpaidLeaveDaysField.getText());
+            int latePenaltyDays = (Integer) latePenaltyComboBox.getSelectedItem();
 
             double otRate = 8.0;
             double otPay = 0.0;
@@ -162,6 +183,9 @@ public class SalaryCalculator extends JFrame {
                 unpaidLeaveDeduction = (salary / 20) * outstandingLeave;
             }
             unpaidLeaveDeductionLabel.setText(String.format("RM%.2f", unpaidLeaveDeduction));
+
+            double latePenaltyDeduction = (latePenaltyDays / 3) * 100.0; // Deduct RM100 for every 3 days
+            latePenaltyAmountLabel.setText(String.format("RM%.2f", latePenaltyDeduction));
 
             double epfContribution = salary * 0.11;
             epfLabel.setText(String.format("RM%.2f", epfContribution));
@@ -181,7 +205,7 @@ public class SalaryCalculator extends JFrame {
             double allowance = 300;
             allowanceLabel.setText(String.format("RM%.2f", allowance));
 
-            double netSalary = salary - totalPayable + allowance + otPay - unpaidLeaveDeduction;
+            double netSalary = salary - totalPayable + allowance + otPay - unpaidLeaveDeduction - latePenaltyDeduction;
             netSalaryLabel.setText(String.format("RM%.2f", netSalary));
 
         } catch (NumberFormatException ex) {
@@ -198,6 +222,7 @@ public class SalaryCalculator extends JFrame {
             writer.println("Salary: RM" + String.format("%.2f", employee.getSalary()));
             writer.println("OT Pay: RM" + otPayLabel.getText());
             writer.println("Unpaid Leave Deduction: RM" + unpaidLeaveDeductionLabel.getText());
+            writer.println("Late Penalty Deduction: RM" + latePenaltyAmountLabel.getText());
             writer.println("EPF: " + epfLabel.getText());
             writer.println("SOCSO: " + socsoLabel.getText());
             writer.println("EIS: " + eisLabel.getText());
