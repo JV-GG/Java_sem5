@@ -1,16 +1,19 @@
 import java.awt.*;
 import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class SalaryCalculator extends JFrame {
     private JTextField hoursWorkedField, unpaidLeaveDaysField;
     private JLabel otPayLabel, unpaidLeaveDeductionLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel;
-    private JButton calculateButton;
+    private JButton calculateButton, printPayslipButton;
     private EmpProfile employee;
 
     public SalaryCalculator(EmpProfile employee) {
         this.employee = employee;
         setTitle("Salary Calculator");
-        setSize(500, 600);
+        setSize(500, 650);  // Adjust size to fit the new button
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);  // Center the window on the screen
         setLayout(new GridBagLayout());
@@ -124,9 +127,17 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         panel.add(netSalaryLabel, gbc);
 
+        // Print Payslip Button
+        printPayslipButton = new JButton("Print Payslip");
+        gbc.gridx = 1;
+        gbc.gridy = 13;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(printPayslipButton, gbc);
+
         add(panel);
 
         calculateButton.addActionListener(e -> calculateAndDisplaySalary());
+        printPayslipButton.addActionListener(e -> printPayslip());
 
         setVisible(true);
     }
@@ -175,6 +186,31 @@ public class SalaryCalculator extends JFrame {
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Please enter valid numbers.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void printPayslip() {
+        String fileName = "Payslips.txt"; // Common file for all payslips
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) { // 'true' to append to file
+            writer.println("--------------------------------------------------");
+            writer.println("Payslip for " + employee.getName());
+            writer.println("Salary: RM" + String.format("%.2f", employee.getSalary()));
+            writer.println("OT Pay: RM" + otPayLabel.getText());
+            writer.println("Unpaid Leave Deduction: RM" + unpaidLeaveDeductionLabel.getText());
+            writer.println("EPF: " + epfLabel.getText());
+            writer.println("SOCSO: " + socsoLabel.getText());
+            writer.println("EIS: " + eisLabel.getText());
+            writer.println("PCB: " + pcbLabel.getText());
+            writer.println("Total Payable: " + totalPayableLabel.getText());
+            writer.println("Allowance: " + allowanceLabel.getText());
+            writer.println("Net Salary: " + netSalaryLabel.getText());
+            writer.println("--------------------------------------------------");
+            writer.println(); // Add a blank line for separation between payslips
+
+            JOptionPane.showMessageDialog(this, "Payslip has been appended to the file.");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "An error occurred while printing the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

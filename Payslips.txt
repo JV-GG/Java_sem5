@@ -1,0 +1,28 @@
+--------------------------------------------------
+Payslip for -
+Salary: RM5000.00
+OT Pay: RMRM0.00
+Unpaid Leave Deduction: RMRM0.00
+EPF: RMRM550.00
+SOCSO: RMRM25.00
+EIS: RMRM10.00
+PCB: RMRM20.80
+Total Payable: RMRM605.80
+Allowance: RMRM300.00
+Net Salary: RMRM4694.20
+--------------------------------------------------
+
+--------------------------------------------------
+Payslip for -
+Salary: RM5000.00
+OT Pay: RMRM0.00
+Unpaid Leave Deduction: RMRM2250.00
+EPF: RM550.00
+SOCSO: RM25.00
+EIS: RM10.00
+PCB: RM20.80
+Total Payable: RM605.80
+Allowance: RM300.00
+Net Salary: RM2444.20
+--------------------------------------------------
+
