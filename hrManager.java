@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -50,29 +48,12 @@ public class hrManager {
         }
 
         // Add action listeners to handle button clicks
-        btnCreate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                createEmployeeProfile();
-            }
-        });
-
-        btnRetrieve.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                retrieveEmployeeProfile();
-            }
-        });
-
-        btnUpdate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                updateEmployeeProfile();
-            }
-        });
-
-        btnExit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-                new AuthApp();
-            }
+        btnCreate.addActionListener(e -> createEmployeeProfile());
+        btnRetrieve.addActionListener(e -> retrieveEmployeeProfile());
+        btnUpdate.addActionListener(e -> updateEmployeeProfile());
+        btnExit.addActionListener(e -> {
+            frame.dispose();
+            new AuthApp();
         });
 
         // Make the frame visible

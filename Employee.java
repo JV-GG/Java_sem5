@@ -51,11 +51,7 @@ public class Employee {
     }
 
     public void createAndShowGUI() {
-<<<<<<< Updated upstream
         System.setProperty("sun.java2d.uiScale", "1.0");
-=======
-        System.setProperty("sun.java2d.uiScale", "1.25");
->>>>>>> Stashed changes
         loadAttendanceRecords(username);
         JFrame frame = new JFrame("Employee Attendance System");
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
