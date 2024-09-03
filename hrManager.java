@@ -15,7 +15,6 @@ import javax.swing.*;
 public class hrManager {
     private JFrame frame;
     private Map<String, String> userPasswords = new HashMap<>(); // Store username and hashed password
-    private JLabel statusLabel;
     private String username;
     private String password;
     private String nric;
