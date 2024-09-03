@@ -72,7 +72,7 @@ public class hrManager {
         btnChangePassword.addActionListener(e -> changePassword(username, password, frame));
         btnExit.addActionListener(e -> {
             frame.dispose();
-
+            new AuthApp();
         });
 
         // Make the frame visible
@@ -347,6 +347,7 @@ public class hrManager {
                 }
                 JOptionPane.showMessageDialog(null, "Password changed successfully.");
                 frame.dispose();
+                new AuthApp();
             } else {
                 JOptionPane.showMessageDialog(null, "Old password is incorrect.");
             }

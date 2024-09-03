@@ -118,7 +118,7 @@ public class Employee {
         logoutButton.setBounds(760, 800, 400, 100);
         logoutButton.addActionListener(e -> {
             frame.dispose();
-
+            new AuthApp();
         });
         frame.add(logoutButton);
 
@@ -535,6 +535,7 @@ public class Employee {
                 }
                 JOptionPane.showMessageDialog(null, "Password changed successfully.");
                 frame.dispose();
+                new AuthApp();
             } else {
                 JOptionPane.showMessageDialog(null, "Old password is incorrect.");
             }

@@ -1,5 +1,5 @@
 admin3,admin,System Administrator,false,0,000000000000
 JV,lol,Payroll Officer,false,0,040329040268
-1,1,Employee,false,0,040720040016
-zonghao,2,Human Resource Officer,false,0,040430010775
+1,2,Employee,false,0,040720040016
+zonghao,1,Human Resource Officer,false,0,040430010775
 Ali,123,Employee,false,0,010203040506

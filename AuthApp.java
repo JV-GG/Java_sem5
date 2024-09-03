@@ -164,7 +164,10 @@ public class AuthApp extends JFrame {
                                 nricField.setText("");
                                 passwordField.setText("");
                                 hrManager manager = new hrManager(password, nric);
+
                                 manager.runhrManager();
+                                SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
+
                             } else if (currentUserRole.equals("Department Manager")) {
                                 JOptionPane.showMessageDialog(null, "Welcome Department Manager!");
                             } else if (currentUserRole.equals("Payroll Officer")) {
@@ -174,6 +177,7 @@ public class AuthApp extends JFrame {
                                 nricField.setText("");
                                 passwordField.setText("");
                                 runEmployeeClass(nric, password);
+                                SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                             } else {
                                 cardLayout.show(mainPanel, "Dashboard");
                             }
