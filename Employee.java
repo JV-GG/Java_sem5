@@ -232,15 +232,15 @@ public class Employee {
     }
 
     private void writeAttendanceToFile(AttendanceRecord record, long workingHours) {
-        String username = record.getUsername();
-        String directoryPath = "Employees/" + username;
+
+        String directoryPath = "Employees/" + nric;
         File directory = new File(directoryPath);
 
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
-        String filename = directoryPath + File.separator + username + "_attendance.txt";
+        String filename = directoryPath + File.separator + nric + "_attendance.txt";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
         LocalDateTime lateThreshold = record.getClockInTime().withHour(9).withMinute(31).withSecond(0).withNano(0); // time
 
@@ -277,8 +277,8 @@ public class Employee {
 
         if (option == JOptionPane.OK_OPTION) {
             int selectedMonth = monthSelector.getSelectedIndex() + 1;
-            String directoryPath = "Employees/" + username;
-            String filename = directoryPath + File.separator + username + "_attendance.txt";
+            String directoryPath = "Employees/" + nric;
+            String filename = directoryPath + File.separator + nric + "_attendance.txt";
             List<Integer> workingHoursList = new ArrayList<>();
             int lateCount = 0;
             int penalty = 0;
@@ -321,7 +321,7 @@ public class Employee {
             long totalHoursWorked = workingHoursList.stream().mapToInt(Integer::intValue).sum();
 
             // Write the report
-            String reportFilename = directoryPath + File.separator + username + "_monthly_report_"
+            String reportFilename = directoryPath + File.separator + nric + "_monthly_report_"
                     + months[selectedMonth - 1] + ".txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportFilename))) {
                 writer.write("Monthly Report for " + username + " - " + months[selectedMonth - 1] + "\n");
@@ -362,8 +362,8 @@ public class Employee {
 
         if (option == JOptionPane.OK_OPTION) {
             String selectedYear = (String) yearSelector.getSelectedItem();
-            String directoryPath = "Employees/" + username; // Path to the user's directory
-            String filename = directoryPath + File.separator + username + "_attendance.txt";
+            String directoryPath = "Employees/" + nric; // Path to the user's directory
+            String filename = directoryPath + File.separator + nric + "_attendance.txt";
             List<Integer> workingHoursList = new ArrayList<>();
             int lateCount = 0; // Track how many times the user was late
             int penalty = 0; // Total penalty amount
@@ -408,7 +408,7 @@ public class Employee {
             long totalHoursWorked = workingHoursList.stream().mapToInt(Integer::intValue).sum();
 
             // Write the annual report
-            String reportFilename = directoryPath + File.separator + username + "_annual_report_" + selectedYear
+            String reportFilename = directoryPath + File.separator + nric + "_annual_report_" + selectedYear
                     + ".txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportFilename))) {
                 writer.write("Annual Report for " + username + " - " + selectedYear + "\n");

@@ -1,6 +1,0 @@
-1, 03-Sep-2024 16:23:45, Still Clocked In, Hours: 0, Late
-1, 03-Sep-2024 16:23:45, 03-Sep-2024 16:23:45, Hours: 0, Late
-1, 03-Sep-2024 16:23:56, Still Clocked In, Hours: 0, Late
-1, 03-Sep-2024 16:23:56, 03-Sep-2024 16:23:56, Hours: 0, Late
-1, 03-Sep-2024 16:23:56, Still Clocked In, Hours: 0, Late
-1, 03-Sep-2024 16:23:56, 03-Sep-2024 16:23:57, Hours: 0, Late
