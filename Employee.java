@@ -118,7 +118,7 @@ public class Employee {
         logoutButton.setBounds(760, 800, 400, 100);
         logoutButton.addActionListener(e -> {
             frame.dispose();
-            new AuthApp();
+
         });
         frame.add(logoutButton);
 

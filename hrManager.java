@@ -72,7 +72,7 @@ public class hrManager {
         btnChangePassword.addActionListener(e -> changePassword(username, password, frame));
         btnExit.addActionListener(e -> {
             frame.dispose();
-            new AuthApp(); // Ensure AuthApp class exists
+
         });
 
         // Make the frame visible
