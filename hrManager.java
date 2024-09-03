@@ -81,79 +81,69 @@ public class hrManager {
 
 
     public void createEmployeeProfile() {
-        JPanel formPanel = new JPanel(new GridLayout(20,20,0,20));
-
-        formPanel.add(new JLabel("Employee NRIC/Passport:"));
-        JTextField txtNRIC = new JTextField();
-        formPanel.add(txtNRIC);
-    
-        formPanel.add(new JLabel("Employee Password:"));
-        JTextField txtPassword = new JTextField();
-        formPanel.add(txtPassword);
-    
-        formPanel.add(new JLabel("Employee Bank Account (Maybank xxxxxxxxxxxx):"));
-        JTextField txtBankAcc = new JTextField();
-        formPanel.add(txtBankAcc);
-    
-        formPanel.add(new JLabel("Employee Fullname (as per NRIC/Passport):"));
-        JTextField txtName = new JTextField();
-        formPanel.add(txtName);
-    
-        formPanel.add(new JLabel("Gender: "));
-        JTextField txtGender = new JTextField();
-        formPanel.add(txtGender);
-    
-        formPanel.add(new JLabel("Employee DOB (yyyy-mm-dd):"));
-        JTextField txtDOB = new JTextField();
-        formPanel.add(txtDOB);
-    
-        formPanel.add(new JLabel("Employee Address:"));
-        JTextField txtAddress = new JTextField();
-        formPanel.add(txtAddress);
-    
-        formPanel.add(new JLabel("Employee Emergency Contact (601xxxxxxxx):"));
-        JTextField txtEmergencyContact = new JTextField();
-        formPanel.add(txtEmergencyContact);
-    
-        formPanel.add(new JLabel("Employee Working Experience (comma-separated):"));
-        JTextField txtExperience = new JTextField();
-        formPanel.add(txtExperience);
-    
-        formPanel.add(new JLabel("Position:"));
-        JTextField txtPosition = new JTextField();
-        formPanel.add(txtPosition);
-    
-        formPanel.add(new JLabel("Department:"));
-        JTextField txtDepartment = new JTextField();
-        formPanel.add(txtDepartment);
-    
-        formPanel.add(new JLabel("Salary (RM):"));
-        JTextField txtSalary = new JTextField();
-        formPanel.add(txtSalary);
-
-        txtNRIC.setPreferredSize(new Dimension(10,30));
-    
+        // Create the form panel with GridBagLayout
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        
+        // Helper method to add labels and text fields
+        addLabeledField(formPanel, gbc, "Employee NRIC/Passport:", new JTextField());
+        addLabeledField(formPanel, gbc, "Employee Password:", new JPasswordField());
+        addLabeledField(formPanel, gbc, "Employee Bank Account (Maybank xxxxxxxxxxxx):", new JTextField());
+        addLabeledField(formPanel, gbc, "Employee Fullname (as per NRIC/Passport):", new JTextField());
+        addLabeledField(formPanel, gbc, "Gender:", new JTextField());
+        addLabeledField(formPanel, gbc, "Employee DOB (yyyy-mm-dd):", new JTextField());
+        addLabeledField(formPanel, gbc, "Employee Address:", new JTextField());
+        addLabeledField(formPanel, gbc, "Employee Emergency Contact (601xxxxxxxx):", new JTextField());
+        addLabeledField(formPanel, gbc, "Employee Working Experience (comma-separated):", new JTextField());
+        addLabeledField(formPanel, gbc, "Position:", new JTextField());
+        addLabeledField(formPanel, gbc, "Department:", new JTextField());
+        addLabeledField(formPanel, gbc, "Salary (RM):", new JTextField());
+        
+        // Adjust field sizes
+        Component[] components = formPanel.getComponents();
+        for (Component component : components) {
+            if (component instanceof JTextField) {
+                component.setPreferredSize(new Dimension(200, 25));
+            }
+        }
+        
+        // Display the dialog
         int result = JOptionPane.showConfirmDialog(frame, formPanel, "Create Employee", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-            // Logic to create employee using input data
-            String NRIC = txtNRIC.getText();
-            String Password = txtPassword.getText();
-            String BankAcc = txtBankAcc.getText();
-            String Name = txtName.getText();
-            String Gender = txtGender.getText();
-            LocalDate DOB = LocalDate.parse(txtDOB.getText());
-            String address = txtAddress.getText();
-            String emergencyContact = txtEmergencyContact.getText();
-            List<String> experience = Arrays.asList(txtExperience.getText().split(","));
-            String department = txtDepartment.getText();
-            String position = txtPosition.getText();
-            double salary = Double.parseDouble(txtSalary.getText());
+            // Collect the data from the fields
+            String NRIC = ((JTextField) components[1]).getText();
+            String Password = ((JTextField) components[3]).getText();
+            String BankAcc = ((JTextField) components[5]).getText();
+            String Name = ((JTextField) components[7]).getText();
+            String Gender = ((JTextField) components[9]).getText();
+            LocalDate DOB = LocalDate.parse(((JTextField) components[11]).getText());
+            String address = ((JTextField) components[13]).getText();
+            String emergencyContact = ((JTextField) components[15]).getText();
+            List<String> experience = Arrays.asList(((JTextField) components[17]).getText().split(","));
+            String department = ((JTextField) components[19]).getText();
+            String position = ((JTextField) components[21]).getText();
+            double salary = Double.parseDouble(((JTextField) components[23]).getText());
     
+            // Create and register the new employee profile
             EmpProfile newEmployee = new EmpProfile(NRIC, Password, BankAcc, Name, Gender, DOB, address, emergencyContact, experience, department, position, salary);
             hrManager.createEmployeeProfile(newEmployee);
         }
     }
-
+    
+    // Helper method to add labeled fields
+    private void addLabeledField(JPanel panel, GridBagConstraints gbc, String labelText, JTextField textField) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel(labelText), gbc);
+        gbc.gridx = 1;
+        panel.add(textField, gbc);
+    }
+    
     private void retrieveEmployeeProfile() {
         // Input dialog for Employee ID
         String empID = JOptionPane.showInputDialog(frame, "Enter Employee ID:");
