@@ -68,7 +68,7 @@ public class Employee {
         // Username display
         JLabel usernameLabel = new JLabel("Username: " + username, SwingConstants.CENTER);
         usernameLabel.setFont(new Font("Arial", Font.BOLD, 60));
-        usernameLabel.setBounds(0, 150, 1920, 50);
+        usernameLabel.setBounds(0, 150, 1920, 70);
         frame.add(usernameLabel);
         JLabel usernameLabel2 = new JLabel("[Employee]", SwingConstants.LEFT);
         usernameLabel2.setFont(new Font("Arial", Font.BOLD, 40));
@@ -525,7 +525,7 @@ public class Employee {
 
     private void supportTicket(String username) {
         // Create the dropdown for selecting a reason
-        String[] reasons = { "Forget to clock in/out", "System problem"};
+        String[] reasons = { "Forget to clock in/out", "System problem" };
         JComboBox<String> reasonDropdown = new JComboBox<>(reasons);
 
         // Create the text area for writing additional details with larger dimensions
@@ -555,7 +555,7 @@ public class Employee {
 
     private void saveTicketToFile(String username, String option, String reason) {
         try (FileWriter writer = new FileWriter("Employees/Employee_ticket.txt", true)) {
-            writer.write("Username: " +username + ", NRIC: "+nric+", " + option + ", Reason: " + reason + "\n");
+            writer.write("Username: " + username + ", NRIC: " + nric + ", " + option + ", Reason: " + reason + "\n");
             JOptionPane.showMessageDialog(null, "Ticket submitted successfully.", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
