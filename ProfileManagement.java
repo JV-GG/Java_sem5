@@ -238,7 +238,7 @@ public class ProfileManagement {
     
     public void saveEmployeeDetails2(EmpProfile newEmployee) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-            writer.write(newEmployee.getName() + "," + newEmployee.getPassword() + "," + "employee" + "," + "false" + "," + "0" + "," + newEmployee.getNRIC() + "\n");
+            writer.write(newEmployee.getName() + "," + newEmployee.getPassword() + "," + "Employee" + "," + "false" + "," + "0" + "," + newEmployee.getNRIC() + "\n");
         } catch (IOException e) {
             System.out.println("An error occurred while saving employee details.\n");
             e.printStackTrace(System.out);
