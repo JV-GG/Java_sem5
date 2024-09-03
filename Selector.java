@@ -28,7 +28,7 @@ public class Selector extends JFrame {
             EmpProfile selectedEmployee = employees.get(selectedID);
             if (selectedEmployee != null) {
                 // Open SalaryCalculatorGUI with selected employee's data
-                new SalaryCalculatorGUI(selectedEmployee);
+                new SalaryCalculator(selectedEmployee);
             }
         });
         add(selectButton);
