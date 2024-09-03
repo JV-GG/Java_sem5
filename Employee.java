@@ -52,7 +52,7 @@ public class Employee {
 
     public void createAndShowGUI() {
         System.setProperty("sun.java2d.uiScale", "1.0");
-        loadAttendanceRecords(username);
+        loadAttendanceRecords(nric);
         JFrame frame = new JFrame("Employee Attendance System");
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -190,8 +190,8 @@ public class Employee {
         }
     }
 
-    public void loadAttendanceRecords(String username) {
-        String filename = "Employees/" + username + "/" + username + "_attendance.txt";
+    public void loadAttendanceRecords(String nric) {
+        String filename = "Employees/" + nric + "/" + nric + "_attendance.txt";
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String lastLine = null;
             String currentLine;

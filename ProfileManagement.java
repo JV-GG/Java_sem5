@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -47,7 +48,7 @@ public class ProfileManagement {
                     } else if (line.startsWith("Emergency Contact: ")) {
                         employee.updateEmergencyContact(line.substring(19));
                     } else if (line.startsWith("Working Experience: ")) {
-                        List<String> experience = List.of(line.substring(20).split(", "));
+                        List<String> experience = Arrays.asList(line.substring(20).split(", "));
                         employee.updateWorkingExperience(experience);
                     } else if (line.startsWith("Position: ")) {
                         employee.updatePosition(line.substring(10));
@@ -72,20 +73,23 @@ public class ProfileManagement {
         for (EmpProfile emp : employees) {
             System.out.println(emp.getNRIC() + ": " + emp.getName());
         }
-    }    
+    }
 
     public void createEmployeeProfile(EmpProfile employee) {
         if (isDuplicateID(employee.getNRIC())) {
-            JOptionPane.showMessageDialog(null, "An employee with this ID already exists in the file. Cannot create duplicate profiles.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "An employee with this ID already exists in the file. Cannot create duplicate profiles.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         employees.add(employee);
         saveEmployeeDetails();
         saveEmployeeDetails2(employee);
-        JOptionPane.showMessageDialog(null, "Employee profile created successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Employee profile created successfully.", "Success",
+                JOptionPane.INFORMATION_MESSAGE);
     }
-    
+
     private boolean isDuplicateID(String NRIC) {
         return employees.stream().anyMatch(e -> e.getNRIC().equalsIgnoreCase(NRIC));
     }
@@ -95,7 +99,7 @@ public class ProfileManagement {
         try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/employee_profiles.txt"))) {
             String line;
             EmpProfile employee = null;
-    
+
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("ID: ") && line.substring(4).equalsIgnoreCase(empID)) {
                     employee = new EmpProfile();
@@ -117,7 +121,7 @@ public class ProfileManagement {
                     } else if (line.startsWith("Emergency Contact: ")) {
                         employee.updateEmergencyContact(line.substring(19));
                     } else if (line.startsWith("Working Experience: ")) {
-                        List<String> experience = List.of(line.substring(20).split(", "));
+                        List<String> experience = Arrays.asList(line.substring(20).split(", "));
                         employee.updateWorkingExperience(experience);
                     } else if (line.startsWith("Position: ")) {
                         employee.updatePosition(line.substring(10));
@@ -135,29 +139,30 @@ public class ProfileManagement {
             }
             return employee;
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "An error occurred while retrieving employee profiles..", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "An error occurred while retrieving employee profiles..", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             e.printStackTrace(System.out);
         }
         return null;
-    }    
+    }
 
     public void updateEmployeeProfile(String employeeId, EmpProfile updatedEmployee) {
         System.out.println("Updating employee profile with ID: " + employeeId);
         System.out.println("Updated Employee Details: " + updatedEmployee);
-    
+
         EmpProfile existingEmployee = retrieveEmployeeProfile(employeeId);
-        
+
         if (existingEmployee != null) {
             // Log salary changes
             if (existingEmployee.getSalary() != updatedEmployee.getSalary()) {
                 logSalaryChange(existingEmployee, updatedEmployee.getSalary());
             }
-    
+
             // Log position changes
             if (!existingEmployee.getPosition().equals(updatedEmployee.getPosition())) {
                 logPositionChange(existingEmployee, updatedEmployee.getPosition());
             }
-    
+
             // Update employee in the list
             int index = employees.indexOf(existingEmployee);
             if (index != -1) {
@@ -166,17 +171,18 @@ public class ProfileManagement {
             } else {
                 JOptionPane.showMessageDialog(null, "Failed to find the employee.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-    
+
             // Save the complete list to the file
             saveEmployeeDetails();
-    
+
         } else {
             JOptionPane.showMessageDialog(null, "Employee not found.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private void logSalaryChange(EmpProfile employee, double newSalary) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProfileManagement/SalaryIncrement.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter("ProfileManagement/SalaryIncrement.txt", true))) {
             System.out.println("Writing salary change...");
             writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now());
             writer.write("\nICNo: " + employee.getNRIC());
@@ -190,9 +196,10 @@ public class ProfileManagement {
             e.printStackTrace(System.out);
         }
     }
-    
+
     private void logPositionChange(EmpProfile employee, String newPosition) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProfileManagement/PositionPromote.txt", true))) {
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter("ProfileManagement/PositionPromote.txt", true))) {
             System.out.println("Writing position change...");
             writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now());
             writer.write("\nICNo: " + employee.getNRIC());
@@ -234,11 +241,12 @@ public class ProfileManagement {
             System.out.println("An error occurred while saving employee details.\n");
             e.printStackTrace(System.out);
         }
-    }    
-    
+    }
+
     public void saveEmployeeDetails2(EmpProfile newEmployee) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
-            writer.write(newEmployee.getName() + "," + newEmployee.getPassword() + "," + "Employee" + "," + "false" + "," + "0" + "," + newEmployee.getNRIC() + "\n");
+            writer.write(newEmployee.getName() + "," + newEmployee.getPassword() + "," + "Employee" + "," + "false"
+                    + "," + "0" + "," + newEmployee.getNRIC() + "\n");
         } catch (IOException e) {
             System.out.println("An error occurred while saving employee details.\n");
             e.printStackTrace(System.out);
