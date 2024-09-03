@@ -351,6 +351,7 @@ public class AuthApp extends JFrame {
             add(createButton("Update User", this::updateUser), gbc);
             add(createButton("Delete User", this::deleteUser), gbc);
             add(createButton("Unlock User", this::unlockUser), gbc);
+            add(createButton("View Support Ticket", this::viewsupport), gbc);
             add(createButton("Logout", e -> cardLayout.show(mainPanel, "Login")), gbc);
         }
 
@@ -452,10 +453,18 @@ public class AuthApp extends JFrame {
         }
 
         private void showUserList(ActionEvent e) {
-            JTextArea userListArea = new JTextArea(20, 30);
+            JTextArea userListArea = new JTextArea(20, 60);
             userListArea.setEditable(false);
             userListArea.setText(userManagement.getAllUsers());
             JOptionPane.showMessageDialog(null, new JScrollPane(userListArea), "User List",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        private void viewsupport(ActionEvent e) {
+            JTextArea userListArea = new JTextArea(20, 60);
+            userListArea.setEditable(false);
+            userListArea.setText(userManagement.getAllSupportTicket());
+            JOptionPane.showMessageDialog(null, new JScrollPane(userListArea), "Support Ticket List",
                     JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -584,6 +593,7 @@ public class AuthApp extends JFrame {
 
 class UserManagement {
     private File userFile;
+    private File supportFile = new File("Employees/Employee_ticket.txt");
 
     public UserManagement(String filePath) {
         this.userFile = new File(filePath);
@@ -790,6 +800,19 @@ class UserManagement {
             e.printStackTrace();
         }
         return userList.toString();
+    }
+
+    public String getAllSupportTicket() {
+        StringBuilder supportList = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(supportFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                supportList.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return supportList.toString();
     }
 
 }
