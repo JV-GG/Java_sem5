@@ -172,7 +172,41 @@ public class SalaryCalculator extends JFrame {
             int hoursWorked = Integer.parseInt(hoursWorkedField.getText());
             int unpaidLeaveDays = Integer.parseInt(unpaidLeaveDaysField.getText());
 
-            // OT Pay, Unpaid Leave, Contributions, and Net Salary calculations (same as before)
+            double otRate = 8.0;
+            double otPay = 0.0;
+            if (hoursWorked > 160) {
+                int otHours = hoursWorked - 160;
+                otPay = otHours * otRate;
+            }
+            otPayLabel.setText(String.format("RM%.2f", otPay));
+
+            double unpaidLeaveDeduction = 0.0;
+            if (unpaidLeaveDays > 14) {
+                int outstandingLeave = unpaidLeaveDays - 14;
+                unpaidLeaveDeduction = (salary / 20) * outstandingLeave;
+            }
+            unpaidLeaveDeductionLabel.setText(String.format("RM%.2f", unpaidLeaveDeduction));
+
+            double epfContribution = salary * 0.11;
+            epfLabel.setText(String.format("RM%.2f", epfContribution));
+
+            double socsoContribution = salary * 0.005;
+            socsoLabel.setText(String.format("RM%.2f", socsoContribution));
+
+            double eisContribution = salary * 0.002;
+            eisLabel.setText(String.format("RM%.2f", eisContribution));
+
+            double pcbContribution = salary * 0.00416;
+            pcbLabel.setText(String.format("RM%.2f", pcbContribution));
+
+            double totalPayable = epfContribution + socsoContribution + eisContribution + pcbContribution;
+            totalPayableLabel.setText(String.format("RM%.2f", totalPayable));
+
+            double allowance = 300;
+            allowanceLabel.setText(String.format("RM%.2f", allowance));
+
+            double netSalary = salary - totalPayable + allowance + otPay - unpaidLeaveDeduction;
+            netSalaryLabel.setText(String.format("RM%.2f", netSalary));
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Please enter valid numbers.", "Input Error", JOptionPane.ERROR_MESSAGE);
@@ -182,13 +216,27 @@ public class SalaryCalculator extends JFrame {
     private void printPayslip() {
         String fileName = "Payslips.txt";
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) {
-            // Print payslip details (same as before)
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) { // 'true' to append to file
+        writer.println("--------------------------------------------------");
+        writer.println("Payslip for " + selectedEmployee.getName());
+        writer.println("NRIC: " + selectedEmployee.getNRIC());
+        writer.println("Salary: RM" + String.format("%.2f", selectedEmployee.getSalary()));
+        writer.println("OT Pay: RM" + otPayLabel.getText());
+        writer.println("Unpaid Leave Deduction: RM" + unpaidLeaveDeductionLabel.getText());
+        writer.println("EPF: " + epfLabel.getText());
+        writer.println("SOCSO: " + socsoLabel.getText());
+        writer.println("EIS: " + eisLabel.getText());
+        writer.println("PCB: " + pcbLabel.getText());
+        writer.println("Total Payable: " + totalPayableLabel.getText());
+        writer.println("Allowance: " + allowanceLabel.getText());
+        writer.println("Net Salary: " + netSalaryLabel.getText());
+        writer.println("--------------------------------------------------");
+        writer.println(); // Add a blank line for separation between payslips
 
-            JOptionPane.showMessageDialog(this, "Payslip has been appended to the file.");
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "An error occurred while printing the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(this, "Payslip has been appended to the file.");
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(this, "An error occurred while printing the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
+    }
     }
 
     private HashMap<String, EmpProfile> readEmployeeData() {
