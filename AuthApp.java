@@ -167,7 +167,6 @@ public class AuthApp extends JFrame {
 
                                 manager.runhrManager();
                                 SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
-
                             } else if (currentUserRole.equals("Department Manager")) {
                                 JOptionPane.showMessageDialog(null, "Welcome Department Manager!");
                             } else if (currentUserRole.equals("Payroll Officer")) {

@@ -129,6 +129,7 @@ public class ProfileManagement {
                         employee.updateDepartment(line.substring(12));
                     } else if (line.startsWith("Gross Salary: ")) {
                         employee.updateSalary(Double.parseDouble(line.substring(14)));
+                        break;
                     }
                 }
             }

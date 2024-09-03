@@ -44,7 +44,7 @@ public class EmpProfile {
         // this.monthlyGrossSalary = 0.0;
     }
 
-    public EmpProfile(String NRIC, String Password, String BankAcc, String Name, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String department, String position, double salary) {
+    public EmpProfile(String NRIC, String Password, String BankAcc, String Name, String Gender, LocalDate DOB, String address, String emergencyContact, List<String> workingExperience, String position, String department, double salary) {
         this.NRIC = NRIC;
         this.Password = Password;
         this.BankAcc = BankAcc;
@@ -54,8 +54,8 @@ public class EmpProfile {
         this.address = address;
         this.emergencyContact = emergencyContact;
         this.workingExperience = workingExperience;
-        this.department = department;
         this.position = position;
+        this.department = department;
         this.salary = salary;
     }
 

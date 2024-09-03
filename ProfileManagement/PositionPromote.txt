@@ -1,12 +1,6 @@
-Date and Time: 2024-09-03 11:15:20.892015
-ICNo: 040430010775
-Name: -
-Original Position: -
-New Position: technical support
-
-Date and Time: 2024-09-03 22:03:10.362465
-ICNo: 010203040506
-Name: Ali
-Original Position: Toilet
-New Position: Toilet Manager
+Date and Time: 2024-09-04 01:15:46.664591200
+ICNo: 040130141234
+Name: Chen JV
+Original Position: technical
+New Position: medical support
 
