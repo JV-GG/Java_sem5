@@ -40,10 +40,12 @@ public class Employee {
     private JLabel statusLabel;
     private String username;
     private String password;
+    private String nric;
 
-    public Employee(String username, String password) {
+    public Employee(String username, String password, String nric) {
         this.username = username;
         this.password = password;
+        this.nric = nric;
     }
 
     public void createAndShowGUI() {
@@ -553,7 +555,7 @@ public class Employee {
 
     private void saveTicketToFile(String username, String option, String reason) {
         try (FileWriter writer = new FileWriter("Employees/Employee_ticket.txt", true)) {
-            writer.write(username + ", " + option + ", " + reason + "\n");
+            writer.write("Username: " +username + ", NRIC: "+nric+", " + option + ", Reason: " + reason + "\n");
             JOptionPane.showMessageDialog(null, "Ticket submitted successfully.", "Success",
                     JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
