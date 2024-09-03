@@ -11,17 +11,28 @@ public class Selector extends JFrame {
     public Selector() {
         super("Employee Payroll Selector");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 150);
-        setLayout(new FlowLayout());
+        setSize(400, 200); // Increase size to accommodate larger JComboBox
+        setLayout(new GridBagLayout()); // Use GridBagLayout to center components
 
         // Read employee data from the file
         employees = readEmployeeData();
+
+        // Create and configure employeeSelector
         employeeSelector = new JComboBox<>(employees.keySet().toArray(new String[0]));
+        employeeSelector.setPreferredSize(new Dimension(250, 30)); // Set preferred size for larger dropdown
 
-        add(new JLabel("Select Employee NRIC:"));
-        add(employeeSelector);
+        // Create GridBagConstraints for centering components
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
 
-        // Button to handle selection
+        // Add components to the frame
+        add(new JLabel("Select Employee NRIC:"), gbc);
+        gbc.gridy = 1;
+        add(employeeSelector, gbc);
+
         JButton selectButton = new JButton("Select");
         selectButton.addActionListener(e -> {
             String selectedID = (String) employeeSelector.getSelectedItem();
@@ -31,7 +42,8 @@ public class Selector extends JFrame {
                 new SalaryCalculator(selectedEmployee);
             }
         });
-        add(selectButton);
+        gbc.gridy = 2;
+        add(selectButton, gbc);
 
         setVisible(true);
     }
@@ -72,6 +84,6 @@ public class Selector extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Selector();
+        SwingUtilities.invokeLater(Selector::new);
     }
 }
