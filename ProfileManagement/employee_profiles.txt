@@ -12,3 +12,17 @@ Position: technical manager
 Department: technical
 Salary: 5000.0
 
+ID: 040720040016
+Password: -
+BankAcc: -
+Name: -
+Gender: -
+DOB: 2004-07-20
+Age: 20
+Address: -
+Emergency Contact: -
+Working Experience: -
+Position: -
+Department: -
+Salary: 3000.0
+

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class ProfileManagement {
     private final List<EmpProfile> employees;
@@ -75,7 +76,7 @@ public class ProfileManagement {
 
     public void createEmployeeProfile(EmpProfile employee) {
         if (isDuplicateID(employee.getNRIC())) {
-            System.out.println("An employee with this ID already exists in the file. Cannot create duplicate profiles.\n");
+            JOptionPane.showMessageDialog(null, "An employee with this ID already exists in the file. Cannot create duplicate profiles.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -133,7 +134,7 @@ public class ProfileManagement {
             }
             return employee;
         } catch (IOException e) {
-            System.out.println("An error occurred while retrieving employee profiles.");
+            JOptionPane.showMessageDialog(null, "An error occurred while retrieving employee profiles..", "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace(System.out);
         }
         return null;
@@ -160,16 +161,16 @@ public class ProfileManagement {
             int index = employees.indexOf(existingEmployee);
             if (index != -1) {
                 employees.set(index, updatedEmployee);
-                System.out.println("Employee profile updated.");
+                JOptionPane.showMessageDialog(null, "Employee profile updated.", "New Employee Create!", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("Failed to find the employee to update.");
+                JOptionPane.showMessageDialog(null, "Failed to find the employee.", "Error", JOptionPane.ERROR_MESSAGE);
             }
     
             // Save the complete list to the file
             saveEmployeeDetails();
     
         } else {
-            System.out.println("Employee not found.");
+            JOptionPane.showMessageDialog(null, "Employee not found.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -227,7 +228,7 @@ public class ProfileManagement {
                 writer.write("\nSalary: " + emp.getSalary());
                 writer.write("\n\n");
             }
-            System.out.println("Employee details saved successfully.\n");
+            JOptionPane.showMessageDialog(null, "Employee details saved successfully.", "New Employee Create!", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             System.out.println("An error occurred while saving employee details.\n");
             e.printStackTrace(System.out);
@@ -238,7 +239,7 @@ public class ProfileManagement {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
             writer.write(newEmployee.getName() + "," + newEmployee.getPassword() + "," + "employee" + "," + "false" + "," + "0" + "," + newEmployee.getNRIC() + "\n");
         } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file.");
+            System.out.println("An error occurred while saving employee details.\n");
             e.printStackTrace(System.out);
         }
     }

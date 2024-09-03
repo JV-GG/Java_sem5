@@ -156,7 +156,15 @@ public class AuthApp extends JFrame {
                             // Navigate based on user role
                             if (currentUserRole.equals("System Administrator")) {
                                 cardLayout.show(mainPanel, "Admin");
-                            } else if (currentUserRole.equals("Employee")) {
+                            } else if (currentUserRole.equals("Human Resource Officer")) {
+                                JOptionPane.showMessageDialog(null, "Welcome Human Resource Officer!");
+                                hrManager manager = new hrManager();
+                                manager.runhrManager();
+                            } else if (currentUserRole.equals("Department Manager")) {
+                                JOptionPane.showMessageDialog(null, "Welcome Department Manager!");
+                            } else if (currentUserRole.equals("Payroll Officer")) {
+                                JOptionPane.showMessageDialog(null, "Welcome Payroll Officer!");
+                            }else if (currentUserRole.equals("Employee")) {
                                 runEmployeeClass(nric, password);
                             } else {
                                 cardLayout.show(mainPanel, "Dashboard");

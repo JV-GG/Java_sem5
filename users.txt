@@ -1,4 +1,8 @@
 admin3,admin,System Administrator,false,0,000000000000
 JV,lol,Payroll Officer,false,0,040329040268
 1,1,Employee,false,0,040329040267
+<<<<<<< Updated upstream
 KHOO ZONG HAO,khoo0430,employee,false,0,040430010775
+=======
+zonghao,khoo1234,Human Resource Officer,false,0,040430010775
+>>>>>>> Stashed changes

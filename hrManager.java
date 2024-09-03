@@ -1,181 +1,328 @@
-import java.time.DateTimeException;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.List;
+import javax.swing.*;
 
 public class hrManager {
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private JFrame frame;
+    ProfileManagement hrManager = new ProfileManagement();
+
+    public void runhrManager() {
+        // Create the frame
+        frame = new JFrame("HR Manager");
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Create the panel
+        JPanel panel = new JPanel(new GridBagLayout());
+        frame.getContentPane().add(panel, BorderLayout.CENTER);
+
+        // Set up the layout
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.insets = new Insets(20, 10, 20, 10); // Top, Left, Bottom, Right padding
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Add the title label
+        JLabel titleLabel = new JLabel("HR Panel");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 60));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.gridy = 0;
+        panel.add(titleLabel, gbc);
+
+        // Create buttons with the same styling
+        JButton btnCreate = new JButton("Create Employee Profile");
+        JButton btnRetrieve = new JButton("Retrieve Employee Profile");
+        JButton btnUpdate = new JButton("Update Employee Profile");
+        JButton btnExit = new JButton("Exit");
+
+        JButton[] buttons = {btnCreate, btnRetrieve, btnUpdate, btnExit};
+
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setFont(new Font("Arial", Font.PLAIN, 20));
+            buttons[i].setPreferredSize(new Dimension(300, 50));
+            gbc.gridy = i + 1;
+            panel.add(buttons[i], gbc);
+        }
+
+        // Add action listeners to handle button clicks
+        btnCreate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                createEmployeeProfile();
+            }
+        });
+
+        btnRetrieve.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                retrieveEmployeeProfile();
+            }
+        });
+
+        btnUpdate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                updateEmployeeProfile();
+            }
+        });
+
+        btnExit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                new AuthApp();
+            }
+        });
+
+        // Make the frame visible
+        frame.setVisible(true);
+    }
+
+
+    private void createEmployeeProfile() {
+        JPanel formPanel = new JPanel(new GridLayout(20,20,0,20));
+
+        formPanel.add(new JLabel("Employee NRIC/Passport:"));
+        JTextField txtNRIC = new JTextField();
+        formPanel.add(txtNRIC);
     
-    public static void main(String[] args) {
-        ProfileManagement hrManager = new ProfileManagement();
-        Scanner scanner = new Scanner(System.in);
-        boolean exit = false;
+        formPanel.add(new JLabel("Employee Password:"));
+        JTextField txtPassword = new JTextField();
+        formPanel.add(txtPassword);
+    
+        formPanel.add(new JLabel("Employee Bank Account (Maybank xxxxxxxxxxxx):"));
+        JTextField txtBankAcc = new JTextField();
+        formPanel.add(txtBankAcc);
+    
+        formPanel.add(new JLabel("Employee Fullname (as per NRIC/Passport):"));
+        JTextField txtName = new JTextField();
+        formPanel.add(txtName);
+    
+        formPanel.add(new JLabel("Gender: "));
+        JTextField txtGender = new JTextField();
+        formPanel.add(txtGender);
+    
+        formPanel.add(new JLabel("Employee DOB (yyyy-mm-dd):"));
+        JTextField txtDOB = new JTextField();
+        formPanel.add(txtDOB);
+    
+        formPanel.add(new JLabel("Employee Address:"));
+        JTextField txtAddress = new JTextField();
+        formPanel.add(txtAddress);
+    
+        formPanel.add(new JLabel("Employee Emergency Contact (601xxxxxxxx):"));
+        JTextField txtEmergencyContact = new JTextField();
+        formPanel.add(txtEmergencyContact);
+    
+        formPanel.add(new JLabel("Employee Working Experience (comma-separated):"));
+        JTextField txtExperience = new JTextField();
+        formPanel.add(txtExperience);
+    
+        formPanel.add(new JLabel("Position:"));
+        JTextField txtPosition = new JTextField();
+        formPanel.add(txtPosition);
+    
+        formPanel.add(new JLabel("Department:"));
+        JTextField txtDepartment = new JTextField();
+        formPanel.add(txtDepartment);
+    
+        formPanel.add(new JLabel("Salary (RM):"));
+        JTextField txtSalary = new JTextField();
+        formPanel.add(txtSalary);
 
-        while (!exit) {
-            System.out.println("HR Management System");
-            System.out.println("1. Create Employee Profile");
-            System.out.println("2. Retrieve Employee Profile");
-            System.out.println("3. Update Employee Profile");
-            System.out.println("4. Exit");
-            System.out.println("Enter your choice:");
+        txtNRIC.setPreferredSize(new Dimension(10,30));
+    
+        int result = JOptionPane.showConfirmDialog(frame, formPanel, "Create Employee", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            // Logic to create employee using input data
+            String NRIC = txtNRIC.getText();
+            String Password = txtPassword.getText();
+            String BankAcc = txtBankAcc.getText();
+            String Name = txtName.getText();
+            String Gender = txtGender.getText();
+            LocalDate DOB = LocalDate.parse(txtDOB.getText());
+            String address = txtAddress.getText();
+            String emergencyContact = txtEmergencyContact.getText();
+            List<String> experience = Arrays.asList(txtExperience.getText().split(","));
+            String department = txtDepartment.getText();
+            String position = txtPosition.getText();
+            double salary = Double.parseDouble(txtSalary.getText());
+    
+            EmpProfile newEmployee = new EmpProfile(NRIC, Password, BankAcc, Name, Gender, DOB, address, emergencyContact, experience, department, position, salary);
+            hrManager.createEmployeeProfile(newEmployee);
+        }
+    }
 
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+    private void retrieveEmployeeProfile() {
+        // Input dialog for Employee ID
+        String empID = JOptionPane.showInputDialog(frame, "Enter Employee ID:");
+    
+        if (empID != null && !empID.trim().isEmpty()) {
+            EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
+    
+            if (emp != null) {
+                // Create a panel to display the employee profile
+                JPanel profilePanel = new JPanel(new GridLayout(0, 2, 10, 10));
+                profilePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    
+                // Add profile details to the panel
+                profilePanel.add(new JLabel("Employee NRIC/Passport:"));
+                profilePanel.add(new JLabel(emp.getNRIC()));
+    
+                profilePanel.add(new JLabel("Employee Password:"));
+                profilePanel.add(new JLabel(emp.getPassword()));
+    
+                profilePanel.add(new JLabel("Employee Bank Account:"));
+                profilePanel.add(new JLabel(emp.getBankAcc()));
+    
+                profilePanel.add(new JLabel("Employee Fullname (as per NRIC/Passport):"));
+                profilePanel.add(new JLabel(emp.getName()));
+    
+                profilePanel.add(new JLabel("Employee Gender:"));
+                profilePanel.add(new JLabel(emp.getGender()));
+    
+                profilePanel.add(new JLabel("Employee DOB:"));
+                profilePanel.add(new JLabel(emp.getDOB().toString()));
+    
+                profilePanel.add(new JLabel("Employee Age:"));
+                profilePanel.add(new JLabel(String.valueOf(emp.getAge())));
+    
+                profilePanel.add(new JLabel("Employee Address:"));
+                profilePanel.add(new JLabel(emp.getAddress()));
+    
+                profilePanel.add(new JLabel("Employee Emergency Contact:"));
+                profilePanel.add(new JLabel(emp.getEmergencyContact()));
+    
+                profilePanel.add(new JLabel("Employee Working Experience:"));
+                profilePanel.add(new JLabel(String.join(", ", emp.getWorkingExperience())));
+    
+                profilePanel.add(new JLabel("Employee Position:"));
+                profilePanel.add(new JLabel(emp.getPosition()));
+    
+                profilePanel.add(new JLabel("Employee Department:"));
+                profilePanel.add(new JLabel(emp.getDepartment()));
+    
+                profilePanel.add(new JLabel("Employee Salary (RM):"));
+                profilePanel.add(new JLabel(String.format("%.2f", emp.getSalary())));
+    
+                // Display the profile information in a dialog
+                JOptionPane.showMessageDialog(frame, profilePanel, "Employee Profile", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Employee not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
-            switch (choice) {
-                case 1 -> createEmployeeProfile(scanner, hrManager);
-                case 2 -> retrieveEmployeeProfile(scanner, hrManager);
-                case 3 -> updateEmployeeProfile(scanner, hrManager);
-                case 4 -> {
-                    exit = true;
-                    System.out.println("Exiting...");
+    private void updateEmployeeProfile() {
+        // Input dialog for Employee ID
+        String empID = JOptionPane.showInputDialog(frame, "Enter Employee NRIC/Passport:");
+    
+        if (empID != null && !empID.trim().isEmpty()) {
+            EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
+    
+            if (emp != null) {
+                // Create a panel with GridLayout for the update form
+                JPanel formPanel = new JPanel(new GridLayout(0, 2, 10, 10));
+                formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    
+                // Add input fields with existing data as placeholder text
+                formPanel.add(new JLabel("New Bank Account (leave blank to keep current):"));
+                JTextField txtBankAcc = new JTextField(emp.getBankAcc());
+                formPanel.add(txtBankAcc);
+    
+                formPanel.add(new JLabel("New Fullname (leave blank to keep current):"));
+                JTextField txtName = new JTextField(emp.getName());
+                formPanel.add(txtName);
+    
+                formPanel.add(new JLabel("New DOB (yyyy-mm-dd) (leave blank to keep current):"));
+                JTextField txtDOB = new JTextField(emp.getDOB().toString());
+                formPanel.add(txtDOB);
+    
+                formPanel.add(new JLabel("New Address (leave blank to keep current):"));
+                JTextField txtAddress = new JTextField(emp.getAddress());
+                formPanel.add(txtAddress);
+    
+                formPanel.add(new JLabel("New Emergency Contact (leave blank to keep current):"));
+                JTextField txtEmergencyContact = new JTextField(emp.getEmergencyContact());
+                formPanel.add(txtEmergencyContact);
+    
+                formPanel.add(new JLabel("New Working Experience (comma-separated, leave blank to keep current):"));
+                JTextField txtExperience = new JTextField(String.join(", ", emp.getWorkingExperience()));
+                formPanel.add(txtExperience);
+    
+                formPanel.add(new JLabel("New Position (leave blank to keep current):"));
+                JTextField txtPosition = new JTextField(emp.getPosition());
+                formPanel.add(txtPosition);
+    
+                formPanel.add(new JLabel("New Department (leave blank to keep current):"));
+                JTextField txtDepartment = new JTextField(emp.getDepartment());
+                formPanel.add(txtDepartment);
+    
+                formPanel.add(new JLabel("New Salary (leave blank to keep current):"));
+                JTextField txtSalary = new JTextField(String.valueOf(emp.getSalary()));
+                formPanel.add(txtSalary);
+    
+                // Display the form in a dialog
+                int result = JOptionPane.showConfirmDialog(frame, formPanel, "Update Employee Profile", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
+                    // Update employee data based on user input
+                    String bankAcc = txtBankAcc.getText().trim();
+                    if (!bankAcc.isEmpty()) {
+                        emp.updateBankAcc(bankAcc);
+                    }
+    
+                    String name = txtName.getText().trim();
+                    if (!name.isEmpty()) {
+                        emp.updateName(name);
+                    }
+    
+                    String dob = txtDOB.getText().trim();
+                    if (!dob.isEmpty()) {
+                        emp.updateDOB(LocalDate.parse(dob));
+                    }
+    
+                    String address = txtAddress.getText().trim();
+                    if (!address.isEmpty()) {
+                        emp.updateAddress(address);
+                    }
+    
+                    String emergencyContact = txtEmergencyContact.getText().trim();
+                    if (!emergencyContact.isEmpty()) {
+                        emp.updateEmergencyContact(emergencyContact);
+                    }
+    
+                    String experience = txtExperience.getText().trim();
+                    if (!experience.isEmpty()) {
+                        emp.updateWorkingExperience(Arrays.asList(experience.split(",\\s*")));
+                    }
+    
+                    String position = txtPosition.getText().trim();
+                    if (!position.isEmpty()) {
+                        emp.updatePosition(position);
+                    }
+    
+                    String department = txtDepartment.getText().trim();
+                    if (!department.isEmpty()) {
+                        emp.updateDepartment(department);
+                    }
+    
+                    String salaryInput = txtSalary.getText().trim();
+                    if (!salaryInput.isEmpty()) {
+                        emp.updateSalary(Double.parseDouble(salaryInput));
+                    }
+    
+                    // Save the updated profile
+                    hrManager.updateEmployeeProfile(empID, emp);
+                    JOptionPane.showMessageDialog(frame, "Employee profile updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 }
-                default -> System.out.println("Invalid choice, please try again.");
+            } else {
+                JOptionPane.showMessageDialog(frame, "Employee not found.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        scanner.close();
-    }
-
-    private static void createEmployeeProfile(Scanner scanner, ProfileManagement hrManager) {
-        System.out.println("\nCreating Employee Profile");
-        System.out.println("Enter Employee NRIC/Passport:");
-        String NRIC = scanner.nextLine();
-        System.out.println("Enter Employee Password:");
-        String Password = scanner.nextLine();
-        System.out.println("Enter Employee Bank Account (Maybank xxxxxxxxxxxx):");
-        String BankAcc = scanner.nextLine();
-        System.out.println("Enter Employee Fullname (as per NRIC/Passport):");
-        String Name = scanner.nextLine();
-        System.out.println("Enter Gender:");
-        String Gender = scanner.nextLine();
-        System.out.println("Enter Employee DOB (yyyy-mm-dd):");
-        LocalDate DOB = parseDate(scanner.nextLine());
-        System.out.println("Enter Employee Address:");
-        String address = scanner.nextLine();
-        System.out.println("Enter Employee Emergency Contact (601xxxxxxxx):");
-        String emergencyContact = scanner.nextLine();
-        System.out.println("Enter Employee Working Experience (comma-separated):");
-        String experienceInput = scanner.nextLine();
-        var experience = Arrays.asList(experienceInput.split(",\\s*"));
-        System.out.println("Enter Employee Position:");
-        String position = scanner.nextLine();
-        System.out.println("Enter Employee Department:");
-        String department = scanner.nextLine();
-        System.out.println("Enter Employee Salary (RM):");
-        double salary = parseDouble(scanner.nextLine());
-
-        EmpProfile newEmployee = new EmpProfile(NRIC, Password, BankAcc, Name, Gender, DOB, address, emergencyContact, experience, department, position, salary);
-        hrManager.createEmployeeProfile(newEmployee);
-    }
-
-    private static void retrieveEmployeeProfile(Scanner scanner, ProfileManagement hrManager) {
-        System.out.println("Enter Employee ID:");
-        String empID = scanner.nextLine();
-        EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
-
-        if (emp != null) {
-            System.out.println("\nEmployee Profile:");
-            System.out.println("Employee NRIC/Passport: " + emp.getNRIC());
-            System.out.println("Employee Password: " + emp.getPassword());
-            System.out.println("Employee Bank Account: " + emp.getBankAcc());
-            System.out.println("Employee Fullname (as per NRIC/Passport): " + emp.getName());
-            System.out.println("Employee Gender: " + emp.getGender());
-            System.out.println("Employee DOB: " + emp.getDOB());
-            System.out.println("Employee age: " + emp.getAge());
-            System.out.println("Employee Address: " + emp.getAddress());
-            System.out.println("Employee Emergency Contact: " + emp.getEmergencyContact());
-            System.out.println("Employee Working Experience: " + emp.getWorkingExperience());
-            System.out.println("Employee Position: " + emp.getPosition());
-            System.out.println("Employee Department: " + emp.getDepartment());
-            System.out.println("Employee Salary (RM): " + emp.getSalary());
-            System.out.println("\n");
-        } else {
-            System.out.println("Employee not found.");
         }
     }
 
-    private static void updateEmployeeProfile(Scanner scanner, ProfileManagement hrManager) {
-        System.out.println("Enter Employee NRIC/Passport:");
-        String empID = scanner.nextLine();
-        EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
-
-        if (emp != null) {
-            System.err.println("Enter new Bank Account (leave blank to keep current):");
-            String bankAcc = scanner.nextLine();
-            if (!bankAcc.isBlank()) {
-                emp.updateBankAcc(bankAcc);
-            }
-
-            System.out.println("Enter new fullname (leave blank to keep current):");
-            String name = scanner.nextLine();
-            if (!name.isBlank()) {
-                emp.updateName(name);
-            }
-
-            System.out.println("Enter new DOB (yyyy-mm-dd) (leave blank to keep current):");
-            String dob = scanner.nextLine();
-            if (!dob.isBlank()) {
-                emp.updateDOB(parseDate(dob));
-            }
-
-            System.out.println("Enter new address (leave blank to keep current):");
-            String address = scanner.nextLine();
-            if (!address.isBlank()) {
-                emp.updateAddress(address);
-            }
-
-            System.out.println("Enter new emergency contact (leave blank to keep current):");
-            String emergencyContact = scanner.nextLine();
-            if (!emergencyContact.isBlank()) {
-                emp.updateEmergencyContact(emergencyContact);
-            }
-
-            System.out.println("Enter new working experience (comma-separated, leave blank to keep current):");
-            String experience = scanner.nextLine();
-            if (!experience.isBlank()) {
-                emp.updateWorkingExperience(Arrays.asList(experience.split(",\\s*")));
-            }
-
-            System.out.println("Enter new position (leave blank to keep current):");
-            String position = scanner.nextLine();
-            if (!position.isBlank()) {
-                emp.updatePosition(position);
-            }
-
-            System.out.println("Enter new department (leave blank to keep current):");
-            String department = scanner.nextLine();
-            if (!department.isBlank()) {
-                emp.updateDepartment(department);
-            }
-
-            System.out.println("Enter new salary (leave blank to keep current):");
-            String salaryInput = scanner.nextLine();
-            if (!salaryInput.isBlank()) {
-                emp.updateSalary(parseDouble(salaryInput));
-            }
-
-            hrManager.updateEmployeeProfile(empID, emp);
-        } else {
-            System.out.println("Employee not found.");
-        }
-    }
-
-    private static LocalDate parseDate(String date) {
-        try {
-            return LocalDate.parse(date, DATE_FORMAT);
-        } catch (DateTimeException e) {
-            System.out.println("Invalid date format. Please use yyyy-mm-dd.");
-            return null;
-        }
-    }
-
-    private static double parseDouble(String input) {
-        try {
-            return Double.parseDouble(input);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid salary input. Defaulting to 0.0");
-            return 0.0;
-        }
+    public static void main(String[] args) {
+        // main method code
+        new hrManager().runhrManager();
     }
 }
