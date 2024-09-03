@@ -523,7 +523,7 @@ public class Employee {
 
     private void supportTicket(String username) {
         // Create the dropdown for selecting a reason
-        String[] reasons = { "Forget to clock in/out", "System problem", "Emergency issues", "Sick leave" };
+        String[] reasons = { "Forget to clock in/out", "System problem"};
         JComboBox<String> reasonDropdown = new JComboBox<>(reasons);
 
         // Create the text area for writing additional details with larger dimensions
