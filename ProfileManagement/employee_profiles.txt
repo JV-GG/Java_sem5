@@ -1,42 +1,42 @@
-ID: 040430010775
-Password: -
-BankAcc: -
-Name: Khoo Zong Hao
-Gender: -
-DOB: 2004-07-20
-Age: 20
-Address: -
-Emergency Contact: -
-Working Experience: -
-Position: technical support
-Department: -
-Salary: 3000.0
-
 ID: 040720040016
-Password: -
-BankAcc: -
-Name: -
-Gender: -
+Password: 123
+BankAcc: MBB 111111111111
+Name: wl
+Gender: female
 DOB: 2004-07-20
 Age: 20
-Address: -
-Emergency Contact: -
-Working Experience: -
-Position: technical support
-Department: -
-Salary: 5000.0
+Address: 1, Jalan 2, Taman 3, Johor
+Emergency Contact: 60123456789
+Working Experience: promoter,  event crew
+Position: salesman
+Department: sales
+Gross Salary: 2000.0
 
-ID: 020202020202
-Password: -
-BankAcc: -
-Name: -
-Gender: -
-DOB: 2004-07-20
+ID: 040130-14-1234
+Password: 123
+BankAcc: MBB 222222222222
+Name: Chen JV
+Gender: Male
+DOB: 2004-01-30
 Age: 20
-Address: -
-Emergency Contact: -
-Working Experience: -
-Position: technical support
-Department: -
-Salary: 2000.0
+Address: 1, Jalan 2, Taman 3, Kajang, Selangor
+Emergency Contact: 60112223333
+Working Experience: medical support
+Position: technical
+Department: technical support
+Gross Salary: 3000.0
+
+ID: 040329040000
+Password: 123
+BankAcc: MBB 333333333333
+Name: Yap Boon Siong
+Gender: Male
+DOB: 2004-03-29
+Age: 20
+Address: 1, Jalan 10, Taman 1000, 50000 KL
+Emergency Contact: 60113335555
+Working Experience: CEO
+Position: CEO
+Department: CEO
+Gross Salary: 10000.0
 

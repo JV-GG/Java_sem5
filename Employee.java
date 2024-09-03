@@ -535,6 +535,7 @@ public class Employee {
                 }
                 JOptionPane.showMessageDialog(null, "Password changed successfully.");
                 frame.dispose();
+                new AuthApp();
             } else {
                 JOptionPane.showMessageDialog(null, "Old password is incorrect.");
             }

@@ -1,6 +1,6 @@
-Date and Time: 2024-09-03 11:15:20.892015
-ICNo: 040430010775
-Name: -
-Original Salary: 3000.0
-New Salary: 5000.0
+Date and Time: 2024-09-04 01:15:46.664591200
+ICNo: 040130141234
+Name: Chen JV
+Original Gross Salary: 3000.0
+New Gross Salary: 5000.0
 

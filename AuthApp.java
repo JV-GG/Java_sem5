@@ -45,7 +45,7 @@ public class AuthApp extends JFrame {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return null;
     }
@@ -82,7 +82,7 @@ public class AuthApp extends JFrame {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         if (userFile.delete()) {
@@ -104,7 +104,7 @@ public class AuthApp extends JFrame {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, true))) {
@@ -112,7 +112,7 @@ public class AuthApp extends JFrame {
             bw.write(username + "," + password + "," + role + ",false,0," + nric);
             bw.newLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         return true;
@@ -161,7 +161,10 @@ public class AuthApp extends JFrame {
                                 cardLayout.show(mainPanel, "Admin");
                             } else if (currentUserRole.equals("Human Resource Officer")) {
                                 JOptionPane.showMessageDialog(null, "Welcome Human Resource Officer!");
-                                hrManager manager = new hrManager();
+                                nricField.setText("");
+                                passwordField.setText("");
+                                hrManager manager = new hrManager(password, nric);
+
                                 manager.runhrManager();
                                 SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                             } else if (currentUserRole.equals("Department Manager")) {
@@ -388,7 +391,7 @@ public class AuthApp extends JFrame {
             if (selectedRole == null) {
                 return;
             } else if (selectedRole.equals("Employee")) {
-                hrManager hrManager = new hrManager();
+                hrManager hrManager = new hrManager("", "");
                 hrManager.createEmployeeProfile();
             } else if (!selectedRole.equals("Employee")) {
                 // Step 2: Proceed to show the Create User Panel
@@ -621,14 +624,14 @@ class UserManagement {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, true))) {
             bw.write(username + "," + password + "," + role + ",false,0," + nric);
             bw.newLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         return true;
@@ -644,7 +647,7 @@ class UserManagement {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return null;
     }
@@ -676,7 +679,7 @@ class UserManagement {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         if (!nricFound) {
@@ -714,7 +717,7 @@ class UserManagement {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         if (!nricFound) {
@@ -750,7 +753,7 @@ class UserManagement {
                 bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
 
         if (!nricFound) {
@@ -796,7 +799,7 @@ class UserManagement {
             return userList;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return new String[0][0];
     }
@@ -809,7 +812,7 @@ class UserManagement {
                 userList.append(line).append("\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return userList.toString();
     }
@@ -822,7 +825,7 @@ class UserManagement {
                 supportList.append(line).append("\n");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.out);
         }
         return supportList.toString();
     }
