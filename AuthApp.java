@@ -209,7 +209,7 @@ public class AuthApp extends JFrame {
             if (userDetails != null) {
                 String username = userDetails[0];
                 SwingUtilities.invokeLater(() -> {
-                    Employee employee = new Employee(username, password);
+                    Employee employee = new Employee(username, password, nric);
                     employee.createAndShowGUI();
                 });
             } else {
