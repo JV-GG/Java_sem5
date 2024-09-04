@@ -7,21 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
-    
+public class ManageStatus extends javax.swing.JFrame {
+
     private LeaveRecord selectedLeaveRecord;
     private List<LeaveRecord> leaveRecords;
     /**
-     * Creates new form EmployeeCheckLeaveDetail
+     * Creates new form ManageStatus
      */
-    
-    public EmployeeCheckLeaveDetail(int recordIndex) {
+    public ManageStatus(int recordIndex) {
         initComponents();
         leaveRecords = new ArrayList<>();
-        readLeaveData(); // Read data from file
+        readLeaveData();
         
         if (recordIndex >= 0 && recordIndex < leaveRecords.size()) {
-            selectedLeaveRecord = leaveRecords.get(recordIndex); // Display the record at the given index
+            selectedLeaveRecord = leaveRecords.get(recordIndex);
             displayLeaveDetails();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid record index", "Error", JOptionPane.ERROR_MESSAGE);
@@ -47,7 +46,7 @@ public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
         String endDate;
         String reason;
         String status;
-        String totalLeaveDaysTaken; // New field
+        String totalLeaveDaysTaken;
     }
     
     private void readLeaveData() {
@@ -110,13 +109,13 @@ public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
     
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             for (LeaveRecord record : leaveRecords) {
-                bw.write("NRIC:" + record.nric + "\n");
-                bw.write("Gender:" + record.gender + "\n");
+                bw.write("NRIC :" + record.nric + "\n");
                 bw.write("Leave Type:" + record.leaveType + "\n");
                 bw.write("Start Date:" + record.startDate + "\n");
                 bw.write("End Date:" + record.endDate + "\n");
                 bw.write("Reason:" + record.reason + "\n");
                 bw.write("Status:" + record.status + "\n");
+                bw.write("Total Leave Days Taken:" + record.totalLeaveDaysTaken + "\n");
                 bw.write("\n"); // Add a blank line between records
             }
         } catch (IOException e) {
@@ -124,15 +123,33 @@ public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
         }
     }
     
-    private void deleteLeaveRecord(int recordIndex) {
-        if (recordIndex >= 0 && recordIndex < leaveRecords.size()) {
-            leaveRecords.remove(recordIndex);
-            writeLeaveData(); // Update the file with the new records
+    private void approveLeave() {
+        if (selectedLeaveRecord != null) {
+            selectedLeaveRecord.status = "Approved";
+            writeLeaveData();
+            JOptionPane.showMessageDialog(this, "Leave record approved.", "Approved", JOptionPane.INFORMATION_MESSAGE);
+            
+            ManageViewLeave viewleave = new ManageViewLeave();
+            viewleave.setVisible(true);
+            this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Invalid record index", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No leave record selected.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
+    private void rejectLeave() {
+        if (selectedLeaveRecord != null) {
+            selectedLeaveRecord.status = "Rejected";
+            writeLeaveData();
+            JOptionPane.showMessageDialog(this, "Leave record rejected.", "Rejected", JOptionPane.INFORMATION_MESSAGE);
+            
+            ManageViewLeave viewleave = new ManageViewLeave();
+            viewleave.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "No leave record selected.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -150,11 +167,12 @@ public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         Backbtn = new javax.swing.JButton();
-        Cancelbtn = new javax.swing.JButton();
+        approvebtn = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Employee Check Leave Detail", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manager Check Leave", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
 
         jLabel1.setText("Leave Type:");
 
@@ -175,11 +193,20 @@ public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
             }
         });
 
-        Cancelbtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        Cancelbtn.setText("Cancel");
-        Cancelbtn.addActionListener(new java.awt.event.ActionListener() {
+        approvebtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        approvebtn.setText("Approve");
+        approvebtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CancelbtnActionPerformed(evt);
+                approvebtnActionPerformed(evt);
+            }
+        });
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton1.setText("Reject");
+        jButton1.setToolTipText("");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -188,53 +215,64 @@ public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(119, 119, 119)
+                .addComponent(approvebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(86, 86, 86)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(173, 173, 173))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(334, 334, 334)
-                .addComponent(Backbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                .addComponent(Cancelbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Backbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(173, 173, 173))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Backbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addComponent(jLabel1)
                 .addGap(45, 45, 45)
                 .addComponent(jLabel2)
                 .addGap(50, 50, 50)
                 .addComponent(jLabel3)
-                .addGap(55, 55, 55)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addGap(54, 54, 54)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Backbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Cancelbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18))
+                    .addComponent(approvebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(7, 7, 7))
         );
 
         pack();
@@ -242,24 +280,19 @@ public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        EmployeeCheckNRIC checknric = new EmployeeCheckNRIC();
-        checknric.setVisible(true);
-        
+        ManageViewLeave viewleave = new ManageViewLeave();
+        viewleave.setVisible(true);
+
         this.dispose();
     }                                       
 
-    private void CancelbtnActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        int recordIndex = leaveRecords.indexOf(selectedLeaveRecord);
-        deleteLeaveRecord(recordIndex);
+    private void approvebtnActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        approveLeave();
+    }                                          
 
-        // Optionally, show a confirmation message
-        JOptionPane.showMessageDialog(this, "Record deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-        LeaveMenu leavemenu = new LeaveMenu();
-        leavemenu.setVisible(true);
-        
-        this.dispose();
-    }                                         
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        rejectLeave();
+    }                                        
 
     /**
      * @param args the command line arguments
@@ -278,27 +311,28 @@ public class EmployeeCheckLeaveDetail extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EmployeeCheckLeaveDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EmployeeCheckLeaveDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EmployeeCheckLeaveDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EmployeeCheckLeaveDetail.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ManageStatus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new EmployeeCheckLeaveDetail(0).setVisible(true);
+                new ManageStatus(0).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton Backbtn;
-    private javax.swing.JButton Cancelbtn;
+    private javax.swing.JButton approvebtn;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
