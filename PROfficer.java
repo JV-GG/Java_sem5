@@ -7,7 +7,8 @@ public class PROfficer extends JFrame {
     public PROfficer() {
         super("Payroll Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 300);  // Increased size for better visibility
+        setSize(700, 300);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);  // Maximize by default
         setLayout(new BorderLayout());
 
         // Welcome message at the top left
@@ -33,11 +34,8 @@ public class PROfficer extends JFrame {
         employeePaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open SalaryCalculator window
-                new SalaryCalculator(); // Assuming SalaryCalculator is another JFrame
-
-                // Close the current window
-                dispose();
+                new SalaryCalculator(); // Open SalaryCalculator window
+                dispose(); // Close the current window
             }
         });
         buttonPanel.add(employeePaySlipButton, gbc);
@@ -47,11 +45,8 @@ public class PROfficer extends JFrame {
         editPaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open Payslipupdate window
-                new Payslipupdate(); // Assuming Payslipupdate is another JFrame
-
-                // Close the current window
-                dispose();
+                new Payslipupdate(); // Open Payslipupdate window
+                dispose(); // Close the current window
             }
         });
         gbc.gridx = 1;
@@ -62,18 +57,84 @@ public class PROfficer extends JFrame {
         overviewPaySlipsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Implement the functionality to overview all employee payslips
                 JOptionPane.showMessageDialog(PROfficer.this, "Overview All Employee Pay Slips functionality is not yet implemented.");
             }
         });
         gbc.gridx = 2;
         buttonPanel.add(overviewPaySlipsButton, gbc);
 
-        add(buttonPanel, BorderLayout.CENTER);
+        // Add the Change Password Button
+        JButton changePasswordButton = new RoundedButton("Change Password");
+        changePasswordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Open the change password dialog
+                new ChangePasswordDialog(PROfficer.this); // Assuming this is similar to the one in hrManager
+            }
+        });
+        gbc.gridx = 3;
+        buttonPanel.add(changePasswordButton, gbc);
 
+        add(buttonPanel, BorderLayout.CENTER);
         setVisible(true);
     }
 
+    // Define the ChangePasswordDialog class similar to the hrManager
+    private static class ChangePasswordDialog extends JDialog {
+        public ChangePasswordDialog(JFrame parent) {
+            super(parent, "Change Password", true);
+            setLayout(new GridLayout(3, 2));
+
+            JLabel oldPasswordLabel = new JLabel("Old Password:");
+            JPasswordField oldPasswordField = new JPasswordField();
+            JLabel newPasswordLabel = new JLabel("New Password:");
+            JPasswordField newPasswordField = new JPasswordField();
+            JButton changeButton = new JButton("Change Password");
+            JButton cancelButton = new JButton("Cancel");
+
+            add(oldPasswordLabel);
+            add(oldPasswordField);
+            add(newPasswordLabel);
+            add(newPasswordField);
+            add(changeButton);
+            add(cancelButton);
+
+            changeButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Implement the logic to change the password
+                    String oldPassword = new String(oldPasswordField.getPassword());
+                    String newPassword = new String(newPasswordField.getPassword());
+                    // Assume a method to validate and change the password
+                    if (changePassword(oldPassword, newPassword)) {
+                        JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Password changed successfully!");
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Old password is incorrect.");
+                    }
+                }
+            });
+
+            cancelButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dispose();
+                }
+            });
+
+            pack();
+            setLocationRelativeTo(parent);
+            setVisible(true);
+        }
+
+        // Placeholder method for changing password
+        private boolean changePassword(String oldPassword, String newPassword) {
+            // Add actual logic to change the password
+            return true;
+        }
+    }
+
+    // RoundedButton class as before
     private static class RoundedButton extends JButton {
         private static final int ARC_WIDTH = 20;
         private static final int ARC_HEIGHT = 20;
@@ -83,7 +144,7 @@ public class PROfficer extends JFrame {
             setFont(new Font("Arial", Font.BOLD, 16));
             setBackground(new Color(70, 130, 180));
             setForeground(Color.WHITE);
-            setPreferredSize(new Dimension(220, 60));  // Set preferred size for buttons
+            setPreferredSize(new Dimension(220, 60));
             setFocusPainted(false);
             setBorderPainted(false);
             setOpaque(false);
@@ -95,12 +156,10 @@ public class PROfficer extends JFrame {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Paint gradient background
                 GradientPaint gradient = new GradientPaint(0, 0, new Color(70, 130, 180), 0, getHeight(), new Color(100, 149, 237));
                 g2d.setPaint(gradient);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), ARC_WIDTH, ARC_HEIGHT);
 
-                // Paint the button text
                 g2d.setColor(getForeground());
                 FontMetrics fm = g2d.getFontMetrics();
                 String text = getText();
@@ -116,7 +175,6 @@ public class PROfficer extends JFrame {
 
         @Override
         protected void paintBorder(Graphics g) {
-            // Override to remove default border
         }
     }
 

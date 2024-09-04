@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -185,7 +186,7 @@ public class ProfileManagement {
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter("ProfileManagement/SalaryIncrement.txt", true))) {
             System.out.println("Writing salary change...");
-            writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now());
+            writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
             writer.write("\nICNo: " + employee.getNRIC());
             writer.write("\nName: " + employee.getName());
             writer.write("\nOriginal Gross Salary: " + employee.getSalary());
@@ -202,7 +203,7 @@ public class ProfileManagement {
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter("ProfileManagement/PositionPromote.txt", true))) {
             System.out.println("Writing position change...");
-            writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now());
+            writer.write("Date and Time: " + LocalDate.now() + " " + java.time.LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
             writer.write("\nICNo: " + employee.getNRIC());
             writer.write("\nName: " + employee.getName());
             writer.write("\nOriginal Position: " + employee.getPosition());

@@ -12,7 +12,7 @@ Position: salesman
 Department: sales
 Gross Salary: 2000.0
 
-ID: 040130-14-1234
+ID: 040130141229
 Password: 123
 BankAcc: MBB 222222222222
 Name: Chen JV
@@ -23,8 +23,8 @@ Address: 1, Jalan 2, Taman 3, Kajang, Selangor
 Emergency Contact: 60112223333
 Working Experience: medical support
 Position: technical
-Department: technical support
-Gross Salary: 3000.0
+Department: technical
+Gross Salary: 2500.0
 
 ID: 040329040000
 Password: 123
