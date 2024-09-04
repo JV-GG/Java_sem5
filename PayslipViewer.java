@@ -8,6 +8,7 @@ public class PayslipViewer extends JFrame {
     private JComboBox<String> fileDropdown;
     private JTextArea fileContentArea;
     private JButton viewButton;
+    private JButton backButton;
 
     public PayslipViewer() {
         setTitle("Payslip Viewer");
@@ -23,13 +24,29 @@ public class PayslipViewer extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        // Back button
+        backButton = new JButton("Back");
+        backButton.setFont(new Font("Arial", Font.BOLD, 14));
+        backButton.setBackground(new Color(255, 69, 58)); // Red color for back button
+        backButton.setForeground(Color.WHITE);
+        backButton.setFocusPainted(false);
+        backButton.setPreferredSize(new Dimension(100, 30));
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backToPROfficer();
+            }
+        });
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        topPanel.add(backButton, gbc);
+
         // Dropdown for file selection
         fileDropdown = new JComboBox<>(getPayslipFiles());
         fileDropdown.setPreferredSize(new Dimension(300, 30));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        topPanel.add(new JLabel("Select Payslip File:"), gbc);
         gbc.gridx = 1;
+        topPanel.add(new JLabel("Select Payslip File:"), gbc);
+        gbc.gridx = 2;
         topPanel.add(fileDropdown, gbc);
 
         // View button
@@ -45,7 +62,7 @@ public class PayslipViewer extends JFrame {
                 viewFileContent();
             }
         });
-        gbc.gridx = 2;
+        gbc.gridx = 3;
         topPanel.add(viewButton, gbc);
 
         // Create a panel for file content
@@ -90,6 +107,12 @@ public class PayslipViewer extends JFrame {
                 JOptionPane.showMessageDialog(this, "Error reading file: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void backToPROfficer() {
+        // Close the current window and open PROfficer
+        dispose();
+        SwingUtilities.invokeLater(() -> new PROfficer());
     }
 
     public static void main(String[] args) {

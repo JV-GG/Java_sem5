@@ -189,10 +189,11 @@ public class Payslipupdate extends JFrame {
     }
 
     private void navigateBack() {
-        // Close the current frame and navigate back to the previous screen or menu
-        this.dispose(); // Assuming this is a standalone frame; modify as needed if using a different navigation method
+        // Close the current frame and navigate back to PROfficer
+        this.dispose(); // Close the Payslipupdate window
+        SwingUtilities.invokeLater(() -> new PROfficer()); // Open the PROfficer window
     }
-
+    
     private void updateEmployeeDetails() {
         String selectedID = (String) employeeSelector.getSelectedItem();
         selectedEmployee = employees.get(selectedID);
@@ -332,4 +333,3 @@ public class Payslipupdate extends JFrame {
     }
 }
 
-// latest
