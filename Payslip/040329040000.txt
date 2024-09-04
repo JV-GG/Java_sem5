@@ -1,15 +1,15 @@
 --------------------------------------------------
 Payslip for Yap Boon Siong
 NRIC: 040329040000
-Gross Salary: RM10000.00
-OT Pay: RM282344.00
-Unpaid Leave Deduction: RM68780.00
-Late Penalty: RM11500.00
+Salary: RM10000.00
+OT Pay: RM272592.00
+Unpaid Leave Deduction: RM4400.00
+Late Penalty: RM7800.00
 EPF: RM1100.00
 SOCSO: RM50.00
 EIS: RM20.00
 PCB: RM41.60
 Total Payable: RM1211.60
 Allowance: RM300.00
-Net Salary: RM211152.40
+Net Salary: RM269480.40
 --------------------------------------------------

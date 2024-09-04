@@ -2,14 +2,14 @@
 Payslip for wl
 NRIC: 040720040016
 Salary: RM2000.00
-OT Pay: RM435080.00
-Unpaid Leave Deduction: RM353000.00
-Late Penalty: RM4100.00
+OT Pay: RM1304.00
+Unpaid Leave Deduction: RM4400.00
+Late Penalty: RM7800.00
 EPF: RM220.00
 SOCSO: RM10.00
 EIS: RM4.00
 PCB: RM8.32
 Total Payable: RM242.32
 Allowance: RM300.00
-Net Salary: RM80037.68
+Net Salary: RM-8838.32
 --------------------------------------------------

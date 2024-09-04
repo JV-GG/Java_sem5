@@ -280,7 +280,7 @@ public class SalaryCalculator extends JFrame {
             writer.println("--------------------------------------------------");
             writer.println("Payslip for " + selectedEmployee.getName());
             writer.println("NRIC: " + selectedEmployee.getNRIC());
-            writer.println("Gross Salary: RM" + String.format("%.2f", selectedEmployee.getSalary()));
+            writer.println("Salary: RM" + String.format("%.2f", selectedEmployee.getSalary()));
             writer.println("OT Pay: RM" + otPayLabel.getText());
             writer.println("Unpaid Leave Deduction: RM" + unpaidLeaveDeductionLabel.getText());
             writer.println("Late Penalty: RM" + latePenaltyLabel.getText());
