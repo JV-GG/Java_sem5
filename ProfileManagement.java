@@ -148,6 +148,72 @@ public class ProfileManagement {
         return null;
     }
 
+    
+
+    // Method to get position change history
+    public String getPositionChangeHistory(String empID) {
+        StringBuilder history = new StringBuilder();
+        String dateAndTime = "";
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/PositionPromote.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Date and Time:")) {
+                    dateAndTime = line.substring("Date and Time:".length()).trim();
+                } else if (line.startsWith("ICNo: " + empID)) {
+                    history.append("Date and Time: ").append(dateAndTime).append("\n");
+                    history.append(line).append("\n"); // ICNo
+                    while ((line = reader.readLine()) != null && !line.startsWith("Date and Time:") && !line.startsWith("ICNo:")) {
+                        history.append(line).append("\n");
+                    }
+                    history.append("\n");
+    
+                    // Go back one line if loop ends without reading the next date
+                    if (line != null && line.startsWith("Date and Time:")) {
+                        history.append(line).append("\n"); // Date and Time for the next record
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        }
+    
+        return history.toString();
+    }
+    
+    
+
+    // Method to get salary increment history
+    public String getSalaryIncrementHistory(String empID) {
+        StringBuilder history = new StringBuilder();
+        String dateAndTime = "";
+    
+        try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/SalaryIncrement.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Date and Time:")) {
+                    dateAndTime = line.substring("Date and Time:".length()).trim();
+                } else if (line.startsWith("ICNo: " + empID)) {
+                    history.append("Date and Time: ").append(dateAndTime).append("\n");
+                    history.append(line).append("\n"); // ICNo
+                    while ((line = reader.readLine()) != null && !line.startsWith("Date and Time:")) {
+                        history.append(line).append("\n");
+                    }
+                    history.append("\n");
+    
+                    // Go back one line if loop ends without reading the next date
+                    if (line != null && line.startsWith("Date and Time:")) {
+                        history.append(line).append("\n"); // Date and Time for the next record
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        }
+    
+        return history.toString();
+    }
+
     public void updateEmployeeProfile(String employeeId, EmpProfile updatedEmployee) {
         System.out.println("Updating employee profile with ID: " + employeeId);
         System.out.println("Updated Employee Details: " + updatedEmployee);

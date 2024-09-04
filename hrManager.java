@@ -197,9 +197,9 @@ public class hrManager {
                 profilePanel.add(new JLabel(String.format("%.2f", emp.getSalary())));
 
                 // Position and Salary history tabs
-                JTextArea positionHistory = new JTextArea(getPositionChangeHistory(empID));
+                JTextArea positionHistory = new JTextArea(hrManager.getPositionChangeHistory(empID));
                 positionHistory.setEditable(false);
-                JTextArea salaryHistory = new JTextArea(getSalaryIncrementHistory(empID));
+                JTextArea salaryHistory = new JTextArea(hrManager.getSalaryIncrementHistory(empID));
                 salaryHistory.setEditable(false);
 
                 JTabbedPane historyTabbedPane = new JTabbedPane();
@@ -218,59 +218,6 @@ public class hrManager {
             }
         }
     }
-
-    // Method to get position change history
-    private String getPositionChangeHistory(String empID) {
-        StringBuilder history = new StringBuilder();
-    
-        try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/PositionPromote.txt"))) {
-            String line;
-            String dateAndTime = "";
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Date and Time:")) {
-                    dateAndTime = line.substring("Date and Time:".length()).trim();
-                } else if (line.startsWith("ICNo: " + empID)) {
-                    history.append("Date and Time: ").append(dateAndTime).append("\n");
-                    history.append(line).append("\n"); // ICNo
-                    while ((line = reader.readLine()) != null && !line.startsWith("Date and Time:")) {
-                        history.append(line).append("\n");
-                    }
-                    history.append("\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace(System.out);
-        }
-    
-        return history.toString();
-    }
-    
-
-    // Method to get salary increment history
-    private String getSalaryIncrementHistory(String empID) {
-        StringBuilder history = new StringBuilder();
-    
-        try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/SalaryIncrement.txt"))) {
-            String line;
-            String dateAndTime = "";
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Date and Time:")) {
-                    dateAndTime = line.substring("Date and Time:".length()).trim();
-                } else if (line.startsWith("ICNo: " + empID)) {
-                    history.append("Date and Time: ").append(dateAndTime).append("\n");
-                    history.append(line).append("\n"); // ICNo
-                    while ((line = reader.readLine()) != null && !line.startsWith("Date and Time:")) {
-                        history.append(line).append("\n");
-                    }
-                    history.append("\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace(System.out);
-        }
-    
-        return history.toString();
-    }    
 
     private void updateEmployeeProfile() {
         // Input dialog for Employee ID
