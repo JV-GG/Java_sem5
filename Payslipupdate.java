@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
 
-public class SalaryCalculator extends JFrame {
+public class Payslipupdate extends JFrame {
     private JComboBox<String> employeeSelector;
     private JTextField hoursWorkedField, unpaidLeaveDaysField, lateDaysField;
     private JLabel nricLabel, otPayLabel, unpaidLeaveDeductionLabel, latePenaltyLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel, salaryLabel;
@@ -13,8 +13,8 @@ public class SalaryCalculator extends JFrame {
     private HashMap<String, EmpProfile> employees;
     private EmpProfile selectedEmployee;
 
-    public SalaryCalculator() {
-        setTitle("Salary Calculator");
+    public Payslipupdate() {
+        setTitle("Salary Updater");
         setSize(500, 750);  // Adjusted height for late penalty display
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -252,7 +252,8 @@ public class SalaryCalculator extends JFrame {
         // Generate the file name based on the selected NRIC
         String fileName = "Payslip/" + selectedEmployee.getNRIC() + ".txt";
     
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+        // Use FileWriter without 'append' mode (second argument 'false') to overwrite existing file
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, false))) {
             writer.println("--------------------------------------------------");
             writer.println("Payslip for " + selectedEmployee.getName());
             writer.println("NRIC: " + selectedEmployee.getNRIC());
@@ -269,8 +270,10 @@ public class SalaryCalculator extends JFrame {
             writer.println("Net Salary: " + netSalaryLabel.getText());
             writer.println("--------------------------------------------------");
     
+            // Show success message
             JOptionPane.showMessageDialog(this, "Payslip has been saved as " + fileName);
         } catch (IOException ex) {
+            // Handle any exceptions during file writing
             JOptionPane.showMessageDialog(this, "An error occurred while saving the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }
