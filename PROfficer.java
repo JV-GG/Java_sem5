@@ -47,8 +47,11 @@ public class PROfficer extends JFrame {
         editPaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Implement the functionality to edit an employee's payslip
-                JOptionPane.showMessageDialog(PROfficer.this, "Edit Employee Pay Slip functionality is not yet implemented.");
+                // Open Payslipupdate window
+                new Payslipupdate(); // Assuming Payslipupdate is another JFrame
+
+                // Close the current window
+                dispose();
             }
         });
         gbc.gridx = 1;
