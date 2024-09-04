@@ -196,7 +196,7 @@ public class Payslipupdate extends JFrame {
             int hoursWorked = Integer.parseInt(hoursWorkedField.getText());
             int unpaidLeaveDays = Integer.parseInt(unpaidLeaveDaysField.getText());
             int lateDays = Integer.parseInt(lateDaysField.getText());
-
+    
             double otRate = 8.0;
             double otPay = 0.0;
             if (hoursWorked > 160) {
@@ -204,44 +204,44 @@ public class Payslipupdate extends JFrame {
                 otPay = otHours * otRate;
             }
             otPayLabel.setText(String.format("RM%.2f", otPay));
-
+    
             double unpaidLeaveDeduction = 0.0;
             if (unpaidLeaveDays > 14) {
                 int outstandingLeave = unpaidLeaveDays - 14;
                 unpaidLeaveDeduction = (salary / 20) * outstandingLeave;
             }
             unpaidLeaveDeductionLabel.setText(String.format("RM%.2f", unpaidLeaveDeduction));
-
-            double latePenaltyRate = 10.0;  // Assume a fixed rate of RM10 per late day
-            double latePenalty = lateDays * latePenaltyRate;
+    
+            // Late Penalty Calculation (RM100 for every 3 days late)
+            double latePenalty = (lateDays / 3) * 100.0;
             latePenaltyLabel.setText(String.format("RM%.2f", latePenalty));
-
+    
             double epfContribution = salary * 0.11;
             epfLabel.setText(String.format("RM%.2f", epfContribution));
-
+    
             double socsoContribution = salary * 0.005;
             socsoLabel.setText(String.format("RM%.2f", socsoContribution));
-
+    
             double eisContribution = salary * 0.002;
             eisLabel.setText(String.format("RM%.2f", eisContribution));
-
+    
             double pcbContribution = salary * 0.00416;
             pcbLabel.setText(String.format("RM%.2f", pcbContribution));
-
+    
             double totalPayable = epfContribution + socsoContribution + eisContribution + pcbContribution;
             totalPayableLabel.setText(String.format("RM%.2f", totalPayable));
-
+    
             double allowance = 300;
             allowanceLabel.setText(String.format("RM%.2f", allowance));
-
+    
             double netSalary = salary - totalPayable + allowance + otPay - unpaidLeaveDeduction - latePenalty;
             netSalaryLabel.setText(String.format("RM%.2f", netSalary));
-
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Please enter valid numbers.", "Input Error", JOptionPane.ERROR_MESSAGE);
+    
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     private void printPayslip() {
         // Create the folder if it doesn't exist
         File folder = new File("Payslip");

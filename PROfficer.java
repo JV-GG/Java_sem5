@@ -33,7 +33,11 @@ public class PROfficer extends JFrame {
         employeePaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Selector(); // Open the Selector window to choose an employee
+                // Open SalaryCalculator window
+                new SalaryCalculator(); // Assuming SalaryCalculator is another JFrame
+
+                // Close the current window
+                dispose();
             }
         });
         buttonPanel.add(employeePaySlipButton, gbc);
