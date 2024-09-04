@@ -56,15 +56,18 @@ public class PROfficer extends JFrame {
         buttonPanel.add(editPaySlipButton, gbc);
 
         // Button for Overview All Employee Pay Slips
-        JButton overviewPaySlipsButton = new RoundedButton("Overview All Employee Pay Slips");
-        overviewPaySlipsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(PROfficer.this, "Overview All Employee Pay Slips functionality is not yet implemented.");
-            }
-        });
-        gbc.gridx = 2;
-        buttonPanel.add(overviewPaySlipsButton, gbc);
+// Button for Overview All Employee Pay Slips
+JButton overviewPaySlipsButton = new RoundedButton("Overview All Employee Pay Slips");
+overviewPaySlipsButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        new PayslipViewer(); // Open PayslipViewer window
+        dispose(); // Close the current PROfficer window
+    }
+});
+gbc.gridx = 2;
+buttonPanel.add(overviewPaySlipsButton, gbc);
+
 
         // Add the Change Password Button
         JButton changePasswordButton = new RoundedButton("Change Password");
