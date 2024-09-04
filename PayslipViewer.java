@@ -7,6 +7,7 @@ import javax.swing.*;
 public class PayslipViewer extends JFrame {
     private JComboBox<String> fileDropdown;
     private JTextField nricField, salaryField, otPayField, unpaidLeaveField, latePenaltyField, socsoField, eisField, pcbField, totalPayableField, allowanceField, netSalaryField;
+    private JTextField employeeNameField;  // Added for displaying employee name
     private JButton viewButton, backButton;
 
     public PayslipViewer() {
@@ -65,10 +66,14 @@ public class PayslipViewer extends JFrame {
         topPanel.add(viewButton, gbc);
 
         // Create a panel for displaying payslip details
-        JPanel contentPanel = new JPanel(new GridLayout(12, 2, 10, 10)); // 12 rows, 2 columns
+        JPanel contentPanel = new JPanel(new GridLayout(13, 2, 10, 10)); // Adjusted to 13 rows for employee name
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
 
         // Labels and text fields for displaying payslip data
+        contentPanel.add(new JLabel("Employee Name:"));
+        employeeNameField = createTextField();
+        contentPanel.add(employeeNameField);
+
         contentPanel.add(new JLabel("NRIC:"));
         nricField = createTextField();
         contentPanel.add(nricField);
@@ -164,6 +169,7 @@ public class PayslipViewer extends JFrame {
     }
 
     private void clearTextFields() {
+        employeeNameField.setText("");
         nricField.setText("");
         salaryField.setText("");
         otPayField.setText("");
@@ -178,47 +184,58 @@ public class PayslipViewer extends JFrame {
     }
 
     private void updatePayslipField(String line) {
-        String[] parts = line.split(":");
-        if (parts.length == 2) {
-            String key = parts[0].trim();
-            String value = parts[1].trim();
+        if (line.startsWith("Payslip for")) {
+            String[] parts = line.split("for");
+            if (parts.length == 2) {
+                String name = parts[1].trim().replaceAll("\"", "");
+                employeeNameField.setText(name);
+            }
+        } else {
+            String[] parts = line.split(":");
+            if (parts.length == 2) {
+                String key = parts[0].trim();
+                String value = parts[1].trim();
 
-            switch (key) {
-                case "NRIC":
-                    nricField.setText(value);
-                    break;
-                case "Salary":
-                    salaryField.setText(value);
-                    break;
-                case "OT Pay":
-                    otPayField.setText(value);
-                    break;
-                case "Unpaid Leave Deduction":
-                    unpaidLeaveField.setText(value);
-                    break;
-                case "Late Penalty":
-                    latePenaltyField.setText(value);
-                    break;
-                case "SOCSO":
-                    socsoField.setText(value);
-                    break;
-                case "EIS":
-                    eisField.setText(value);
-                    break;
-                case "PCB":
-                    pcbField.setText(value);
-                    break;
-                case "Total Payable":
-                    totalPayableField.setText(value);
-                    break;
-                case "Allowance":
-                    allowanceField.setText(value);
-                    break;
-                case "Net Salary":
-                    netSalaryField.setText(value);
-                    break;
-                default:
-                    break;
+                switch (key) {
+                    case "NRIC":
+                        nricField.setText(value);
+                        break;
+                    case "Gross Salary":
+                        salaryField.setText(value);
+                        break;
+                    case "OT Pay":
+                        otPayField.setText(value);
+                        break;
+                    case "Unpaid Leave Deduction":
+                        unpaidLeaveField.setText(value);
+                        break;
+                    case "Late Penalty":
+                        latePenaltyField.setText(value);
+                        break;
+                    case "EPF":
+                        socsoField.setText(value);
+                        break;
+                    case "SOCSO":
+                        socsoField.setText(value);
+                        break;
+                    case "EIS":
+                        eisField.setText(value);
+                        break;
+                    case "PCB":
+                        pcbField.setText(value);
+                        break;
+                    case "Total Payable":
+                        totalPayableField.setText(value);
+                        break;
+                    case "Allowance":
+                        allowanceField.setText(value);
+                        break;
+                    case "Net Salary":
+                        netSalaryField.setText(value);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
