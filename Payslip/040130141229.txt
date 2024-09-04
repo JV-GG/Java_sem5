@@ -1,0 +1,15 @@
+--------------------------------------------------
+Payslip for Chen JV
+NRIC: 040130141229
+Salary: RM2500.00
+OT Pay: RM60768.00
+Unpaid Leave Deduction: RM7218875.00
+Late Penalty: RM100.00
+EPF: RM275.00
+SOCSO: RM12.50
+EIS: RM5.00
+PCB: RM10.40
+Total Payable: RM302.90
+Allowance: RM300.00
+Net Salary: RM-7155709.90
+--------------------------------------------------

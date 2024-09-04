@@ -225,20 +225,20 @@ public class SalaryCalculator extends JFrame {
                 int otHours = hoursWorked - 160;
                 otPay = otHours * otRate;
             }
-            otPayLabel.setText(String.format("RM%.2f", otPay));
+            otPayLabel.setText(String.format("%.2f", otPay));
     
             double unpaidLeaveDeduction = 0.0;
             if (unpaidLeaveDays > 14) {
                 int outstandingLeave = unpaidLeaveDays - 14;
                 unpaidLeaveDeduction = outstandingLeave * 20;
             }
-            unpaidLeaveDeductionLabel.setText(String.format("RM%.2f", unpaidLeaveDeduction));
+            unpaidLeaveDeductionLabel.setText(String.format("%.2f", unpaidLeaveDeduction));
     
             double latePenalty = 0.0;
             if (lateDays > 0) {
                 latePenalty = (lateDays / 3) * 100;
             }
-            latePenaltyLabel.setText(String.format("RM%.2f", latePenalty));
+            latePenaltyLabel.setText(String.format("%.2f", latePenalty));
     
             double epfContribution = salary * 0.11;
             epfLabel.setText(String.format("RM%.2f", epfContribution));

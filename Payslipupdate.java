@@ -221,18 +221,18 @@ public class Payslipupdate extends JFrame {
                 int otHours = hoursWorked - 160;
                 otPay = otHours * otRate;
             }
-            otPayLabel.setText(String.format("RM%.2f", otPay));
+            otPayLabel.setText(String.format("%.2f", otPay));
     
             double unpaidLeaveDeduction = 0.0;
             if (unpaidLeaveDays > 14) {
                 int outstandingLeave = unpaidLeaveDays - 14;
                 unpaidLeaveDeduction = (salary / 20) * outstandingLeave;
             }
-            unpaidLeaveDeductionLabel.setText(String.format("RM%.2f", unpaidLeaveDeduction));
+            unpaidLeaveDeductionLabel.setText(String.format("%.2f", unpaidLeaveDeduction));
     
             // Late Penalty Calculation (RM100 for every 3 days late)
             double latePenalty = (lateDays / 3) * 100.0;
-            latePenaltyLabel.setText(String.format("RM%.2f", latePenalty));
+            latePenaltyLabel.setText(String.format("%.2f", latePenalty));
     
             double epfContribution = salary * 0.11;
             epfLabel.setText(String.format("RM%.2f", epfContribution));
