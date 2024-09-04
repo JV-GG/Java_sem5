@@ -1,23 +1,17 @@
 import java.awt.*;
-import java.awt.desktop.UserSessionEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.*;
 
 public class PROfficer extends JFrame {
     public PROfficer() {
         super("Payroll Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 300);  // Increased size for better visibility
+        setSize(700, 300);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);  // Maximize by default
         setLayout(new BorderLayout());
 
         // Welcome message at the top left
@@ -43,8 +37,7 @@ public class PROfficer extends JFrame {
         employeePaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open SalaryCalculator window
-                new SalaryCalculator().setVisible(true); // Make sure SalaryCalculator is visible
+                new SalaryCalculator(); // Open SalaryCalculator window
                 dispose(); // Close the current window
             }
         });
@@ -55,8 +48,7 @@ public class PROfficer extends JFrame {
         editPaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open Payslipupdate window
-                new Payslipupdate().setVisible(true); // Make sure Payslipupdate is visible
+                new Payslipupdate(); // Open Payslipupdate window
                 dispose(); // Close the current window
             }
         });
@@ -68,75 +60,88 @@ public class PROfficer extends JFrame {
         overviewPaySlipsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open PayslipViewer window
-                new PayslipViewer().setVisible(true); // Make sure PayslipViewer is visible
-                dispose(); // Close the current window
+                JOptionPane.showMessageDialog(PROfficer.this, "Overview All Employee Pay Slips functionality is not yet implemented.");
             }
         });
         gbc.gridx = 2;
         buttonPanel.add(overviewPaySlipsButton, gbc);
 
-        add(buttonPanel, BorderLayout.CENTER);
+        // Add the Change Password Button
+        JButton changePasswordButton = new RoundedButton("Change Password");
+        changePasswordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Open the change password dialog
+                new ChangePasswordDialog(PROfficer.this, PROfficer.this); // Pass reference to PROfficer
+            }
+        });
+        gbc.gridx = 3;
+        buttonPanel.add(changePasswordButton, gbc);
 
+        add(buttonPanel, BorderLayout.CENTER);
         setVisible(true);
     }
 
     // Define the ChangePasswordDialog class similar to the hrManager
     public class ChangePasswordDialog extends JDialog {
         private static final String USERS_FILE = "users.txt"; // File path for users data
-    
-        public ChangePasswordDialog(JFrame parent) {
+        private JFrame parentFrame; // Reference to PROfficer
+
+        public ChangePasswordDialog(JFrame parent, JFrame profficer) {
             super(parent, "Change Password", true);
+            this.parentFrame = profficer; // Store reference to PROfficer
             setLayout(new GridLayout(3, 2));
-    
+
             JLabel oldPasswordLabel = new JLabel("Old Password:");
             JPasswordField oldPasswordField = new JPasswordField();
             JLabel newPasswordLabel = new JLabel("New Password:");
             JPasswordField newPasswordField = new JPasswordField();
             JButton changeButton = new JButton("Change Password");
             JButton cancelButton = new JButton("Cancel");
-    
+
             add(oldPasswordLabel);
             add(oldPasswordField);
             add(newPasswordLabel);
             add(newPasswordField);
             add(changeButton);
             add(cancelButton);
-    
+
             changeButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String oldPassword = new String(oldPasswordField.getPassword());
                     String newPassword = new String(newPasswordField.getPassword());
-                    
+
                     // Assuming username is retrieved from a method or passed to the dialog
                     String username = getCurrentUsername();
-                    
+
                     if (changePassword(username, oldPassword, newPassword)) {
                         JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Password changed successfully!");
                         dispose();
+                        parentFrame.dispose(); // Dispose the PROfficer frame
+                        AuthApp.main(null); // Open the login window
                     } else {
                         JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Old password is incorrect.");
                     }
                 }
             });
-    
+
             cancelButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     dispose();
                 }
             });
-    
+
             pack();
             setLocationRelativeTo(parent);
             setVisible(true);
         }
-    
+
         private boolean changePassword(String username, String oldPassword, String newPassword) {
             List<String> fileLines = new ArrayList<>();
             boolean passwordChanged = false;
-    
+
             try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -159,7 +164,7 @@ public class PROfficer extends JFrame {
                 e.printStackTrace();
                 return false;
             }
-    
+
             if (passwordChanged) {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE))) {
                     for (String fileLine : fileLines) {
