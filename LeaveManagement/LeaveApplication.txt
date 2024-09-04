@@ -14,3 +14,12 @@ Reason:Testing 123
 Status:Approved
 Total Leave Days Taken:4
 
+NRIC : 040302101023
+Gender: Female
+Leave Type: Maternity Leave
+Start Date: 2024-09-13
+End Date: 2024-09-21
+Reason: Testing 1234
+Status: Pending
+Total Leave Days Taken: 9
+
