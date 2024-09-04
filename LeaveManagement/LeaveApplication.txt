@@ -1,0 +1,9 @@
+NRIC : 040302101031
+Gender: Male
+Leave Type: Annual Leave
+Start Date: 2024-09-04
+End Date: 2024-09-05
+Reason: Testing 1
+Status: Pending
+Total Leave Days Taken: 2
+
