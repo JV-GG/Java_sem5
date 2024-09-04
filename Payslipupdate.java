@@ -192,12 +192,6 @@ public class Payslipupdate extends JFrame {
         setVisible(true);
     }
 
-    private void navigateBack() {
-        // Close the current frame and navigate back to PROfficer
-        this.dispose(); // Close the Payslipupdate window
-        SwingUtilities.invokeLater(() -> new PROfficer()); // Open the PROfficer window
-    }
-    
     private void updateEmployeeDetails() {
         String selectedID = (String) employeeSelector.getSelectedItem();
         selectedEmployee = employees.get(selectedID);
@@ -209,6 +203,19 @@ public class Payslipupdate extends JFrame {
     }
 
     private void calculateAndDisplaySalary() {
+        if (selectedEmployee == null) {
+            JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String fileName = "Payslip/" + selectedEmployee.getNRIC() + ".txt";
+        File file = new File(fileName);
+
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(this, "Employee Payslip does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         try {
             double salary = selectedEmployee.getSalary();
             int hoursWorked = Integer.parseInt(hoursWorkedField.getText());
@@ -261,6 +268,19 @@ public class Payslipupdate extends JFrame {
     }
     
     private void printPayslip() {
+        if (selectedEmployee == null) {
+            JOptionPane.showMessageDialog(this, "No employee selected.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String fileName = "Payslip/" + selectedEmployee.getNRIC() + ".txt";
+        File file = new File(fileName);
+
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(this, "Employee Payslip does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    
         // Create the folder if it doesn't exist
         File folder = new File("Payslip");
         if (!folder.exists()) {
@@ -268,8 +288,6 @@ public class Payslipupdate extends JFrame {
         }
     
         // Generate the file name based on the selected NRIC
-        String fileName = "Payslip/" + selectedEmployee.getNRIC() + ".txt";
-    
         // Use FileWriter without 'append' mode (second argument 'false') to overwrite existing file
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, false))) {
             writer.println("--------------------------------------------------");
@@ -295,7 +313,6 @@ public class Payslipupdate extends JFrame {
             JOptionPane.showMessageDialog(this, "An error occurred while saving the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
 
     private HashMap<String, EmpProfile> readEmployeeData() {
         HashMap<String, EmpProfile> employeeMap = new HashMap<>();
@@ -338,4 +355,3 @@ public class Payslipupdate extends JFrame {
         SwingUtilities.invokeLater(Payslipupdate::new);
     }
 }
-

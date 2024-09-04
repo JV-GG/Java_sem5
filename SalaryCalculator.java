@@ -275,6 +275,13 @@ public class SalaryCalculator extends JFrame {
     
         // Generate the file name based on the selected NRIC
         String fileName = "Payslip/" + selectedEmployee.getNRIC() + ".txt";
+        File file = new File(fileName);
+    
+        // Check if the file already exists
+        if (file.exists()) {
+            JOptionPane.showMessageDialog(this, "Payslip already exists for the selected NRIC.", "File Exists", JOptionPane.WARNING_MESSAGE);
+            return;  // Exit the method to prevent overwriting
+        }
     
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             writer.println("--------------------------------------------------");
@@ -298,7 +305,7 @@ public class SalaryCalculator extends JFrame {
             JOptionPane.showMessageDialog(this, "An error occurred while saving the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     private HashMap<String, EmpProfile> readEmployeeData() {
         HashMap<String, EmpProfile> employeeMap = new HashMap<>();
         File file = new File("ProfileManagement/employee_profiles.txt");
