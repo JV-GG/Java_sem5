@@ -3,7 +3,7 @@ Leave Type:Medical Leave
 Start Date:2024-09-06
 End Date:2024-09-18
 Reason:Testing 1
-Status:Rejected
+Status:Approved
 Total Leave Days Taken:13
 
 NRIC :040302101031
@@ -11,6 +11,6 @@ Leave Type:Maternity Leave
 Start Date:2024-09-07
 End Date:2024-09-10
 Reason:Testing 123
-Status:Rejected
+Status:Approved
 Total Leave Days Taken:4
 
