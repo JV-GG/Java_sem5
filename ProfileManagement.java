@@ -157,62 +157,101 @@ public class ProfileManagement {
     
         try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/PositionPromote.txt"))) {
             String line;
+            boolean isCurrentRecord = false;
+            
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Date and Time:")) {
+                    // If we are processing a current record, append it before starting a new one
+                    if (isCurrentRecord) {
+                        history.append("\n");
+                    }
                     dateAndTime = line.substring("Date and Time:".length()).trim();
-                } else if (line.startsWith("ICNo: " + empID)) {
+                    isCurrentRecord = false;
+                } 
+                
+                if (line.startsWith("ICNo: " + empID)) {
+                    isCurrentRecord = true;
                     history.append("Date and Time: ").append(dateAndTime).append("\n");
-                    history.append(line).append("\n"); // ICNo
-                    while ((line = reader.readLine()) != null && !line.startsWith("Date and Time:") && !line.startsWith("ICNo:")) {
-                        history.append(line).append("\n");
-                    }
-                    history.append("\n");
-    
-                    // Go back one line if loop ends without reading the next date
-                    if (line != null && line.startsWith("Date and Time:")) {
-                        history.append(line).append("\n"); // Date and Time for the next record
-                    }
+                }
+                
+                if (isCurrentRecord) {
+                    history.append(line).append("\n");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace(System.out);
         }
-    
+
         return history.toString();
     }
     
-    
-
     // Method to get salary increment history
     public String getSalaryIncrementHistory(String empID) {
         StringBuilder history = new StringBuilder();
         String dateAndTime = "";
-    
+
         try (BufferedReader reader = new BufferedReader(new FileReader("ProfileManagement/SalaryIncrement.txt"))) {
             String line;
+            boolean isCurrentRecord = false;
+            
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Date and Time:")) {
+                    // If we are processing a current record, append it before starting a new one
+                    if (isCurrentRecord) {
+                        history.append("\n");
+                    }
                     dateAndTime = line.substring("Date and Time:".length()).trim();
-                } else if (line.startsWith("ICNo: " + empID)) {
+                    isCurrentRecord = false;
+                } 
+                
+                if (line.startsWith("ICNo: " + empID)) {
+                    isCurrentRecord = true;
                     history.append("Date and Time: ").append(dateAndTime).append("\n");
-                    history.append(line).append("\n"); // ICNo
-                    while ((line = reader.readLine()) != null && !line.startsWith("Date and Time:")) {
-                        history.append(line).append("\n");
-                    }
-                    history.append("\n");
-    
-                    // Go back one line if loop ends without reading the next date
-                    if (line != null && line.startsWith("Date and Time:")) {
-                        history.append(line).append("\n"); // Date and Time for the next record
-                    }
+                }
+                
+                if (isCurrentRecord) {
+                    history.append(line).append("\n");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace(System.out);
         }
-    
+
         return history.toString();
     }
+
+    // Method to get leave entitlement
+    public String getLeaveEntitlementHistory(String empID) {
+        StringBuilder history = new StringBuilder();
+        String line;
+        boolean inRecord = false;
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader("LeaveManagement/LeaveApplication.txt"))) {
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("NRIC : " + empID)) {
+                    inRecord = true;
+                } else if (line.startsWith("NRIC : ") && inRecord) {
+                    // When a new record starts and we were in a previous record
+                    history.append("\n");
+                    inRecord = false;
+                }
+    
+                if (inRecord) {
+                    history.append(line).append("\n");
+                }
+            }
+            
+            // Handle the case where the last record is still active
+            if (inRecord) {
+                history.append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace(System.out);
+        }
+        
+        return history.toString();
+    }
+    
 
     public void updateEmployeeProfile(String employeeId, EmpProfile updatedEmployee) {
         System.out.println("Updating employee profile with ID: " + employeeId);

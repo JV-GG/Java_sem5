@@ -147,77 +147,95 @@ public class hrManager {
     private void retrieveEmployeeProfile() {
         // Input dialog for Employee ID
         String empID = JOptionPane.showInputDialog(frame, "Enter Employee ID:");
-
+    
         if (empID != null && !empID.trim().isEmpty()) {
             EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
-
+    
             if (emp != null) {
-                // Create a panel to display the employee profile
+                // Create a panel to display the employee profile with fixed size
                 JPanel profilePanel = new JPanel(new GridLayout(0, 2, 10, 10));
                 profilePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
+                profilePanel.setPreferredSize(new Dimension(600, 500)); // Fixed size for the profile panel
+    
                 // Add profile details to the panel
                 profilePanel.add(new JLabel("Employee NRIC/Passport:"));
                 profilePanel.add(new JLabel(emp.getNRIC()));
-
+    
                 profilePanel.add(new JLabel("Employee Password:"));
                 profilePanel.add(new JLabel(emp.getPassword()));
-
+    
                 profilePanel.add(new JLabel("Employee Bank Account:"));
                 profilePanel.add(new JLabel(emp.getBankAcc()));
-
+    
                 profilePanel.add(new JLabel("Employee Fullname (as per NRIC/Passport):"));
                 profilePanel.add(new JLabel(emp.getName()));
-
+    
                 profilePanel.add(new JLabel("Employee Gender:"));
                 profilePanel.add(new JLabel(emp.getGender()));
-
+    
                 profilePanel.add(new JLabel("Employee DOB:"));
                 profilePanel.add(new JLabel(emp.getDOB().toString()));
-
+    
                 profilePanel.add(new JLabel("Employee Age:"));
                 profilePanel.add(new JLabel(String.valueOf(emp.getAge())));
-
+    
                 profilePanel.add(new JLabel("Employee Address:"));
                 profilePanel.add(new JLabel(emp.getAddress()));
-
+    
                 profilePanel.add(new JLabel("Employee Emergency Contact:"));
                 profilePanel.add(new JLabel(emp.getEmergencyContact()));
-
+    
                 profilePanel.add(new JLabel("Employee Working Experience:"));
                 profilePanel.add(new JLabel(String.join(", ", emp.getWorkingExperience())));
-
+    
                 profilePanel.add(new JLabel("Employee Position:"));
                 profilePanel.add(new JLabel(emp.getPosition()));
-
+    
                 profilePanel.add(new JLabel("Employee Department:"));
                 profilePanel.add(new JLabel(emp.getDepartment()));
-
+    
                 profilePanel.add(new JLabel("Employee Gross Salary (RM):"));
                 profilePanel.add(new JLabel(String.format("%.2f", emp.getSalary())));
-
-                // Position and Salary history tabs
+    
+                // Create history tabs with scroll panes
                 JTextArea positionHistory = new JTextArea(hrManager.getPositionChangeHistory(empID));
                 positionHistory.setEditable(false);
+                JScrollPane positionScrollPane = new JScrollPane(positionHistory);
+                positionScrollPane.setPreferredSize(new Dimension(550, 200)); // Fixed height for the scroll pane
+                
                 JTextArea salaryHistory = new JTextArea(hrManager.getSalaryIncrementHistory(empID));
                 salaryHistory.setEditable(false);
-
+                JScrollPane salaryScrollPane = new JScrollPane(salaryHistory);
+                salaryScrollPane.setPreferredSize(new Dimension(550, 200)); // Fixed height for the scroll pane
+    
+                JTextArea leaveHistory = new JTextArea(hrManager.getLeaveEntitlementHistory(empID));
+                leaveHistory.setEditable(false);
+                JScrollPane leaveScrollPane = new JScrollPane(leaveHistory);
+                leaveScrollPane.setPreferredSize(new Dimension(550, 200)); // Fixed height for the scroll pane
+    
                 JTabbedPane historyTabbedPane = new JTabbedPane();
-                historyTabbedPane.addTab("Position History", new JScrollPane(positionHistory));
-                historyTabbedPane.addTab("Salary History", new JScrollPane(salaryHistory));
-
+                historyTabbedPane.addTab("Position History", positionScrollPane);
+                historyTabbedPane.addTab("Salary History", salaryScrollPane);
+                historyTabbedPane.addTab("Leave Entitlement History", leaveScrollPane);
+    
                 // Create a main panel to combine profile details and history tabs
                 JPanel mainPanel = new JPanel(new BorderLayout());
                 mainPanel.add(profilePanel, BorderLayout.CENTER);
                 mainPanel.add(historyTabbedPane, BorderLayout.SOUTH);
-
-                // Display the profile information in a dialog
-                JOptionPane.showMessageDialog(frame, mainPanel, "Employee Profile", JOptionPane.INFORMATION_MESSAGE);
+    
+                // Create a dialog to display the profile information
+                JDialog dialog = new JDialog(frame, "Employee Profile", true);
+                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                dialog.setContentPane(mainPanel);
+                dialog.setSize(500, 600); // Fixed size for the dialog
+                dialog.setLocationRelativeTo(frame); // Center the dialog relative to the main frame
+                dialog.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(frame, "Employee not found.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
+    
 
     private void updateEmployeeProfile() {
         // Input dialog for Employee ID
