@@ -9,13 +9,13 @@ public class Payslipupdate extends JFrame {
     private JComboBox<String> employeeSelector;
     private JTextField hoursWorkedField, unpaidLeaveDaysField, lateDaysField;
     private JLabel nricLabel, otPayLabel, unpaidLeaveDeductionLabel, latePenaltyLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel, salaryLabel;
-    private JButton calculateButton, printPayslipButton;
+    private JButton calculateButton, printPayslipButton, backButton;
     private HashMap<String, EmpProfile> employees;
     private EmpProfile selectedEmployee;
 
     public Payslipupdate() {
         setTitle("Salary Updater");
-        setSize(500, 750);  // Adjusted height for late penalty display
+        setSize(500, 800);  // Adjusted height for back button
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
@@ -170,14 +170,27 @@ public class Payslipupdate extends JFrame {
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(printPayslipButton, gbc);
 
+        // Back Button
+        backButton = new JButton("Back");
+        gbc.gridx = 0;
+        gbc.gridy = 17;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(backButton, gbc);
+
         add(panel);
 
         // Add Action Listeners
         employeeSelector.addActionListener(e -> updateEmployeeDetails());
         calculateButton.addActionListener(e -> calculateAndDisplaySalary());
         printPayslipButton.addActionListener(e -> printPayslip());
+        backButton.addActionListener(e -> navigateBack());
 
         setVisible(true);
+    }
+
+    private void navigateBack() {
+        // Close the current frame and navigate back to the previous screen or menu
+        this.dispose(); // Assuming this is a standalone frame; modify as needed if using a different navigation method
     }
 
     private void updateEmployeeDetails() {
@@ -315,6 +328,6 @@ public class Payslipupdate extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(SalaryCalculator::new);
+        SwingUtilities.invokeLater(Payslipupdate::new);
     }
 }

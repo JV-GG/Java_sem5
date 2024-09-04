@@ -9,75 +9,75 @@ public class SalaryCalculator extends JFrame {
     private JComboBox<String> employeeSelector;
     private JTextField hoursWorkedField, unpaidLeaveDaysField, lateDaysField;
     private JLabel nricLabel, otPayLabel, unpaidLeaveDeductionLabel, latePenaltyLabel, epfLabel, socsoLabel, eisLabel, pcbLabel, totalPayableLabel, allowanceLabel, netSalaryLabel, salaryLabel;
-    private JButton calculateButton, printPayslipButton;
+    private JButton calculateButton, printPayslipButton, backButton;
     private HashMap<String, EmpProfile> employees;
     private EmpProfile selectedEmployee;
 
     public SalaryCalculator() {
         setTitle("Salary Calculator");
-        setSize(500, 750);  // Adjusted height for late penalty display
+        setSize(500, 800);  // Adjusted height for better layout
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
 
-        // Read employee data from the file
-        employees = readEmployeeData();
-
-        // Create a panel for the input fields and labels
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        // Create a panel for the main content
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        // Read employee data from the file
+        employees = readEmployeeData();
+
         // Employee NRIC Selector
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(new JLabel("Select Employee NRIC:"), gbc);
+        mainPanel.add(new JLabel("Select Employee NRIC:"), gbc);
         employeeSelector = new JComboBox<>(employees.keySet().toArray(new String[0]));
         gbc.gridx = 1;
-        panel.add(employeeSelector, gbc);
+        mainPanel.add(employeeSelector, gbc);
 
         // Salary
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Salary (RM):"), gbc);
+        mainPanel.add(new JLabel("Salary (RM):"), gbc);
         salaryLabel = new JLabel("RM0.00");
         gbc.gridx = 1;
-        panel.add(salaryLabel, gbc);
+        mainPanel.add(salaryLabel, gbc);
 
         // NRIC Label
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panel.add(new JLabel("Employee NRIC:"), gbc);
+        mainPanel.add(new JLabel("Employee NRIC:"), gbc);
         nricLabel = new JLabel("-");
         gbc.gridx = 1;
-        panel.add(nricLabel, gbc);
+        mainPanel.add(nricLabel, gbc);
 
         // Hours Worked
         gbc.gridx = 0;
         gbc.gridy = 3;
-        panel.add(new JLabel("Enter Hours Worked:"), gbc);
+        mainPanel.add(new JLabel("Enter Hours Worked:"), gbc);
         hoursWorkedField = new JTextField(15);
         gbc.gridx = 1;
-        panel.add(hoursWorkedField, gbc);
+        mainPanel.add(hoursWorkedField, gbc);
 
         // Unpaid Leave Days
         gbc.gridx = 0;
         gbc.gridy = 4;
-        panel.add(new JLabel("Enter Unpaid Leave Days:"), gbc);
+        mainPanel.add(new JLabel("Enter Unpaid Leave Days:"), gbc);
         unpaidLeaveDaysField = new JTextField(15);
         gbc.gridx = 1;
-        panel.add(unpaidLeaveDaysField, gbc);
+        mainPanel.add(unpaidLeaveDaysField, gbc);
 
         // Late Days
         gbc.gridx = 0;
         gbc.gridy = 5;
-        panel.add(new JLabel("Enter Late Days:"), gbc);
+        mainPanel.add(new JLabel("Enter Late Days:"), gbc);
         lateDaysField = new JTextField(15);
         gbc.gridx = 1;
-        panel.add(lateDaysField, gbc);
+        mainPanel.add(lateDaysField, gbc);
 
         // Calculate Button
         calculateButton = new JButton("Calculate Salary");
@@ -86,96 +86,117 @@ public class SalaryCalculator extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         calculateButton.setFont(new Font("Arial", Font.BOLD, 14));
-        calculateButton.setBackground(new Color(70, 130, 180));
+        calculateButton.setBackground(new Color(100, 149, 237));  // Cornflower Blue
         calculateButton.setForeground(Color.WHITE);
-        panel.add(calculateButton, gbc);
+        calculateButton.setFocusPainted(false);
+        mainPanel.add(calculateButton, gbc);
 
         // Output labels (with NRIC before OT Pay)
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 7;
-        panel.add(new JLabel("OT Pay (RM):"), gbc);
+        mainPanel.add(new JLabel("OT Pay (RM):"), gbc);
         otPayLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(otPayLabel, gbc);
+        mainPanel.add(otPayLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 8;
-        panel.add(new JLabel("Unpaid Leave Deduction (RM):"), gbc);
+        mainPanel.add(new JLabel("Unpaid Leave Deduction (RM):"), gbc);
         unpaidLeaveDeductionLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(unpaidLeaveDeductionLabel, gbc);
+        mainPanel.add(unpaidLeaveDeductionLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 9;
-        panel.add(new JLabel("Late Penalty (RM):"), gbc);
+        mainPanel.add(new JLabel("Late Penalty (RM):"), gbc);
         latePenaltyLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(latePenaltyLabel, gbc);
+        mainPanel.add(latePenaltyLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 10;
-        panel.add(new JLabel("Payable EPF (RM):"), gbc);
+        mainPanel.add(new JLabel("Payable EPF (RM):"), gbc);
         epfLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(epfLabel, gbc);
+        mainPanel.add(epfLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 11;
-        panel.add(new JLabel("Payable SOCSO (RM):"), gbc);
+        mainPanel.add(new JLabel("Payable SOCSO (RM):"), gbc);
         socsoLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(socsoLabel, gbc);
+        mainPanel.add(socsoLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 12;
-        panel.add(new JLabel("Payable EIS (RM):"), gbc);
+        mainPanel.add(new JLabel("Payable EIS (RM):"), gbc);
         eisLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(eisLabel, gbc);
+        mainPanel.add(eisLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 13;
-        panel.add(new JLabel("Payable PCB (RM):"), gbc);
+        mainPanel.add(new JLabel("Payable PCB (RM):"), gbc);
         pcbLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(pcbLabel, gbc);
+        mainPanel.add(pcbLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 14;
-        panel.add(new JLabel("Total Payable (RM):"), gbc);
+        mainPanel.add(new JLabel("Total Payable (RM):"), gbc);
         totalPayableLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(totalPayableLabel, gbc);
+        mainPanel.add(totalPayableLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 15;
-        panel.add(new JLabel("Gross Allowance (RM):"), gbc);
+        mainPanel.add(new JLabel("Gross Allowance (RM):"), gbc);
         allowanceLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(allowanceLabel, gbc);
+        mainPanel.add(allowanceLabel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 16;
-        panel.add(new JLabel("Net Salary (RM):"), gbc);
+        mainPanel.add(new JLabel("Net Salary (RM):"), gbc);
         netSalaryLabel = new JLabel();
         gbc.gridx = 1;
-        panel.add(netSalaryLabel, gbc);
+        mainPanel.add(netSalaryLabel, gbc);
 
         // Print Payslip Button
         printPayslipButton = new JButton("Print Payslip");
-        gbc.gridx = 1;
-        gbc.gridy = 17;
-        gbc.anchor = GridBagConstraints.EAST;
-        panel.add(printPayslipButton, gbc);
+        printPayslipButton.setFont(new Font("Arial", Font.BOLD, 14));
+        printPayslipButton.setBackground(new Color(100, 149, 237));  // Cornflower Blue
+        printPayslipButton.setForeground(Color.WHITE);
+        printPayslipButton.setFocusPainted(false);
+        
+        // Back Button
+        backButton = new JButton("Back");
+        backButton.setFont(new Font("Arial", Font.BOLD, 14));
+        backButton.setBackground(new Color(255, 69, 0));  // Red-Orange
+        backButton.setForeground(Color.WHITE);
+        backButton.setFocusPainted(false);
+        backButton.setBorderPainted(false);
 
-        add(panel);
+        // Create a panel for the bottom bar with both buttons
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+        bottomPanel.add(backButton);
+        bottomPanel.add(printPayslipButton);
+
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        add(mainPanel, BorderLayout.CENTER);
 
         // Add Action Listeners
         employeeSelector.addActionListener(e -> updateEmployeeDetails());
         calculateButton.addActionListener(e -> calculateAndDisplaySalary());
         printPayslipButton.addActionListener(e -> printPayslip());
+        backButton.addActionListener(e -> {
+            new PROfficer().setVisible(true);
+            dispose();  // Close current SalaryCalculator window
+        });
 
         setVisible(true);
     }
@@ -208,12 +229,14 @@ public class SalaryCalculator extends JFrame {
             double unpaidLeaveDeduction = 0.0;
             if (unpaidLeaveDays > 14) {
                 int outstandingLeave = unpaidLeaveDays - 14;
-                unpaidLeaveDeduction = (salary / 20) * outstandingLeave;
+                unpaidLeaveDeduction = outstandingLeave * 20;
             }
             unpaidLeaveDeductionLabel.setText(String.format("RM%.2f", unpaidLeaveDeduction));
     
-            // Late Penalty Calculation (RM100 for every 3 days late)
-            double latePenalty = (lateDays / 3) * 100.0;
+            double latePenalty = 0.0;
+            if (lateDays > 0) {
+                latePenalty = (lateDays / 3) * 100;
+            }
             latePenaltyLabel.setText(String.format("RM%.2f", latePenalty));
     
             double epfContribution = salary * 0.11;
@@ -241,7 +264,6 @@ public class SalaryCalculator extends JFrame {
             JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
 
     private void printPayslip() {
         // Create the folder if it doesn't exist
@@ -275,7 +297,6 @@ public class SalaryCalculator extends JFrame {
             JOptionPane.showMessageDialog(this, "An error occurred while saving the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
 
     private HashMap<String, EmpProfile> readEmployeeData() {
         HashMap<String, EmpProfile> employeeMap = new HashMap<>();
