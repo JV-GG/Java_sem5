@@ -1,8 +1,16 @@
-NRIC:040302101031
-Gender:Female
+NRIC :040302101032
+Leave Type:Medical Leave
+Start Date:2024-09-06
+End Date:2024-09-18
+Reason:Testing 1
+Status:Rejected
+Total Leave Days Taken:13
+
+NRIC :040302101031
 Leave Type:Maternity Leave
-Start Date:2024-10-05
-End Date:2024-10-06
-Reason:Testing 2
-Status:Pending
+Start Date:2024-09-07
+End Date:2024-09-10
+Reason:Testing 123
+Status:Rejected
+Total Leave Days Taken:4
 

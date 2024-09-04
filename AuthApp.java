@@ -172,6 +172,12 @@ public class AuthApp extends JFrame {
                                 }
                                 case "Department Manager" -> {
                                     JOptionPane.showMessageDialog(null, "Welcome Department Manager!");
+                                    nricField.setText("");
+                                    passwordField.setText("");
+
+                                    ManagerMenu managermenu = new ManagerMenu();
+                                    managermenu.setVisible(true);
+                                    SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                                 }
                                 case "Payroll Officer" -> {
                                     JOptionPane.showMessageDialog(null, "Welcome Payroll Officer!");
