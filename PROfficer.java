@@ -62,8 +62,11 @@ public class PROfficer extends JFrame {
         overviewPaySlipsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Implement the functionality to overview all employee payslips
-                JOptionPane.showMessageDialog(PROfficer.this, "Overview All Employee Pay Slips functionality is not yet implemented.");
+                // Open PayslipViewer window
+                new PayslipViewer(); // Assuming PayslipViewer is another JFrame
+
+                // Close the current window
+                dispose();
             }
         });
         gbc.gridx = 2;
