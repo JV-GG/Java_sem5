@@ -1,6 +1,16 @@
 import java.awt.*;
+import java.awt.desktop.UserSessionEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 
 public class PROfficer extends JFrame {
@@ -80,33 +90,37 @@ public class PROfficer extends JFrame {
     }
 
     // Define the ChangePasswordDialog class similar to the hrManager
-    private static class ChangePasswordDialog extends JDialog {
+    public class ChangePasswordDialog extends JDialog {
+        private static final String USERS_FILE = "users.txt"; // File path for users data
+    
         public ChangePasswordDialog(JFrame parent) {
             super(parent, "Change Password", true);
             setLayout(new GridLayout(3, 2));
-
+    
             JLabel oldPasswordLabel = new JLabel("Old Password:");
             JPasswordField oldPasswordField = new JPasswordField();
             JLabel newPasswordLabel = new JLabel("New Password:");
             JPasswordField newPasswordField = new JPasswordField();
             JButton changeButton = new JButton("Change Password");
             JButton cancelButton = new JButton("Cancel");
-
+    
             add(oldPasswordLabel);
             add(oldPasswordField);
             add(newPasswordLabel);
             add(newPasswordField);
             add(changeButton);
             add(cancelButton);
-
+    
             changeButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Implement the logic to change the password
                     String oldPassword = new String(oldPasswordField.getPassword());
                     String newPassword = new String(newPasswordField.getPassword());
-                    // Assume a method to validate and change the password
-                    if (changePassword(oldPassword, newPassword)) {
+                    
+                    // Assuming username is retrieved from a method or passed to the dialog
+                    String username = getCurrentUsername();
+                    
+                    if (changePassword(username, oldPassword, newPassword)) {
                         JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Password changed successfully!");
                         dispose();
                     } else {
@@ -114,23 +128,64 @@ public class PROfficer extends JFrame {
                     }
                 }
             });
-
+    
             cancelButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     dispose();
                 }
             });
-
+    
             pack();
             setLocationRelativeTo(parent);
             setVisible(true);
         }
+    
+        private boolean changePassword(String username, String oldPassword, String newPassword) {
+            List<String> fileLines = new ArrayList<>();
+            boolean passwordChanged = false;
+    
+            try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts[0].equals(username)) {
+                        if (parts[1].equals(oldPassword)) {
+                            // Update password
+                            fileLines.add(username + "," + newPassword + "," + parts[2] + "," + parts[3] + "," + parts[4] + "," + parts[5]);
+                            passwordChanged = true;
+                        } else {
+                            // Incorrect old password
+                            fileLines.add(line);
+                        }
+                    } else {
+                        // Not the user we're looking for
+                        fileLines.add(line);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+    
+            if (passwordChanged) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE))) {
+                    for (String fileLine : fileLines) {
+                        writer.write(fileLine);
+                        writer.newLine();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            return passwordChanged;
+        }
 
-        // Placeholder method for changing password
-        private boolean changePassword(String oldPassword, String newPassword) {
-            // Add actual logic to change the password
-            return true;
+        private String getCurrentUsername() {
+            // Placeholder for actual implementation to retrieve the current username
+            // For instance, this can be passed to the dialog or retrieved from user session
+            return "JV"; // Example static username for demonstration purposes
         }
     }
 
