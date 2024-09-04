@@ -4,3 +4,9 @@ Name: Chen JV
 Original Gross Salary: 3000.0
 New Gross Salary: 5000.0
 
+Date and Time: 2024-09-04 03:25:00
+ICNo: 040130141229
+Name: Chen JV
+Original Gross Salary: 3000.0
+New Gross Salary: 2500.0
+

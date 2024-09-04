@@ -1,6 +1,18 @@
-Date and Time: 2024-09-04 01:15:46.664591200
+Date and Time: 2024-09-04 01:15:46
 ICNo: 040130141234
 Name: Chen JV
 Original Position: technical
 New Position: medical support
+
+Date and Time: 2024-09-04 03:25:00
+ICNo: 040130141234
+Name: Chen JV
+Original Position: technical
+New Position: technical support
+
+Date and Time: 2024-09-04 03:26:37
+ICNo: 040130141234
+Name: Chen JV
+Original Position: technical support
+New Position: technical
 

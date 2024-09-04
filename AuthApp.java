@@ -157,30 +157,45 @@ public class AuthApp extends JFrame {
                             passwordField.setText("");
 
                             // Navigate based on user role
-                            if (currentUserRole.equals("System Administrator")) {
-                                cardLayout.show(mainPanel, "Admin");
-                            } else if (currentUserRole.equals("Human Resource Officer")) {
-                                JOptionPane.showMessageDialog(null, "Welcome Human Resource Officer!");
-                                nricField.setText("");
-                                passwordField.setText("");
-                                hrManager manager = new hrManager(password, nric);
-
-                                manager.runhrManager();
-                                SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
-                            } else if (currentUserRole.equals("Department Manager")) {
-                                JOptionPane.showMessageDialog(null, "Welcome Department Manager!");
-                            } else if (currentUserRole.equals("Payroll Officer")) {
-                                JOptionPane.showMessageDialog(null, "Welcome Payroll Officer!");
-                            } else if (currentUserRole.equals("Employee")) {
-                                JOptionPane.showMessageDialog(null, "Welcome Employee!");
-                                nricField.setText("");
-                                passwordField.setText("");
-                                runEmployeeClass(nric, password);
-                                SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
-                            } else {
-                                cardLayout.show(mainPanel, "Dashboard");
+                            switch (currentUserRole) {
+                                case "System Administrator" -> {
+                                    JOptionPane.showMessageDialog(null, "Welcome System Administrator!");
+                                    cardLayout.show(mainPanel, "Admin");
+                                }
+                                case "Human Resource Officer" -> {
+                                    JOptionPane.showMessageDialog(null, "Welcome Human Resource Officer!");
+                                    nricField.setText("");
+                                    passwordField.setText("");
+                                    hrManager manager = new hrManager(password, nric);
+                                    manager.runhrManager();
+                                    SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
+                                }
+                                case "Department Manager" -> {
+                                    JOptionPane.showMessageDialog(null, "Welcome Department Manager!");
+                                }
+                                case "Payroll Officer" -> {
+                                    JOptionPane.showMessageDialog(null, "Welcome Payroll Officer!");
+                                    nricField.setText("");
+                                    passwordField.setText("");
+        
+                                    // Open the PROfficer window
+                                    SwingUtilities.invokeLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new PROfficer(); // Show the PROfficer window
+                                        }
+                                    });
+                                    SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
+                                }
+                                case "Employee" -> {
+                                    JOptionPane.showMessageDialog(null, "Welcome Employee!");
+                                    nricField.setText("");
+                                    passwordField.setText("");
+                                    runEmployeeClass(nric, password);
+                                    SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
+                                }
+                                default -> cardLayout.show(mainPanel, "Dashboard");
                             }
-
                         } else {
                             int failedAttempts = incrementFailedAttempts(nric);
                             if (failedAttempts >= 3) {

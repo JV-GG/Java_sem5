@@ -16,6 +16,7 @@ public class Payslipupdate extends JFrame {
     public Payslipupdate() {
         setTitle("Salary Updater");
         setSize(500, 800);  // Adjusted height for back button
+        setExtendedState(JFrame.MAXIMIZED_BOTH);  // Set the window to maximize by default
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
@@ -183,7 +184,10 @@ public class Payslipupdate extends JFrame {
         employeeSelector.addActionListener(e -> updateEmployeeDetails());
         calculateButton.addActionListener(e -> calculateAndDisplaySalary());
         printPayslipButton.addActionListener(e -> printPayslip());
-        backButton.addActionListener(e -> navigateBack());
+        backButton.addActionListener(e -> {
+            new PROfficer().setVisible(true);
+            dispose();  // Close current SalaryCalculator window
+        });
 
         setVisible(true);
     }
@@ -296,14 +300,12 @@ public class Payslipupdate extends JFrame {
     private HashMap<String, EmpProfile> readEmployeeData() {
         HashMap<String, EmpProfile> employeeMap = new HashMap<>();
         File file = new File("ProfileManagement/employee_profiles.txt");
-
+    
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             String id = null, name = null, position = null;
             double salary = 0.0;
-            String address = "";
-            LocalDate dob = LocalDate.now(); // Default DOB, replace with actual if available
-
+    
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("ID: ")) {
                     id = line.substring(4).trim();
@@ -311,12 +313,16 @@ public class Payslipupdate extends JFrame {
                     name = line.substring(6).trim();
                 } else if (line.startsWith("Position: ")) {
                     position = line.substring(10).trim();
-                } else if (line.startsWith("Salary: ")) {
-                    salary = Double.parseDouble(line.substring(8).trim());
+                } else if (line.startsWith("Gross Salary: ")) {
+                    salary = Double.parseDouble(line.substring(14).trim());
                 }
-
+    
+                // If all required fields are read, create EmpProfile and add to the map
                 if (id != null && name != null && position != null && salary != 0.0) {
-                    employeeMap.put(id, new EmpProfile(id, "-", "-", name, "-", dob, address, "-", new ArrayList<>(), position, "-", salary));
+                    EmpProfile emp = new EmpProfile(id, "-", "-", name, "-", LocalDate.now(), "-", "-", new ArrayList<>(), position, "-", salary);
+                    employeeMap.put(id, emp);
+                    
+                    // Reset variables for the next employee entry
                     id = name = position = null;
                     salary = 0.0;
                 }

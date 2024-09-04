@@ -23,7 +23,6 @@ public class EmpProfile {
     private double salary; 
     // private List<SalaryHistory> salaryHistory;
     // private LeaveEntitlement leaveEntitlement;
-    // private double monthlyGrossSalary;
 
     // Constructor, getters, setters, etc.
     public EmpProfile(){
