@@ -200,7 +200,7 @@ public class PayslipViewer extends JFrame {
                     case "NRIC":
                         nricField.setText(value);
                         break;
-                    case "Gross Salary":
+                    case "Salary":
                         salaryField.setText(value);
                         break;
                     case "OT Pay":
