@@ -17,8 +17,7 @@ public class PROfficer extends JFrame {
     public PROfficer() {
         super("Payroll Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 300);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);  // Maximize by default
+        setSize(700, 300);  // Increased size for better visibility
         setLayout(new BorderLayout());
 
         // Welcome message at the top left
@@ -44,7 +43,8 @@ public class PROfficer extends JFrame {
         employeePaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SalaryCalculator(); // Open SalaryCalculator window
+                // Open SalaryCalculator window
+                new SalaryCalculator().setVisible(true); // Make sure SalaryCalculator is visible
                 dispose(); // Close the current window
             }
         });
@@ -55,7 +55,8 @@ public class PROfficer extends JFrame {
         editPaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Payslipupdate(); // Open Payslipupdate window
+                // Open Payslipupdate window
+                new Payslipupdate().setVisible(true); // Make sure Payslipupdate is visible
                 dispose(); // Close the current window
             }
         });
@@ -67,25 +68,16 @@ public class PROfficer extends JFrame {
         overviewPaySlipsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(PROfficer.this, "Overview All Employee Pay Slips functionality is not yet implemented.");
+                // Open PayslipViewer window
+                new PayslipViewer().setVisible(true); // Make sure PayslipViewer is visible
+                dispose(); // Close the current window
             }
         });
         gbc.gridx = 2;
         buttonPanel.add(overviewPaySlipsButton, gbc);
 
-        // Add the Change Password Button
-        JButton changePasswordButton = new RoundedButton("Change Password");
-        changePasswordButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Open the change password dialog
-                new ChangePasswordDialog(PROfficer.this); // Assuming this is similar to the one in hrManager
-            }
-        });
-        gbc.gridx = 3;
-        buttonPanel.add(changePasswordButton, gbc);
-
         add(buttonPanel, BorderLayout.CENTER);
+
         setVisible(true);
     }
 
@@ -199,7 +191,7 @@ public class PROfficer extends JFrame {
             setFont(new Font("Arial", Font.BOLD, 16));
             setBackground(new Color(70, 130, 180));
             setForeground(Color.WHITE);
-            setPreferredSize(new Dimension(220, 60));
+            setPreferredSize(new Dimension(220, 60));  // Set preferred size for buttons
             setFocusPainted(false);
             setBorderPainted(false);
             setOpaque(false);
@@ -211,10 +203,12 @@ public class PROfficer extends JFrame {
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+                // Paint gradient background
                 GradientPaint gradient = new GradientPaint(0, 0, new Color(70, 130, 180), 0, getHeight(), new Color(100, 149, 237));
                 g2d.setPaint(gradient);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), ARC_WIDTH, ARC_HEIGHT);
 
+                // Paint the button text
                 g2d.setColor(getForeground());
                 FontMetrics fm = g2d.getFontMetrics();
                 String text = getText();
@@ -230,6 +224,7 @@ public class PROfficer extends JFrame {
 
         @Override
         protected void paintBorder(Graphics g) {
+            // Override to remove default border
         }
     }
 
