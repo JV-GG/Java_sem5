@@ -1,6 +1,4 @@
-// Purpose: Contains the EmpProfile class which stores the employee's profile information.
-// The class includes methods to update the employee's profile information and calculate the employee's age.
-// The class also includes a constructor and getters and setters for the class attributes.
+// Purpose: This class is used to store the employee's profile information.
 
 import java.time.LocalDate;
 import java.time.Period;

@@ -9,3 +9,16 @@ ICNo: 040130141229
 Name: Chen JV
 Original Gross Salary: 3000.0
 New Gross Salary: 2500.0
+
+Date and Time: 2024-09-05 17:58:35
+ICNo: 040430010775
+Name: KHOO ZONG HAO
+Original Gross Salary: 2500.0
+New Gross Salary: 3500.0
+
+Date and Time: 2024-09-05 17:58:58
+ICNo: 040430010775
+Name: KHOO ZONG HAO
+Original Gross Salary: 3500.0
+New Gross Salary: 5000.0
+

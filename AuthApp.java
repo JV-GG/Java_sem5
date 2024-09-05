@@ -166,8 +166,8 @@ public class AuthApp extends JFrame {
                                     JOptionPane.showMessageDialog(null, "Welcome Human Resource Officer!");
                                     nricField.setText("");
                                     passwordField.setText("");
-                                    hrManager manager = new hrManager(password, nric);
-                                    manager.runhrManager();
+                                    hrOfficer manager = new hrOfficer(password, nric);
+                                    manager.runhrOfficer();
                                     SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
                                 }
                                 case "Department Manager" -> {

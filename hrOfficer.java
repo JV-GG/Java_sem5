@@ -1,3 +1,6 @@
+// Purpose: HR Officer panel to manage employee profiles.
+// Other classes required: EmpProfile.java, ProfileManagement.java
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.*;
 
-public class hrManager {
+public class hrOfficer {
     private JFrame frame;
     private Map<String, String> userPasswords = new HashMap<>(); // Store username and hashed password
     private String username;
@@ -20,14 +23,14 @@ public class hrManager {
     private String nric;
     private ProfileManagement hrManager = new ProfileManagement();
 
-    public hrManager(String password, String nric) {
+    public hrOfficer(String password, String nric) {
         this.password = password;
         this.nric = nric;
     }
 
-    public void runhrManager() {
+    public void runhrOfficer() {
         // Create the frame
-        frame = new JFrame("HR Manager");
+        frame = new JFrame("HR Officer");
         frame.setSize(800, 600);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,7 +46,7 @@ public class hrManager {
         gbc.anchor = GridBagConstraints.CENTER;
 
         // Add the title label
-        JLabel titleLabel = new JLabel("HR Panel");
+        JLabel titleLabel = new JLabel("HR Officer Panel");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 60));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 0;
@@ -54,7 +57,7 @@ public class hrManager {
         JButton btnRetrieve = new JButton("Retrieve Employee Profile");
         JButton btnUpdate = new JButton("Update Employee Profile");
         JButton btnChangePassword = new JButton("Change Password");
-        JButton btnExit = new JButton("Exit");
+        JButton btnExit = new JButton("Logout");
 
         JButton[] buttons = { btnCreate, btnRetrieve, btnUpdate, btnChangePassword, btnExit };
 
@@ -239,7 +242,7 @@ public class hrManager {
 
     private void updateEmployeeProfile() {
         // Input dialog for Employee ID
-        String empID = JOptionPane.showInputDialog(frame, "Enter Employee NRIC/Passport:");
+        String empID = JOptionPane.showInputDialog(frame, "Enter Employee ID:");
 
         if (empID != null && !empID.trim().isEmpty()) {
             EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
@@ -441,6 +444,6 @@ public class hrManager {
     public static void main(String[] args) {
         String password = "";
         String nric = "";
-        new hrManager(password, nric).runhrManager();
+        new hrOfficer(password, nric).runhrOfficer();
     }
 }

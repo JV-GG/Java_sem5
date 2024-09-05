@@ -1,6 +1,8 @@
-// Purpose: Class to manage employee profiles (CRUD operations)
-// The class can create, retrieve, update, and list all employee profiles.
-// The class can also save employee details to a text file.
+// Purpose: Class to manage employee profiles, including creation, retrieval, updating, and saving of employee details.
+// This class also includes methods to log salary changes, position changes, and retrieve leave entitlement history.
+// It is used to interact with the employee_profiles.txt file to store and retrieve employee details.
+// It also interacts with the users.txt file to add new employees as users.
+// This class is used by the hrOfficer class to manage employee profiles.
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -148,7 +150,6 @@ public class ProfileManagement {
         return null;
     }
 
-    
 
     // Method to get position change history
     public String getPositionChangeHistory(String empID) {
@@ -185,6 +186,7 @@ public class ProfileManagement {
         return history.toString();
     }
     
+
     // Method to get salary increment history
     public String getSalaryIncrementHistory(String empID) {
         StringBuilder history = new StringBuilder();
@@ -219,6 +221,7 @@ public class ProfileManagement {
 
         return history.toString();
     }
+
 
     // Method to get leave entitlement
     public String getLeaveEntitlementHistory(String empID) {
@@ -321,9 +324,6 @@ public class ProfileManagement {
         }
     }
 
-    public List<EmpProfile> listAllEmployees() {
-        return employees;
-    }
 
     public void saveEmployeeDetails() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("ProfileManagement/employee_profiles.txt"))) {
