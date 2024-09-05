@@ -19,8 +19,6 @@ public class EmpProfile {
     private String position;
     private String department;
     private double salary; 
-    // private List<SalaryHistory> salaryHistory;
-    // private LeaveEntitlement leaveEntitlement;
 
     // Constructor, getters, setters, etc.
     public EmpProfile(){
@@ -36,9 +34,6 @@ public class EmpProfile {
         this.position = "";
         this.department = "";
         this.salary = 0.0;
-        // this.salaryHistory = new ArrayList<SalaryHistory>();
-        // this.leaveEntitlement = new LeaveEntitlement();
-        // this.monthlyGrossSalary = 0.0;
     }
 
     public EmpProfile(String NRIC, String Password, String BankAcc, String Name, String Gender, LocalDate DOB, String address, 
