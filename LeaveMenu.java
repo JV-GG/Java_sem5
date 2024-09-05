@@ -19,7 +19,7 @@ public class LeaveMenu extends javax.swing.JFrame {
         EmployeeLeaveMenu = new javax.swing.JPanel();
         CheckLeavebtn = new javax.swing.JButton();
         ApplyLeavebtn = new javax.swing.JButton();
-        logoutbtn = new javax.swing.JButton();
+        exitbtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -42,11 +42,11 @@ public class LeaveMenu extends javax.swing.JFrame {
             }
         });
 
-        logoutbtn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        logoutbtn.setText("Logout");
-        logoutbtn.addActionListener(new java.awt.event.ActionListener() {
+        exitbtn.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        exitbtn.setText("Exit");
+        exitbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logoutbtnActionPerformed(evt);
+                exitbtnActionPerformed(evt);
             }
         });
 
@@ -59,7 +59,7 @@ public class LeaveMenu extends javax.swing.JFrame {
                 .addGroup(EmployeeLeaveMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(ApplyLeavebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CheckLeavebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(logoutbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(exitbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(156, 156, 156))
         );
         EmployeeLeaveMenuLayout.setVerticalGroup(
@@ -70,7 +70,7 @@ public class LeaveMenu extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(CheckLeavebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
-                .addComponent(logoutbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(exitbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(92, Short.MAX_VALUE))
         );
 
@@ -110,9 +110,7 @@ public class LeaveMenu extends javax.swing.JFrame {
         this.dispose();
     }                                             
 
-    private void logoutbtnActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        AuthApp authapp = new AuthApp();
-        authapp.setVisible(true);
+    private void exitbtnActionPerformed(java.awt.event.ActionEvent evt) {                                          
         
         this.dispose();
     }                                         
@@ -156,6 +154,6 @@ public class LeaveMenu extends javax.swing.JFrame {
     private javax.swing.JButton ApplyLeavebtn;
     private javax.swing.JButton CheckLeavebtn;
     private javax.swing.JPanel EmployeeLeaveMenu;
-    private javax.swing.JButton logoutbtn;
+    private javax.swing.JButton exitbtn;
     // End of variables declaration                   
 }

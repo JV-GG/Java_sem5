@@ -80,6 +80,7 @@ public class Employee {
         frame.add(usernameLabel2);
 
         // Create buttons
+        JButton takeleaveButton = new JButton("Take Leave");
         JButton retrieveButton = new JButton("View Profile");
         JButton clockInButton = new JButton("Clock In");
         JButton clockOutButton = new JButton("Clock Out");
@@ -89,15 +90,17 @@ public class Employee {
         JButton supportTicketButton = new JButton("Support Ticket");
 
         // Set button positions
-        retrieveButton.setBounds(760, 950, 150, 40);
+        takeleaveButton.setBounds(680, 950, 150, 40);
+        retrieveButton.setBounds(880, 950, 150, 40);
         clockInButton.setBounds(480, 300, 150, 50);
         clockOutButton.setBounds(680, 300, 150, 50);
         monthlyReportButton.setBounds(880, 300, 150, 50);
         annualReportButton.setBounds(1080, 300, 150, 50);
         changePasswordButton.setBounds(1280, 300, 200, 50);
-        supportTicketButton.setBounds(1010, 950, 150, 40);
+        supportTicketButton.setBounds(1080, 950, 150, 40);
 
         // Add buttons to the frame
+        frame.add(takeleaveButton);
         frame.add(retrieveButton);
         frame.add(clockInButton);
         frame.add(clockOutButton);
@@ -123,6 +126,7 @@ public class Employee {
         frame.add(logoutButton);
 
         // Button actions
+        takeleaveButton.addActionListener(e -> takeleave());
         retrieveButton.addActionListener(e -> viewProfile(nric));
         clockInButton.addActionListener(e -> clockIn(username));
         clockOutButton.addActionListener(e -> clockOut(username));
@@ -132,6 +136,11 @@ public class Employee {
         supportTicketButton.addActionListener(e -> supportTicket(username));
 
         frame.setVisible(true);
+    }
+
+    private void takeleave(){
+        LeaveMenu leavemenu = new LeaveMenu();
+        leavemenu.setVisible(true);
     }
 
     private void viewProfile(String nric) {
