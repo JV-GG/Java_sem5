@@ -15,13 +15,13 @@ public class SalaryCalculator extends JFrame {
 
     public SalaryCalculator() {
         setTitle("Salary Calculator");
-        setSize(500, 800);  // Adjusted height for better layout
-        setExtendedState(JFrame.MAXIMIZED_BOTH);  // Set the window to maximize by default
+        setSize(500, 800);  
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Create a panel for the main content
+       
         JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -29,10 +29,10 @@ public class SalaryCalculator extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Read employee data from the file
+       
         employees = readEmployeeData();
 
-        // Employee NRIC Selector
+   
         gbc.gridx = 0;
         gbc.gridy = 0;
         mainPanel.add(new JLabel("Select Employee NRIC:"), gbc);
@@ -40,7 +40,7 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         mainPanel.add(employeeSelector, gbc);
 
-        // Salary
+     
         gbc.gridx = 0;
         gbc.gridy = 1;
         mainPanel.add(new JLabel("Gross Salary (RM):"), gbc);
@@ -48,7 +48,7 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         mainPanel.add(salaryLabel, gbc);
 
-        // NRIC Label
+      
         gbc.gridx = 0;
         gbc.gridy = 2;
         mainPanel.add(new JLabel("Employee NRIC:"), gbc);
@@ -56,7 +56,7 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         mainPanel.add(nricLabel, gbc);
 
-        // Hours Worked
+       
         gbc.gridx = 0;
         gbc.gridy = 3;
         mainPanel.add(new JLabel("Enter Hours Worked:"), gbc);
@@ -64,7 +64,7 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         mainPanel.add(hoursWorkedField, gbc);
 
-        // Unpaid Leave Days
+       
         gbc.gridx = 0;
         gbc.gridy = 4;
         mainPanel.add(new JLabel("Enter Unpaid Leave Days:"), gbc);
@@ -72,7 +72,7 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         mainPanel.add(unpaidLeaveDaysField, gbc);
 
-        // Late Days
+    
         gbc.gridx = 0;
         gbc.gridy = 5;
         mainPanel.add(new JLabel("Enter Late Days:"), gbc);
@@ -80,7 +80,7 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         mainPanel.add(lateDaysField, gbc);
 
-        // Calculate Button
+     
         calculateButton = new JButton("Calculate Salary");
         gbc.gridx = 0;
         gbc.gridy = 6;
@@ -92,7 +92,6 @@ public class SalaryCalculator extends JFrame {
         calculateButton.setFocusPainted(false);
         mainPanel.add(calculateButton, gbc);
 
-        // Output labels (with NRIC before OT Pay)
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
         gbc.gridx = 0;
@@ -165,14 +164,13 @@ public class SalaryCalculator extends JFrame {
         gbc.gridx = 1;
         mainPanel.add(netSalaryLabel, gbc);
 
-        // Print Payslip Button
+      
         printPayslipButton = new JButton("Print Payslip");
         printPayslipButton.setFont(new Font("Arial", Font.BOLD, 14));
         printPayslipButton.setBackground(new Color(100, 149, 237));  // Cornflower Blue
         printPayslipButton.setForeground(Color.WHITE);
         printPayslipButton.setFocusPainted(false);
-        
-        // Back Button
+     
         backButton = new JButton("Back");
         backButton.setFont(new Font("Arial", Font.BOLD, 14));
         backButton.setBackground(new Color(255, 69, 0));  // Red-Orange
@@ -180,7 +178,7 @@ public class SalaryCalculator extends JFrame {
         backButton.setFocusPainted(false);
         backButton.setBorderPainted(false);
 
-        // Create a panel for the bottom bar with both buttons
+   
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         bottomPanel.add(backButton);
@@ -190,13 +188,13 @@ public class SalaryCalculator extends JFrame {
 
         add(mainPanel, BorderLayout.CENTER);
 
-        // Add Action Listeners
+
         employeeSelector.addActionListener(e -> updateEmployeeDetails());
         calculateButton.addActionListener(e -> calculateAndDisplaySalary());
         printPayslipButton.addActionListener(e -> printPayslip());
         backButton.addActionListener(e -> {
             new PROfficer().setVisible(true);
-            dispose();  // Close current SalaryCalculator window
+            dispose(); 
         });
 
         setVisible(true);
@@ -267,21 +265,20 @@ public class SalaryCalculator extends JFrame {
     }
 
     private void printPayslip() {
-        // Create the folder if it doesn't exist
+        
         File folder = new File("Payslip");
         if (!folder.exists()) {
-            folder.mkdir(); // Create the folder if it doesn't exist
+            folder.mkdir(); 
         }
     
-        // Generate the file name based on the selected NRIC
+       
         String fileName = "Payslip/" + selectedEmployee.getNRIC() + ".txt";
         File file = new File(fileName);
     
-        // Check if the file already exists
+     
         if (file.exists()) {
             JOptionPane.showMessageDialog(this, "Payslip already exists for the selected NRIC.", "File Exists", JOptionPane.WARNING_MESSAGE);
-            return;  // Exit the method to prevent overwriting
-        }
+            return; 
     
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             writer.println("--------------------------------------------------");
@@ -326,12 +323,11 @@ public class SalaryCalculator extends JFrame {
                     salary = Double.parseDouble(line.substring(14).trim());
                 }
     
-                // If all required fields are read, create EmpProfile and add to the map
+             
                 if (id != null && name != null && position != null && salary != 0.0) {
                     EmpProfile emp = new EmpProfile(id, "-", "-", name, "-", LocalDate.now(), "-", "-", new ArrayList<>(), position, "-", salary);
                     employeeMap.put(id, emp);
-                    
-                    // Reset variables for the next employee entry
+             
                     id = name = position = null;
                     salary = 0.0;
                 }

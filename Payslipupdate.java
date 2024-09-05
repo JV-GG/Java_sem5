@@ -15,16 +15,16 @@ public class Payslipupdate extends JFrame {
 
     public Payslipupdate() {
         setTitle("Salary Updater");
-        setSize(500, 800);  // Adjusted height for back button
-        setExtendedState(JFrame.MAXIMIZED_BOTH);  // Set the window to maximize by default
+        setSize(500, 800);  
+        setExtendedState(JFrame.MAXIMIZED_BOTH);  
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
 
-        // Read employee data from the file
+      
         employees = readEmployeeData();
 
-        // Create a panel for the input fields and labels
+    
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -32,7 +32,6 @@ public class Payslipupdate extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Employee NRIC Selector
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(new JLabel("Select Employee NRIC:"), gbc);
@@ -40,7 +39,7 @@ public class Payslipupdate extends JFrame {
         gbc.gridx = 1;
         panel.add(employeeSelector, gbc);
 
-        // Salary
+
         gbc.gridx = 0;
         gbc.gridy = 1;
         panel.add(new JLabel("Salary (RM):"), gbc);
@@ -48,7 +47,6 @@ public class Payslipupdate extends JFrame {
         gbc.gridx = 1;
         panel.add(salaryLabel, gbc);
 
-        // NRIC Label
         gbc.gridx = 0;
         gbc.gridy = 2;
         panel.add(new JLabel("Employee NRIC:"), gbc);
@@ -56,7 +54,7 @@ public class Payslipupdate extends JFrame {
         gbc.gridx = 1;
         panel.add(nricLabel, gbc);
 
-        // Hours Worked
+    
         gbc.gridx = 0;
         gbc.gridy = 3;
         panel.add(new JLabel("Enter Hours Worked:"), gbc);
@@ -64,7 +62,7 @@ public class Payslipupdate extends JFrame {
         gbc.gridx = 1;
         panel.add(hoursWorkedField, gbc);
 
-        // Unpaid Leave Days
+      
         gbc.gridx = 0;
         gbc.gridy = 4;
         panel.add(new JLabel("Enter Unpaid Leave Days:"), gbc);
@@ -72,7 +70,7 @@ public class Payslipupdate extends JFrame {
         gbc.gridx = 1;
         panel.add(unpaidLeaveDaysField, gbc);
 
-        // Late Days
+   
         gbc.gridx = 0;
         gbc.gridy = 5;
         panel.add(new JLabel("Enter Late Days:"), gbc);
@@ -80,7 +78,7 @@ public class Payslipupdate extends JFrame {
         gbc.gridx = 1;
         panel.add(lateDaysField, gbc);
 
-        // Calculate Button
+        
         calculateButton = new JButton("Calculate Salary");
         gbc.gridx = 0;
         gbc.gridy = 6;
@@ -91,7 +89,7 @@ public class Payslipupdate extends JFrame {
         calculateButton.setForeground(Color.WHITE);
         panel.add(calculateButton, gbc);
 
-        // Output labels (with NRIC before OT Pay)
+       
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
         gbc.gridx = 0;
@@ -164,14 +162,13 @@ public class Payslipupdate extends JFrame {
         gbc.gridx = 1;
         panel.add(netSalaryLabel, gbc);
 
-        // Print Payslip Button
+      
         printPayslipButton = new JButton("Print Payslip");
         gbc.gridx = 1;
         gbc.gridy = 17;
         gbc.anchor = GridBagConstraints.EAST;
         panel.add(printPayslipButton, gbc);
 
-        // Back Button
         backButton = new JButton("Back");
         gbc.gridx = 0;
         gbc.gridy = 17;
@@ -180,13 +177,13 @@ public class Payslipupdate extends JFrame {
 
         add(panel);
 
-        // Add Action Listeners
+  
         employeeSelector.addActionListener(e -> updateEmployeeDetails());
         calculateButton.addActionListener(e -> calculateAndDisplaySalary());
         printPayslipButton.addActionListener(e -> printPayslip());
         backButton.addActionListener(e -> {
             new PROfficer().setVisible(true);
-            dispose();  // Close current SalaryCalculator window
+            dispose(); 
         });
 
         setVisible(true);
@@ -237,7 +234,7 @@ public class Payslipupdate extends JFrame {
             }
             unpaidLeaveDeductionLabel.setText(String.format("%.2f", unpaidLeaveDeduction));
     
-            // Late Penalty Calculation (RM100 for every 3 days late)
+     
             double latePenalty = (lateDays / 3) * 100.0;
             latePenaltyLabel.setText(String.format("%.2f", latePenalty));
     
@@ -281,14 +278,13 @@ public class Payslipupdate extends JFrame {
             return;
         }
     
-        // Create the folder if it doesn't exist
+        
         File folder = new File("Payslip");
         if (!folder.exists()) {
-            folder.mkdir(); // Create the folder if it doesn't exist
+            folder.mkdir(); 
         }
     
-        // Generate the file name based on the selected NRIC
-        // Use FileWriter without 'append' mode (second argument 'false') to overwrite existing file
+
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, false))) {
             writer.println("--------------------------------------------------");
             writer.println("Payslip for " + selectedEmployee.getName());
@@ -306,10 +302,10 @@ public class Payslipupdate extends JFrame {
             writer.println("Net Salary: " + netSalaryLabel.getText());
             writer.println("--------------------------------------------------");
     
-            // Show success message
+
             JOptionPane.showMessageDialog(this, "Payslip has been saved as " + fileName);
         } catch (IOException ex) {
-            // Handle any exceptions during file writing
+
             JOptionPane.showMessageDialog(this, "An error occurred while saving the payslip.", "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -334,12 +330,12 @@ public class Payslipupdate extends JFrame {
                     salary = Double.parseDouble(line.substring(14).trim());
                 }
     
-                // If all required fields are read, create EmpProfile and add to the map
+         
                 if (id != null && name != null && position != null && salary != 0.0) {
                     EmpProfile emp = new EmpProfile(id, "-", "-", name, "-", LocalDate.now(), "-", "-", new ArrayList<>(), position, "-", salary);
                     employeeMap.put(id, emp);
                     
-                    // Reset variables for the next employee entry
+            
                     id = name = position = null;
                     salary = 0.0;
                 }

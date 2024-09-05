@@ -11,17 +11,17 @@ public class PROfficer extends JFrame {
         super("Payroll Management System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 300);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);  // Maximize by default
+        setExtendedState(JFrame.MAXIMIZED_BOTH);  
         setLayout(new BorderLayout());
 
-        // Welcome message at the top left
+       
         JLabel welcomeLabel = new JLabel("Welcome Lengzai Payroll Officer", SwingConstants.LEFT);
         welcomeLabel.setFont(new Font("Time New Roman", Font.BOLD, 20));
         welcomeLabel.setForeground(new Color(70, 130, 180));
         welcomeLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(welcomeLabel, BorderLayout.NORTH);
 
-        // Panel for buttons
+   
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -32,50 +32,50 @@ public class PROfficer extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Button for Employee Pay Slip
+
         JButton employeePaySlipButton = new RoundedButton("Employee Pay Slip");
         employeePaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SalaryCalculator(); // Open SalaryCalculator window
-                dispose(); // Close the current window
+                new SalaryCalculator(); 
+                dispose(); 
             }
         });
         buttonPanel.add(employeePaySlipButton, gbc);
 
-        // Button for Edit Employee Pay Slip
+      
         JButton editPaySlipButton = new RoundedButton("Edit Employee Pay Slip");
         editPaySlipButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Payslipupdate(); // Open Payslipupdate window
-                dispose(); // Close the current window
+                new Payslipupdate(); 
+                dispose(); 
             }
         });
         gbc.gridx = 1;
         buttonPanel.add(editPaySlipButton, gbc);
 
         // Button for Overview All Employee Pay Slips
-// Button for Overview All Employee Pay Slips
+
 JButton overviewPaySlipsButton = new RoundedButton("Overview All Employee Pay Slips");
 overviewPaySlipsButton.addActionListener(new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
-        new PayslipViewer(); // Open PayslipViewer window
-        dispose(); // Close the current PROfficer window
+        new PayslipViewer(); 
+        dispose();
     }
 });
 gbc.gridx = 2;
 buttonPanel.add(overviewPaySlipsButton, gbc);
 
 
-        // Add the Change Password Button
+ 
         JButton changePasswordButton = new RoundedButton("Change Password");
         changePasswordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Open the change password dialog
-                new ChangePasswordDialog(PROfficer.this, PROfficer.this); // Pass reference to PROfficer
+       
+                new ChangePasswordDialog(PROfficer.this, PROfficer.this); 
             }
         });
         gbc.gridx = 3;
@@ -85,14 +85,13 @@ buttonPanel.add(overviewPaySlipsButton, gbc);
         setVisible(true);
     }
 
-    // Define the ChangePasswordDialog class similar to the hrManager
     public class ChangePasswordDialog extends JDialog {
-        private static final String USERS_FILE = "users.txt"; // File path for users data
-        private JFrame parentFrame; // Reference to PROfficer
+        private static final String USERS_FILE = "users.txt"; 
+        private JFrame parentFrame; 
 
         public ChangePasswordDialog(JFrame parent, JFrame profficer) {
             super(parent, "Change Password", true);
-            this.parentFrame = profficer; // Store reference to PROfficer
+            this.parentFrame = profficer; 
             setLayout(new GridLayout(3, 2));
 
             JLabel oldPasswordLabel = new JLabel("Old Password:");
@@ -115,14 +114,14 @@ buttonPanel.add(overviewPaySlipsButton, gbc);
                     String oldPassword = new String(oldPasswordField.getPassword());
                     String newPassword = new String(newPasswordField.getPassword());
 
-                    // Assuming username is retrieved from a method or passed to the dialog
+            
                     String username = getCurrentUsername();
 
                     if (changePassword(username, oldPassword, newPassword)) {
                         JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Password changed successfully!");
                         dispose();
-                        parentFrame.dispose(); // Dispose the PROfficer frame
-                        AuthApp.main(null); // Open the login window
+                        parentFrame.dispose();
+                        AuthApp.main(null); 
                     } else {
                         JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Old password is incorrect.");
                     }
@@ -151,15 +150,15 @@ buttonPanel.add(overviewPaySlipsButton, gbc);
                     String[] parts = line.split(",");
                     if (parts[0].equals(username)) {
                         if (parts[1].equals(oldPassword)) {
-                            // Update password
+                         
                             fileLines.add(username + "," + newPassword + "," + parts[2] + "," + parts[3] + "," + parts[4] + "," + parts[5]);
                             passwordChanged = true;
                         } else {
-                            // Incorrect old password
+                           
                             fileLines.add(line);
                         }
                     } else {
-                        // Not the user we're looking for
+                       
                         fileLines.add(line);
                     }
                 }
@@ -183,13 +182,12 @@ buttonPanel.add(overviewPaySlipsButton, gbc);
         }
 
         private String getCurrentUsername() {
-            // Placeholder for actual implementation to retrieve the current username
-            // For instance, this can be passed to the dialog or retrieved from user session
-            return "JV"; // Example static username for demonstration purposes
+   
+            return "JV"; 
         }
     }
 
-    // RoundedButton class as before
+  
     private static class RoundedButton extends JButton {
         private static final int ARC_WIDTH = 20;
         private static final int ARC_HEIGHT = 20;
@@ -211,12 +209,12 @@ buttonPanel.add(overviewPaySlipsButton, gbc);
                 Graphics2D g2d = (Graphics2D) g.create();
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Paint gradient background
+        
                 GradientPaint gradient = new GradientPaint(0, 0, new Color(70, 130, 180), 0, getHeight(), new Color(100, 149, 237));
                 g2d.setPaint(gradient);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), ARC_WIDTH, ARC_HEIGHT);
 
-                // Paint the button text
+            
                 g2d.setColor(getForeground());
                 FontMetrics fm = g2d.getFontMetrics();
                 String text = getText();
@@ -232,7 +230,7 @@ buttonPanel.add(overviewPaySlipsButton, gbc);
 
         @Override
         protected void paintBorder(Graphics g) {
-            // Override to remove default border
+     
         }
     }
 

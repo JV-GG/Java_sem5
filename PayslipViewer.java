@@ -7,7 +7,7 @@ import javax.swing.*;
 public class PayslipViewer extends JFrame {
     private JComboBox<String> fileDropdown;
     private JTextField nricField, salaryField, otPayField, unpaidLeaveField, latePenaltyField, socsoField, eisField, pcbField, totalPayableField, allowanceField, netSalaryField;
-    private JTextField employeeNameField;  // Added for displaying employee name
+    private JTextField employeeNameField; 
     private JButton viewButton, backButton;
 
     public PayslipViewer() {
@@ -17,17 +17,17 @@ public class PayslipViewer extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Create a panel for the top section
+
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Back button
+ 
         backButton = new JButton("Back");
         backButton.setFont(new Font("Arial", Font.BOLD, 14));
-        backButton.setBackground(new Color(255, 69, 58)); // Red color for back button
+        backButton.setBackground(new Color(255, 69, 58)); 
         backButton.setForeground(Color.WHITE);
         backButton.setFocusPainted(false);
         backButton.setPreferredSize(new Dimension(100, 30));
@@ -41,7 +41,6 @@ public class PayslipViewer extends JFrame {
         gbc.gridy = 0;
         topPanel.add(backButton, gbc);
 
-        // Dropdown for file selection
         fileDropdown = new JComboBox<>(getPayslipFiles());
         fileDropdown.setPreferredSize(new Dimension(300, 30));
         gbc.gridx = 1;
@@ -49,7 +48,7 @@ public class PayslipViewer extends JFrame {
         gbc.gridx = 2;
         topPanel.add(fileDropdown, gbc);
 
-        // View button
+ 
         viewButton = new JButton("View");
         viewButton.setFont(new Font("Arial", Font.BOLD, 14));
         viewButton.setBackground(new Color(70, 130, 180));
@@ -65,11 +64,10 @@ public class PayslipViewer extends JFrame {
         gbc.gridx = 3;
         topPanel.add(viewButton, gbc);
 
-        // Create a panel for displaying payslip details
-        JPanel contentPanel = new JPanel(new GridLayout(13, 2, 10, 10)); // Adjusted to 13 rows for employee name
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around the panel
 
-        // Labels and text fields for displaying payslip data
+        JPanel contentPanel = new JPanel(new GridLayout(13, 2, 10, 10)); 
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); 
+
         contentPanel.add(new JLabel("Employee Name:"));
         employeeNameField = createTextField();
         contentPanel.add(employeeNameField);
@@ -118,7 +116,7 @@ public class PayslipViewer extends JFrame {
         netSalaryField = createTextField();
         contentPanel.add(netSalaryField);
 
-        // Add panels to frame
+  
         add(topPanel, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
 
@@ -128,13 +126,13 @@ public class PayslipViewer extends JFrame {
     private JTextField createTextField() {
         JTextField textField = new JTextField();
         textField.setFont(new Font("Arial", Font.PLAIN, 14));
-        textField.setEditable(false); // Text fields are read-only
+        textField.setEditable(false); 
         return textField;
     }
 
     private String[] getPayslipFiles() {
-        File folder = new File("Payslip"); // Folder "Payslip" is specified here
-        System.out.println("Reading files from: " + folder.getAbsolutePath()); // Debug message
+        File folder = new File("Payslip");
+        System.out.println("Reading files from: " + folder.getAbsolutePath()); 
 
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".txt"));
         if (files == null || files.length == 0) {
@@ -154,10 +152,10 @@ public class PayslipViewer extends JFrame {
         if (selectedFile != null) {
             File file = new File("Payslip/" + selectedFile);
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                // Clear all previous content before displaying new one
+      
                 clearTextFields();
 
-                // Extract values and display them in the correct fields
+
                 String line;
                 while ((line = reader.readLine()) != null) {
                     updatePayslipField(line);
@@ -241,7 +239,7 @@ public class PayslipViewer extends JFrame {
     }
 
     private void backToPROfficer() {
-        // Close the current window and open PROfficer
+     
         dispose();
         SwingUtilities.invokeLater(() -> new PROfficer());
     }
