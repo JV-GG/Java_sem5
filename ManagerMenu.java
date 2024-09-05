@@ -1,3 +1,19 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+/**
+ *
+ * @author keewe
+ */
 public class ManagerMenu extends javax.swing.JFrame {
 
     /**
@@ -19,6 +35,7 @@ public class ManagerMenu extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -40,6 +57,14 @@ public class ManagerMenu extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jButton3.setText("Change Password");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -48,17 +73,20 @@ public class ManagerMenu extends javax.swing.JFrame {
                 .addGap(165, 165, 165)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(179, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(116, 116, 116)
+                .addGap(75, 75, 75)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(136, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -96,6 +124,10 @@ public class ManagerMenu extends javax.swing.JFrame {
         this.dispose();
     }                                        
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        new ChangePasswordDialog(this).setVisible(true); // Pass reference to Manager Menu
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -134,6 +166,103 @@ public class ManagerMenu extends javax.swing.JFrame {
     // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
-    // End of variables declaration                   
+    // End of variables declaration       
+    
+    public class ChangePasswordDialog extends JDialog {
+        private static final String USERS_FILE = "users.txt";
+        private JFrame parentFrame;
+
+        public ChangePasswordDialog(JFrame parent) {
+            super(parent, "Change Password", true);
+            this.parentFrame = parent;
+            setLayout(new GridLayout(3, 2));
+
+            JLabel oldPasswordLabel = new JLabel("Old Password:");
+            JPasswordField oldPasswordField = new JPasswordField();
+            JLabel newPasswordLabel = new JLabel("New Password:");
+            JPasswordField newPasswordField = new JPasswordField();
+            JButton changeButton = new JButton("Change Password");
+            JButton cancelButton = new JButton("Cancel");
+
+            add(oldPasswordLabel);
+            add(oldPasswordField);
+            add(newPasswordLabel);
+            add(newPasswordField);
+            add(changeButton);
+            add(cancelButton);
+
+            changeButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String oldPassword = new String(oldPasswordField.getPassword());
+                    String newPassword = new String(newPasswordField.getPassword());
+                    String username = getCurrentUsername();
+
+                    if (changePassword(username, oldPassword, newPassword)) {
+                        JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Password changed successfully!");
+                        dispose();
+                        parentFrame.dispose();
+                        new AuthApp().setVisible(true); // Open the login window
+                    } else {
+                        JOptionPane.showMessageDialog(ChangePasswordDialog.this, "Old password is incorrect.");
+                    }
+                }
+            });
+
+            cancelButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    dispose();
+                }
+            });
+
+            pack();
+            setLocationRelativeTo(parent);
+        }
+
+        private boolean changePassword(String username, String oldPassword, String newPassword) {
+            List<String> fileLines = new ArrayList<>();
+            boolean passwordChanged = false;
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts[0].equals(username)) {
+                        if (parts[1].equals(oldPassword)) {
+                            fileLines.add(username + "," + newPassword + "," + parts[2] + "," + parts[3] + "," + parts[4] + "," + parts[5]);
+                            passwordChanged = true;
+                        } else {
+                            fileLines.add(line);
+                        }
+                    } else {
+                        fileLines.add(line);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            if (passwordChanged) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE))) {
+                    for (String fileLine : fileLines) {
+                        writer.write(fileLine);
+                        writer.newLine();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            return passwordChanged;
+        }
+
+        private String getCurrentUsername() {
+            // Placeholder for actual implementation
+            return "wenfei";
+        }
+    }
 }

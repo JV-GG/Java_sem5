@@ -5,4 +5,4 @@ wl,123,Employee,false,0,040720040016
 Chen JV,123,Employee,false,0,040130141229
 Yap Boon Siong,123,Employee,false,0,040329040000
 akau,123,Employee,false,0,010203040506
-wenfei,123,Department Manager,false,0,040302101031
+wenfei,1234,Department Manager,false,0,040302101031
