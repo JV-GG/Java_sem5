@@ -17,7 +17,7 @@ import javax.swing.*;
 
 public class hrOfficer {
     private JFrame frame;
-    private Map<String, String> userPasswords = new HashMap<>(); // Store username and hashed password
+    private Map<String, String> userPasswords = new HashMap<>();
     private String username;
     private String password;
     private String nric;
@@ -29,30 +29,24 @@ public class hrOfficer {
     }
 
     public void runhrOfficer() {
-        // Create the frame
         frame = new JFrame("HR Officer");
         frame.setSize(800, 600);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Create the panel
         JPanel panel = new JPanel(new GridBagLayout());
         frame.getContentPane().add(panel, BorderLayout.CENTER);
-
-        // Set up the layout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.insets = new Insets(20, 10, 20, 10); // Top, Left, Bottom, Right padding
+        gbc.insets = new Insets(20, 10, 20, 10);
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Add the title label
         JLabel titleLabel = new JLabel("HR Officer Panel");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 60));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 0;
         panel.add(titleLabel, gbc);
 
-        // Create buttons with the same styling
         JButton btnCreate = new JButton("Create Employee Profile");
         JButton btnRetrieve = new JButton("Retrieve Employee Profile");
         JButton btnUpdate = new JButton("Update Employee Profile");
@@ -68,7 +62,6 @@ public class hrOfficer {
             panel.add(buttons[i], gbc);
         }
 
-        // Add action listeners to handle button clicks
         btnCreate.addActionListener(e -> createEmployeeProfile());
         btnRetrieve.addActionListener(e -> retrieveEmployeeProfile());
         btnUpdate.addActionListener(e -> updateEmployeeProfile());
@@ -78,12 +71,10 @@ public class hrOfficer {
             new AuthApp();
         });
 
-        // Make the frame visible
         frame.setVisible(true);
     }
 
     public void createEmployeeProfile() {
-        // Create the form panel with GridBagLayout
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -92,7 +83,6 @@ public class hrOfficer {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        // Helper method to add labels and text fields
         addLabeledField(formPanel, gbc, "Employee NRIC/Passport:", new JTextField());
         addLabeledField(formPanel, gbc, "Employee Password:", new JPasswordField());
         addLabeledField(formPanel, gbc, "Employee Bank Account (Maybank xxxxxxxxxxxx):", new JTextField());
@@ -106,7 +96,6 @@ public class hrOfficer {
         addLabeledField(formPanel, gbc, "Department:", new JTextField());
         addLabeledField(formPanel, gbc, "Gross Salary (RM):", new JTextField());
 
-        // Adjust field sizes
         Component[] components = formPanel.getComponents();
         for (Component component : components) {
             if (component instanceof JTextField) {
@@ -114,10 +103,8 @@ public class hrOfficer {
             }
         }
 
-        // Display the dialog
         int result = JOptionPane.showConfirmDialog(frame, formPanel, "Create Employee", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-            // Collect the data from the fields
             String NRIC = ((JTextField) components[1]).getText();
             String Password = new String(((JPasswordField) components[3]).getPassword());
             String BankAcc = ((JTextField) components[5]).getText();
@@ -131,14 +118,12 @@ public class hrOfficer {
             String department = ((JTextField) components[21]).getText();
             double salary = Double.parseDouble(((JTextField) components[23]).getText());
 
-            // Create and register the new employee profile
             EmpProfile newEmployee = new EmpProfile(NRIC, Password, BankAcc, Name, Gender, DOB, address,
                     emergencyContact, experience, position, department, salary);
             hrManager.createEmployeeProfile(newEmployee);
         }
     }
 
-    // Helper method to add labeled fields
     private void addLabeledField(JPanel panel, GridBagConstraints gbc, String labelText, JTextField textField) {
         gbc.gridx = 0;
         gbc.gridy++;
@@ -148,19 +133,15 @@ public class hrOfficer {
     }
 
     private void retrieveEmployeeProfile() {
-        // Input dialog for Employee ID
         String empID = JOptionPane.showInputDialog(frame, "Enter Employee ID:");
     
         if (empID != null && !empID.trim().isEmpty()) {
             EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
     
             if (emp != null) {
-                // Create a panel to display the employee profile with fixed size
                 JPanel profilePanel = new JPanel(new GridLayout(0, 2, 10, 10));
                 profilePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-                profilePanel.setPreferredSize(new Dimension(600, 500)); // Fixed size for the profile panel
-    
-                // Add profile details to the panel
+                profilePanel.setPreferredSize(new Dimension(600, 500));
                 profilePanel.add(new JLabel("Employee NRIC/Passport:"));
                 profilePanel.add(new JLabel(emp.getNRIC()));
     
@@ -200,38 +181,35 @@ public class hrOfficer {
                 profilePanel.add(new JLabel("Employee Gross Salary (RM):"));
                 profilePanel.add(new JLabel(String.format("%.2f", emp.getSalary())));
     
-                // Create history tabs with scroll panes
                 JTextArea positionHistory = new JTextArea(hrManager.getPositionChangeHistory(empID));
                 positionHistory.setEditable(false);
                 JScrollPane positionScrollPane = new JScrollPane(positionHistory);
-                positionScrollPane.setPreferredSize(new Dimension(550, 200)); // Fixed height for the scroll pane
+                positionScrollPane.setPreferredSize(new Dimension(550, 200));
                 
                 JTextArea salaryHistory = new JTextArea(hrManager.getSalaryIncrementHistory(empID));
                 salaryHistory.setEditable(false);
                 JScrollPane salaryScrollPane = new JScrollPane(salaryHistory);
-                salaryScrollPane.setPreferredSize(new Dimension(550, 200)); // Fixed height for the scroll pane
+                salaryScrollPane.setPreferredSize(new Dimension(550, 200));
     
                 JTextArea leaveHistory = new JTextArea(hrManager.getLeaveEntitlementHistory(empID));
                 leaveHistory.setEditable(false);
                 JScrollPane leaveScrollPane = new JScrollPane(leaveHistory);
-                leaveScrollPane.setPreferredSize(new Dimension(550, 200)); // Fixed height for the scroll pane
+                leaveScrollPane.setPreferredSize(new Dimension(550, 200));
     
                 JTabbedPane historyTabbedPane = new JTabbedPane();
                 historyTabbedPane.addTab("Position History", positionScrollPane);
                 historyTabbedPane.addTab("Salary History", salaryScrollPane);
                 historyTabbedPane.addTab("Leave Entitlement History", leaveScrollPane);
     
-                // Create a main panel to combine profile details and history tabs
                 JPanel mainPanel = new JPanel(new BorderLayout());
                 mainPanel.add(profilePanel, BorderLayout.CENTER);
                 mainPanel.add(historyTabbedPane, BorderLayout.SOUTH);
     
-                // Create a dialog to display the profile information
                 JDialog dialog = new JDialog(frame, "Employee Profile", true);
                 dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 dialog.setContentPane(mainPanel);
-                dialog.setSize(500, 600); // Fixed size for the dialog
-                dialog.setLocationRelativeTo(frame); // Center the dialog relative to the main frame
+                dialog.setSize(500, 600);
+                dialog.setLocationRelativeTo(frame);
                 dialog.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(frame, "Employee not found.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -241,18 +219,15 @@ public class hrOfficer {
     
 
     private void updateEmployeeProfile() {
-        // Input dialog for Employee ID
         String empID = JOptionPane.showInputDialog(frame, "Enter Employee ID:");
 
         if (empID != null && !empID.trim().isEmpty()) {
             EmpProfile emp = hrManager.retrieveEmployeeProfile(empID);
 
             if (emp != null) {
-                // Create a panel with GridLayout for the update form
                 JPanel formPanel = new JPanel(new GridLayout(0, 2, 10, 10));
                 formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-                // Add input fields with existing data as placeholder text
                 formPanel.add(new JLabel("New Bank Account (leave blank to keep current):"));
                 JTextField txtBankAcc = new JTextField(emp.getBankAcc());
                 formPanel.add(txtBankAcc);
@@ -289,11 +264,9 @@ public class hrOfficer {
                 JTextField txtSalary = new JTextField(String.valueOf(emp.getSalary()));
                 formPanel.add(txtSalary);
 
-                // Display the form in a dialog
                 int result = JOptionPane.showConfirmDialog(frame, formPanel, "Update Employee Profile",
                         JOptionPane.OK_CANCEL_OPTION);
                 if (result == JOptionPane.OK_OPTION) {
-                    // Update employee data based on user input
                     String bankAcc = txtBankAcc.getText().trim();
                     if (!bankAcc.isEmpty()) {
                         emp.updateBankAcc(bankAcc);
@@ -339,7 +312,6 @@ public class hrOfficer {
                         emp.updateSalary(Double.parseDouble(salaryInput));
                     }
 
-                    // Save the updated profile
                     hrManager.updateEmployeeProfile(empID, emp);
                     JOptionPane.showMessageDialog(frame, "Employee profile updated successfully.", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
@@ -407,10 +379,10 @@ public class hrOfficer {
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                String filenric = parts[5]; // Assuming the NRIC is in the 6th position
+                String filenric = parts[5];
 
                 if (filenric.equals(nric)) {
-                    parts[1] = password; // Update the password
+                    parts[1] = password;
                     writer.write(String.join(",", parts));
                     updated = true;
                 } else {

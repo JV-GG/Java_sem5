@@ -151,7 +151,6 @@ public class ProfileManagement {
     }
 
 
-    // Method to get position change history
     public String getPositionChangeHistory(String empID) {
         StringBuilder history = new StringBuilder();
         String dateAndTime = "";
@@ -162,7 +161,6 @@ public class ProfileManagement {
             
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Date and Time:")) {
-                    // If we are processing a current record, append it before starting a new one
                     if (isCurrentRecord) {
                         history.append("\n");
                     }
@@ -187,7 +185,6 @@ public class ProfileManagement {
     }
     
 
-    // Method to get salary increment history
     public String getSalaryIncrementHistory(String empID) {
         StringBuilder history = new StringBuilder();
         String dateAndTime = "";
@@ -198,7 +195,6 @@ public class ProfileManagement {
             
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Date and Time:")) {
-                    // If we are processing a current record, append it before starting a new one
                     if (isCurrentRecord) {
                         history.append("\n");
                     }
@@ -223,7 +219,6 @@ public class ProfileManagement {
     }
 
 
-    // Method to get leave entitlement
     public String getLeaveEntitlementHistory(String empID) {
         StringBuilder history = new StringBuilder();
         String line;
@@ -234,7 +229,6 @@ public class ProfileManagement {
                 if (line.startsWith("NRIC : " + empID)) {
                     inRecord = true;
                 } else if (line.startsWith("NRIC : ") && inRecord) {
-                    // When a new record starts and we were in a previous record
                     history.append("\n");
                     inRecord = false;
                 }
@@ -244,7 +238,6 @@ public class ProfileManagement {
                 }
             }
             
-            // Handle the case where the last record is still active
             if (inRecord) {
                 history.append("\n");
             }
@@ -263,17 +256,14 @@ public class ProfileManagement {
         EmpProfile existingEmployee = retrieveEmployeeProfile(employeeId);
 
         if (existingEmployee != null) {
-            // Log salary changes
             if (existingEmployee.getSalary() != updatedEmployee.getSalary()) {
                 logSalaryChange(existingEmployee, updatedEmployee.getSalary());
             }
 
-            // Log position changes
             if (!existingEmployee.getPosition().equals(updatedEmployee.getPosition())) {
                 logPositionChange(existingEmployee, updatedEmployee.getPosition());
             }
 
-            // Update employee in the list
             int index = employees.indexOf(existingEmployee);
             if (index != -1) {
                 employees.set(index, updatedEmployee);
@@ -282,7 +272,6 @@ public class ProfileManagement {
                 JOptionPane.showMessageDialog(null, "Failed to find the employee.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            // Save the complete list to the file
             saveEmployeeDetails();
 
         } else {
@@ -360,3 +349,5 @@ public class ProfileManagement {
         }
     }
 }
+
+
