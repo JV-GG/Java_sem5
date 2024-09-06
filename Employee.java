@@ -38,7 +38,7 @@ public class Employee {
     }
 
     private List<AttendanceRecord> records = new ArrayList<>();
-    private Map<String, String> userPasswords = new HashMap<>(); // Store username and hashed password
+    private Map<String, String> userPasswords = new HashMap<>();
     private JLabel statusLabel;
     private String username;
     private String password;
@@ -205,13 +205,11 @@ public class Employee {
             String lastLine = null;
             String currentLine;
 
-            // Read all lines to find the last one
             while ((currentLine = reader.readLine()) != null) {
                 lastLine = currentLine;
             }
 
             if (lastLine != null) {
-                // Split the last line into parts
                 String[] parts = lastLine.split(", ");
 
                 // Ensure the parts array has at least 3 elements (username, clockIn, clockOut
@@ -237,7 +235,6 @@ public class Employee {
                         records.add(record);
                     }
                 } else {
-                    // Handle the case where the line doesn't have the expected format
                     System.err.println("Invalid record format: " + lastLine);
                 }
             }
@@ -271,7 +268,6 @@ public class Employee {
             writeAttendanceToFile(record, workingHours); // Write the new clock-in record to the file
 
             // Check if the clock-in time is after the late threshold and update the status
-            // label
             if (now.isAfter(lateThreshold)) {
                 statusLabel.setText(username + " has clocked in at "
                         + now.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss")) + " (Late)");
@@ -366,7 +362,6 @@ public class Employee {
                         String[] hoursArray = hoursPart.split(": ");
                         if (hoursArray.length == 2) {
                             try {
-                                // Parse the hours and check if the record belongs to the selected month
                                 LocalDateTime clockInTime = LocalDateTime.parse(parts[1],
                                         DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
                                 if (clockInTime.getMonthValue() == selectedMonth) {
@@ -394,7 +389,6 @@ public class Employee {
             // Calculate the total hours worked in the selected month
             long totalHoursWorked = workingHoursList.stream().mapToInt(Integer::intValue).sum();
 
-            // Write the report
             String reportFilename = directoryPath + File.separator + nric + "_monthly_report_"
                     + months[selectedMonth - 1] + ".txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportFilename))) {
@@ -415,7 +409,6 @@ public class Employee {
                 e.printStackTrace();
             }
 
-            // Show the report
             try {
                 Desktop.getDesktop().open(new File(reportFilename));
             } catch (IOException e) {
@@ -430,19 +423,17 @@ public class Employee {
 
         yearSelector.setPreferredSize(new Dimension(500, 70));
 
-        // Show a dialog for year selection
         int option = JOptionPane.showConfirmDialog(null, yearSelector, "Select Year",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
             String selectedYear = (String) yearSelector.getSelectedItem();
-            String directoryPath = "Employees/" + nric; // Path to the user's directory
+            String directoryPath = "Employees/" + nric;
             String filename = directoryPath + File.separator + nric + "_attendance.txt";
             List<Integer> workingHoursList = new ArrayList<>();
-            int lateCount = 0; // Track how many times the user was late
-            int penalty = 0; // Total penalty amount
+            int lateCount = 0;
+            int penalty = 0;
 
-            // Read attendance records from the file
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -452,14 +443,12 @@ public class Employee {
                         String[] hoursArray = hoursPart.split(": ");
                         if (hoursArray.length == 2) {
                             try {
-                                // Parse the hours and check if the record belongs to the selected year
                                 LocalDateTime clockInTime = LocalDateTime.parse(parts[1],
                                         DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss"));
                                 if (Integer.toString(clockInTime.getYear()).equals(selectedYear)) {
                                     int hours = Integer.parseInt(hoursArray[1]);
                                     workingHoursList.add(hours);
 
-                                    // Check if the user was late and increment late count
                                     if (parts[4].equals("Late")) {
                                         lateCount++;
 
@@ -478,10 +467,7 @@ public class Employee {
                 e.printStackTrace();
             }
 
-            // Calculate the total hours worked in the selected year
             long totalHoursWorked = workingHoursList.stream().mapToInt(Integer::intValue).sum();
-
-            // Write the annual report
             String reportFilename = directoryPath + File.separator + nric + "_annual_report_" + selectedYear
                     + ".txt";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportFilename))) {
@@ -494,7 +480,7 @@ public class Employee {
                 }
                 writer.write("Total Hours Worked: " + totalHoursWorked + "\n");
                 if (penalty > 0) {
-                    writer.write("Penalty: RM" + penalty + "\n"); // Write the penalty amount
+                    writer.write("Penalty: RM" + penalty + "\n");
                 }
                 JOptionPane.showMessageDialog(null, "Annual report generated!", "Report Status",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -502,7 +488,6 @@ public class Employee {
                 e.printStackTrace();
             }
 
-            // Show the report
             try {
                 Desktop.getDesktop().open(new File(reportFilename));
             } catch (IOException e) {
@@ -568,10 +553,10 @@ public class Employee {
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                String filenric = parts[5]; // Assuming the NRIC is in the 6th position
+                String filenric = parts[5];
 
                 if (filenric.equals(nric)) {
-                    parts[1] = password; // Update the password
+                    parts[1] = password;
                     writer.write(String.join(",", parts));
                     updated = true;
                 } else {

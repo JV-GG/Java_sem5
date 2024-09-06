@@ -25,7 +25,6 @@ public class AuthApp extends JFrame {
 
         userManagement = new UserManagement("users.txt");
 
-        // Adding panels
         mainPanel.add(new LoginPanel(), "Login");
         mainPanel.add(new RegisterPanel(), "Register");
         mainPanel.add(new DashboardPanel(), "Dashboard");
@@ -108,7 +107,6 @@ public class AuthApp extends JFrame {
         }
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile, true))) {
-            // Write the username, password, role, and then nric at the end
             bw.write(username + "," + password + "," + role + ",false,0," + nric);
             bw.newLine();
         } catch (IOException e) {
@@ -156,7 +154,6 @@ public class AuthApp extends JFrame {
                             nricField.setText("");
                             passwordField.setText("");
 
-                            // Navigate based on user role
                             switch (currentUserRole) {
                                 case "System Administrator" -> {
                                     JOptionPane.showMessageDialog(null, "Welcome System Administrator!");
@@ -184,11 +181,10 @@ public class AuthApp extends JFrame {
                                     nricField.setText("");
                                     passwordField.setText("");
         
-                                    // Open the PROfficer window
                                     SwingUtilities.invokeLater(new Runnable() {
                                         @Override
                                         public void run() {
-                                            new PROfficer(); // Show the PROfficer window
+                                            new PROfficer();
                                         }
                                     });
                                     SwingUtilities.getWindowAncestor(LoginPanel.this).dispose();
@@ -218,7 +214,6 @@ public class AuthApp extends JFrame {
                 }
             });
 
-            // Add components to panel
             gbc.gridx = 0;
             gbc.gridy = 0;
             add(nricLabel, gbc);
@@ -338,7 +333,7 @@ public class AuthApp extends JFrame {
                 int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to quit?", "Quit Application",
                         JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
-                    System.exit(0); // Exit the application
+                    System.exit(0); 
                 }
             });
             JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -362,21 +357,18 @@ public class AuthApp extends JFrame {
 
             setLayout(new GridBagLayout());
 
-            // Title label
             JLabel titleLabel = new JLabel("Admin Panel");
             titleLabel.setFont(new Font("Arial", Font.BOLD, 80));
             titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
             titleLabel.setBounds(50, 10, 400, 70);
             add(titleLabel);
 
-            // Layout constraints for buttons
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.insets = new Insets(20, 20, 20, 20);
             gbc.gridx = 0;
             gbc.gridy = GridBagConstraints.RELATIVE;
             gbc.anchor = GridBagConstraints.CENTER;
 
-            // Create buttons
             add(createButton("Create User", this::showCreateUserPanel), gbc);
             add(createButton("View Users", this::showUserList), gbc);
             add(createButton("Update User", this::updateUser), gbc);
@@ -396,7 +388,6 @@ public class AuthApp extends JFrame {
         }
 
         private void showCreateUserPanel(ActionEvent e) {
-            // Step 1: Show Role Selection Dialog
             String[] roles = { "Employee", "System Administrator", "Human Resource Officer", "Department Manager",
                     "Payroll Officer" };
             String selectedRole = (String) JOptionPane.showInputDialog(
@@ -408,31 +399,25 @@ public class AuthApp extends JFrame {
                     roles,
                     roles[0]);
 
-            // If no role is selected (user presses cancel), exit the function
             if (selectedRole == null) {
                 return;
             } else if (selectedRole.equals("Employee")) {
-                hrManager hrManager = new hrManager("", "");
+                hrOfficer hrManager = new hrOfficer("", "");
                 hrManager.createEmployeeProfile();
             } else if (!selectedRole.equals("Employee")) {
-                // Step 2: Proceed to show the Create User Panel
                 JPanel createUserPanel = new JPanel(new GridBagLayout());
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.insets = new Insets(10, 10, 10, 10);
 
-                // Username Label and Field
                 JLabel usernameLabel = new JLabel("Username:");
                 JTextField usernameField = new JTextField(20);
 
-                // Password Label and Field
                 JLabel passwordLabel = new JLabel("Password:");
                 JPasswordField passwordField = new JPasswordField(20);
 
-                // NRIC Label and Field
                 JLabel nricLabel = new JLabel("NRIC:");
                 JTextField nricField = new JTextField(20);
 
-                // Create and Cancel Buttons
                 JButton createButton = new JButton("Create");
                 JButton cancelButton = new JButton("Cancel");
 
@@ -451,7 +436,6 @@ public class AuthApp extends JFrame {
 
                 cancelButton.addActionListener(e1 -> cardLayout.show(mainPanel, "Admin"));
 
-                // Layout the components on the panel using GridBagLayout
                 gbc.gridx = 0;
                 gbc.gridy = 0;
                 createUserPanel.add(usernameLabel, gbc);
@@ -478,7 +462,6 @@ public class AuthApp extends JFrame {
                 gbc.gridy = 5;
                 createUserPanel.add(cancelButton, gbc);
 
-                // Add the panel to the main panel and show it
                 mainPanel.add(createUserPanel, "CreateUser");
                 cardLayout.show(mainPanel, "CreateUser");
             }
@@ -677,7 +660,6 @@ class UserManagement {
         File tempFile = new File("temp.txt");
         boolean nricFound = false;
 
-        // Check that indices and values have the same length
         if (indicesToUpdate.length != newValues.length) {
             throw new IllegalArgumentException("Indices and values arrays must be of the same length.");
         }
@@ -689,7 +671,6 @@ class UserManagement {
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts[5].equals(nric)) {
-                    // Update the specified indices with new values
                     for (int i = 0; i < indicesToUpdate.length; i++) {
                         parts[indicesToUpdate[i]] = newValues[i];
                     }
@@ -709,7 +690,6 @@ class UserManagement {
             JOptionPane.showMessageDialog(null, "User with NRIC " + nric + " has unlocked.");
         }
 
-        // Rename the temp file to the original user file
         if (userFile.delete()) {
             if (!tempFile.renameTo(userFile)) {
                 System.out.println("Failed to rename temp file to user file");
@@ -766,7 +746,7 @@ class UserManagement {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts[5].equals(nric) && !parts[5].equals("000000000000")) { // admin's nric couldnt be deleted
+                if (parts[5].equals(nric) && !parts[5].equals("000000000000")) {
                     nricFound = true;
                     continue;
                 }

@@ -21,7 +21,7 @@ public class LeaveMenu extends javax.swing.JFrame {
         ApplyLeavebtn = new javax.swing.JButton();
         exitbtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         EmployeeLeaveMenu.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Employee Leave Menu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12))); // NOI18N
         EmployeeLeaveMenu.setName(""); // NOI18N
